@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TITAN TECH OMEGA | Regilator Terminal</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div id="tos-overlay" class="tos-overlay">
+    <div class="tos-box">
+        <h2 class="highlight">SECURITY PROTOCOL</h2>
+        <p>Welcome to the <b>TITAN TECH</b> terminal.</p>
+        <ul class="tos-list">
+            <li>📍 <b>Mobile Service:</b> $2.00 Flat Fee (WP1).</li>
+            <li>💾 <b>Data Policy:</b> All transfers are final.</li>
+            <li>⚡ <b>Omega-20:</b> Specials are First-Come, First-Served.</li>
+        </ul>
+        <button class="btn wa" onclick="acceptToS()" style="width:100%; cursor:pointer;">I ACCEPT PROTOCOL</button>
+    </div>
+</div>
+
+<header>
+    <div class="logo-area">
+        <div class="logo-wrapper">
+            <span class="tech-badge">Ω</span> 
+            <h1>TITAN <span class="highlight">TECH</span></h1>
+        </div>
+        <p class="owner-tag">BY REGILATOR | <span class="verify-check">✓ VERIFIED</span></p>
+        <div id="status-bar" class="status-glow">SYSTEM LOADING...</div>
+    </div>
+</header>
+
+<main>
+    <div class="tab-scroll-wrapper">
+        <button class="tab-btn active" onclick="openTab(event, 'movies-folder')">🎬 MOVIES</button>
+        <button class="tab-btn" onclick="openTab(event, 'tv-folder')">📺 TV SHOWS</button>
+        <button class="tab-btn" onclick="openTab(event, 'games-folder')">🎮 GAMES</button>
+        <button class="tab-btn" onclick="openTab(event, 'mobile-folder')">📱 MOBILE</button>
+        <button class="tab-btn" onclick="openTab(event, 'music-folder')">🎵 MUSIC</button>
+        <button class="tab-btn" onclick="openTab(event, 'software-folder')">💻 SOFT</button>
+        <button class="tab-btn" onclick="openTab(event, 'dev-folder')">🛡️ HACK</button>
+    </div>
+
+    <div class="launch-banner shadow-pulse">
+        <div class="glitch-text">⚠️ PROTOCOL OMEGA-20</div>
+        <h3>THE ELITE 20 EXCLUSIVE</h3>
+        <p>First 20 customers on launch get 1 FREE MOVIE!</p>
+    </div>
+
+    <div id="movies-folder" class="tab-content active"><div id="movies-list" class="product-grid"></div></div>
+    <div id="tv-folder" class="tab-content"><div id="tv-list" class="product-grid"></div></div>
+    <div id="games-folder" class="tab-content"><div id="games-list" class="product-grid"></div></div>
+    <div id="mobile-folder" class="tab-content"><div id="mobile-list" class="product-grid"></div></div>
+    <div id="music-folder" class="tab-content"><div id="music-list" class="product-grid"></div></div>
+    <div id="software-folder" class="tab-content"><div id="software-list" class="product-grid"></div></div>
+    <div id="dev-folder" class="tab-content"><div id="dev-list" class="product-grid"></div></div>
+
+    <section class="about-titan">
+        <h3>THE TITAN PROTOCOL</h3>
+        <p>14 28 Crescent, Warren Park 1. Authorized by <b>Regilator</b>.</p>
+        <div class="action-grid">
+            <div class="action-item">✔️ 4K Media</div>
+            <div class="action-item">✔️ Gaming</div>
+            <div class="action-item">✔️ Hacking</div>
+        </div>
+    </section>
+
+    <section class="review-box">
+        <h4>CUSTOMER INTEL</h4>
+        <div id="display-reviews"></div>
+    </section>
+
+    <section class="price-list">
+        <h3>🚀 MOBILE SERVICE</h3>
+        <div class="tier"><span>📍 Warren Park 1</span><b>$2.00</b></div>
+    </section>
+</main>
+
+<footer class="contact-hub">
+    <div class="contact-group">
+        <a href="tel:+263785841446" class="btn call">📞 ECONET</a>
+        <a href="https://wa.me/263785841446" class="btn wa">💬 WHATSAPP</a>
+    </div>
+    <div class="contact-group">
+        <a href="tel:+263781847711" class="btn call-alt">📞 NETONE</a>
+        <a href="https://wa.me/263781847711" class="btn wa-alt">💬 WHATSAPP</a>
+    </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
