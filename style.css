@@ -1,43 +1,67 @@
-:root { --red: #ff0000; --purple: #A020F0; --bg: #050505; --card: #121212; }
-body { background: var(--bg); color: white; margin: 0; font-family: 'Consolas', monospace; overflow-x: hidden; }
+:root { 
+    --red: #ff0000; 
+    --purple: #A020F0; 
+    --bg: #050505; 
+    --card: #121212; 
+    --text: #ffffff;
+}
 
-/* Splash Screen */
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body { 
+    background: var(--bg); 
+    color: var(--text); 
+    margin: 0; 
+    font-family: 'Consolas', 'Courier New', monospace; 
+    overflow-x: hidden; 
+}
+
+/* --- UI COMPONENTS --- */
 #splash { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; transition: 0.8s; }
-.progress { width: 0%; height: 3px; background: var(--red); animation: load 2s forwards; }
+.loader-container { width: 200px; height: 4px; background: #222; margin-top: 20px; border-radius: 10px; overflow: hidden; }
+.progress-bar { width: 0%; height: 100%; background: var(--red); animation: load 2.5s forwards; }
 @keyframes load { to { width: 100%; } }
 
-/* Layout & Typography */
 .neon-red { color: var(--red); text-shadow: 0 0 10px var(--red); }
 .neon-purple { color: var(--purple); text-shadow: 0 0 10px var(--purple); }
-#countdown-banner { background: #111; border-bottom: 1px solid var(--red); padding: 8px; text-align: center; font-size: 0.6rem; }
-header { padding: 20px; text-align: center; }
-.status-box { background: #111; margin: 0 15px; padding: 15px; border-radius: 8px; border: 1px solid #222; font-size: 0.7rem; }
 
-/* Navigation & Grid */
+#countdown-banner { background: #111; border-bottom: 1px solid var(--red); padding: 10px; text-align: center; font-size: 0.6rem; letter-spacing: 1px; }
+
+header { padding: 30px 20px; text-align: center; }
+.location-tag { font-size: 0.6rem; color: #666; letter-spacing: 3px; margin-top: 5px; }
+
+.status-card { background: #0a0a0a; margin: 0 15px; padding: 20px; border-radius: 10px; border: 1px solid #1a1a1a; font-size: 0.7rem; line-height: 1.6; }
+.bio-line { height: 1px; background: linear-gradient(90deg, transparent, var(--purple), transparent); margin: 15px 0; }
+
+/* --- BUTTONS & NAV --- */
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 20px 15px; }
+.contact-card { text-decoration: none; padding: 15px; text-align: center; border-radius: 8px; border: 1px solid #222; background: #000; display: flex; flex-direction: column; }
+.contact-card .label { font-size: 0.6rem; margin-bottom: 5px; opacity: 0.8; }
+.contact-card .phone { font-size: 0.75rem; font-weight: bold; }
+.contact-card.neon-red { border-color: var(--red); color: var(--red); box-shadow: inset 0 0 10px #ff000022; }
+.contact-card.neon-purple { border-color: var(--purple); color: var(--purple); box-shadow: inset 0 0 10px #a020f022; }
+
 .tab-bar { display: flex; overflow-x: auto; padding: 15px; gap: 10px; scrollbar-width: none; }
-.tab-btn { background: transparent; border: 1px solid #333; color: #888; padding: 8px 15px; border-radius: 4px; font-size: 0.6rem; white-space: nowrap; }
-.tab-btn.active { border-color: var(--purple); color: var(--purple); box-shadow: 0 0 8px var(--purple); }
+.tab-btn { background: #111; border: 1px solid #222; color: #888; padding: 10px 20px; border-radius: 5px; font-size: 0.65rem; white-space: nowrap; cursor: pointer; transition: 0.3s; }
+.tab-btn.active { border-color: var(--purple); color: var(--purple); box-shadow: 0 0 10px var(--purple); }
 
-.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 15px; }
-.contact-card { text-decoration: none; padding: 12px; text-align: center; border-radius: 4px; border: 1px solid #333; font-size: 0.7rem; font-weight: bold; }
-.contact-card.neon-red { border-color: var(--red); color: var(--red); }
-.contact-card.neon-purple { border-color: var(--purple); color: var(--purple); }
+/* --- CATALOG --- */
+.search-wrapper { padding: 0 15px 20px; display: flex; gap: 10px; position: sticky; top: 0; background: var(--bg); z-index: 999; }
+#catalog-search { flex: 2; padding: 12px; background: #000; border: 1px solid var(--purple); color: white; border-radius: 6px; outline: none; }
+.request-btn { flex: 1; background: var(--red); color: white; border: none; font-weight: bold; border-radius: 6px; font-size: 0.6rem; cursor: pointer; }
 
-.search-wrapper { padding: 15px; display: flex; gap: 10px; position: sticky; top: 0; background: var(--bg); z-index: 999; }
-#catalog-search { flex: 2; padding: 10px; background: #111; border: 1px solid var(--purple); color: white; border-radius: 4px; }
-.request-btn { flex: 1; background: var(--red); color: white; border: none; font-weight: bold; border-radius: 4px; font-size: 0.6rem; }
+.catalog-container { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 15px; min-height: 300px; }
+.item-card { background: var(--card); border: 1px solid #222; border-radius: 10px; overflow: hidden; transition: 0.3s; }
+.item-card img { width: 100%; height: 120px; object-fit: cover; border-bottom: 1px solid #222; }
+.item-details { padding: 12px; font-size: 0.75rem; }
 
-.catalog-container { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 15px; }
-.item-card { background: var(--card); border: 1px solid #222; border-radius: 8px; overflow: hidden; }
-.item-card img { width: 100%; height: 110px; object-fit: cover; }
-.item-details { padding: 10px; font-size: 0.75rem; }
-
-/* QR & Footer */
-#qr-wrap { text-align: center; padding: 40px 20px; border-top: 1px solid #222; }
-.qr-container { background: #fff; padding: 10px; width: 180px; height: 180px; margin: 15px auto; border: 4px solid var(--purple); border-radius: 10px; }
+/* --- QR PROTOCOL --- */
+#qr-protocol { text-align: center; padding: 50px 20px; background: #080808; border-top: 1px solid #1a1a1a; }
+.qr-frame { background: white; padding: 10px; width: 220px; height: 220px; margin: 20px auto; border: 5px solid var(--purple); border-radius: 15px; box-shadow: 0 0 25px var(--purple); }
 #digital-qr { width: 100%; height: 100%; }
-.qr-action-box { display: flex; justify-content: center; gap: 10px; margin-top: 15px; }
-.download-btn, .share-btn { background: transparent; padding: 10px 15px; font-size: 0.6rem; border-radius: 4px; font-weight: bold; cursor: pointer; }
-.download-btn { border: 1px solid var(--purple); color: var(--purple); }
-.share-btn { border: 1px solid var(--red); color: var(--red); }
-footer { text-align: center; padding: 25px; font-size: 0.6rem; color: #444; }
+.qr-actions { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+.action-btn { background: transparent; padding: 12px 20px; font-size: 0.7rem; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.3s; }
+.purple-glow { border: 1px solid var(--purple); color: var(--purple); }
+.red-glow { border: 1px solid var(--red); color: var(--red); }
+
+footer { text-align: center; padding: 40px 20px; border-top: 1px solid #111; }
