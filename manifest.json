@@ -1,0 +1,11 @@
+{
+  "name": "Titan Tech Omega",
+  "short_name": "TitanTech",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#ff0000",
+  "icons": [
+    { "src": "assets/icon.png", "type": "image/png", "sizes": "512x512" }
+  ]
+}
