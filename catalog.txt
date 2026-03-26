@@ -1,9 +1,38 @@
-Samsung Firmware Flash|10 USD|assets/REPAIRS/flash.png|Repairs
-iPhone iCloud Bypass|15 USD|assets/REPAIRS/bypass.png|Repairs
-Windows 11 Pro Install|10 USD|assets/Repairs/win11.png|Repairs
-Google Account (FRP) Removal|7 USD|assets/REPAIRS/frp.png|Repairs
-Laptop Hardware Cleaning|5 USD|assets/REPAIRS/clean.png|Repairs
-Driver & Software Setup|5 USD|assets/REPAIRS/soft.png|Repairs
-System Speed Optimization|5 USD|assets/REPAIRS/boost.png|Repairs
-The Flash|            inbox for price|assets/MOVIES/the_flash.png|Movies
-Mortal Kombat|                                            inbox for price|assets/MOVIES/mk.png|Movies
+Samsung Firmware Flash|10
+USD|assets/Repairs/flash.png|REPAIRS
+iPhone iCloud Bypass|15
+USD|assets/Repairs/bypass.png|REPAIRS
+Windows 11 Pro Install|10
+USD|assets/Repairs/win11.png|REPAIRS
+The Flash (2023)|3
+USD|assets/Movies/the_flash.png|MOVIES
+Superman: Man of Steel|3
+USD|assets/Movies/superman.png|MOVIES
+Batman: The Dark Knight|3
+USD|assets/Movies/batman.png|MOVIES
+Avatar: Way of Water|3
+USD|assets/Movies/avatar.png|MOVIES
+Snowfall (Full Season)|5
+USD|assets/TV_Shows/snowfall.png|TV SHOWS
+GTA V (Premium Edition)|20
+USD|assets/Games/gtav.png|GAMES
+FIFA 23 / FC 24|20
+USD|assets/Games/fifa.png|GAMES
+Mortal Kombat XL|15
+USD|assets/Games/mkxl.png|GAMES
+Injustice 2|15
+USD|assets/Games/injustice2.png|GAMES
+Need For Speed: Heat|15
+USD|assets/Games/nfs.png|GAMES
+Blur|10
+USD|assets/Games/blur.png|GAMES
+Adobe Master Collection|15
+USD|assets/Software/adobe.png|SOFTWARE
+Internet Download Manager|5
+USD|assets/Software/idm.png|SOFTWARE
+Afrobeat Mega-Mix 2026|2
+USD|assets/Music/afrobeat.png|MUSIC
+MTK Professional Meta Tool|50
+USD|assets/Hack/mtk_tool.png|HACK
+Hydra Tool Dongle|120
+USD|assets/Hack/hydra.png|HACK
