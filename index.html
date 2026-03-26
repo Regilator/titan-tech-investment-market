@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,6 +44,11 @@
 </header>
 
 <main>
+    <div id="search-container" style="padding: 10px 15px; background: #000;">
+        <input type="text" id="terminal-search" onkeyup="filterSearch()" placeholder="🔍 Search Movies, Games, APKs..." 
+            style="width: 100%; padding: 12px; background: #111; border: 1px solid var(--purple); color: white; border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 0.9rem; outline: none; box-sizing: border-box;">
+    </div>
+
     <div class="tab-scroll-wrapper">
         <button class="tab-btn active" onclick="openTab(event, 'movies-folder')">🎬 MOVIES</button>
         <button class="tab-btn" onclick="openTab(event, 'tv-folder')">📺 TV SHOWS</button>
@@ -89,3 +93,4 @@
 <script src="script.js"></script>
 </body>
 </html>
+
