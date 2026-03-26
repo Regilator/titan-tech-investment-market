@@ -1,8 +1,13 @@
+/* =======================================================
+   TITAN TECH OMEGA - ELITE MASTER SCRIPT
+   ======================================================= */
+
 const reviews = [
     {n: "Tinashe M.", t: "Best tech spot in WP1!", d: "Mar 28, 2026"},
     {n: "Kuda_Gaming", t: "FC 25 squads are 100% updated.", d: "Mar 27, 2026"}
 ];
 
+// 1. SECURITY PROTOCOL
 function acceptToS() {
     const overlay = document.getElementById('tos-overlay');
     if(overlay) {
@@ -15,6 +20,18 @@ function acceptToS() {
     }
 }
 
+// 2. SEARCH FILTER
+function filterSearch() {
+    let input = document.getElementById('terminal-search').value.toLowerCase();
+    let cards = document.getElementsByClassName('product-card');
+
+    for (let i = 0; i < cards.length; i++) {
+        let title = cards[i].getElementsByTagName('h4')[0].innerText.toLowerCase();
+        cards[i].style.display = title.includes(input) ? "" : "none";
+    }
+}
+
+// 3. TAB NAVIGATION
 function openTab(evt, tabName) {
     const contents = document.getElementsByClassName("tab-content");
     for (let content of contents) content.style.display = "none";
@@ -23,8 +40,13 @@ function openTab(evt, tabName) {
     
     document.getElementById(tabName).style.display = "block";
     evt.currentTarget.classList.add("active");
+    
+    // Clear search when switching tabs
+    document.getElementById('terminal-search').value = "";
+    filterSearch();
 }
 
+// 4. BUSINESS STATUS
 function updateBusinessStatus() {
     const hour = new Date().getHours();
     const dot = document.getElementById('status-dot');
@@ -42,6 +64,7 @@ function updateBusinessStatus() {
     }
 }
 
+// 5. CATALOG DATA LOADER
 async function loadData() {
     try {
         const res = await fetch('catalog.txt');
@@ -74,29 +97,26 @@ async function loadData() {
     } catch (e) { console.log("Catalog loading standby..."); }
 }
 
+// 6. QR & SHARING
 function generateQR() {
     const qrEl = document.getElementById("qrcode");
     if(qrEl) {
         new QRCode(qrEl, {
-            text: "https://regilator.github.io/titan-tech-investment-market/",
+            text: window.location.href,
             width: 120, height: 120, colorDark: "#ff0000", colorLight: "#ffffff"
         });
     }
 }
 
 async function shareSite() {
-    const shareData = {
-        title: 'TITAN TECH OMEGA',
-        text: 'The Terminal is LIVE! 14 28 Crescent.',
-        url: window.location.href
-    };
     try {
-        await navigator.share(shareData);
+        await navigator.share({ title: 'TITAN TECH OMEGA', url: window.location.href });
     } catch (err) {
-        window.open(`https://wa.me/?text=${encodeURIComponent(shareData.text + " " + shareData.url)}`, '_blank');
+        window.open(`https://wa.me/?text=Check_out_TITAN_TECH_at_14_28_Crescent!_${window.location.href}`, '_blank');
     }
 }
 
+// 7. INITIALIZE
 window.onload = () => {
     updateBusinessStatus();
     loadData();
