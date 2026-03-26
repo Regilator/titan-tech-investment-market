@@ -1,37 +1,33 @@
-:root { --red: #ff0000; --purple: #A020F0; --gold: #f1c40f; --bg: #000; }
-body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; padding-bottom: 160px; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
-h1, h2, h3, .tab-btn { font-family: 'Orbitron', sans-serif; }
+:root { --red: #ff0000; --purple: #A020F0; --bg: #050505; --card: #121212; }
+body { background: var(--bg); color: white; margin: 0; font-family: 'Consolas', monospace; overflow-x: hidden; }
 
-#status-indicator { padding: 10px; text-align: center; font-weight: bold; border-bottom: 1px solid #222; background: #080808; font-size: 0.7rem; position: sticky; top: 0; z-index: 1000; }
-#status-dot { height: 8px; width: 8px; border-radius: 50%; display: inline-block; margin-right: 5px; background: #555; }
+#splash { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; transition: 0.6s; }
+.progress { width: 0%; height: 3px; background: var(--red); animation: load 2.5s forwards; }
+@keyframes load { to { width: 100%; } }
+.neon-red { color: var(--red); text-shadow: 0 0 10px var(--red); }
+.neon-purple { color: var(--purple); text-shadow: 0 0 10px var(--purple); }
 
-#terminal-search:focus { border-color: var(--red) !important; box-shadow: 0 0 10px var(--red); transition: 0.3s; }
+.tab-bar { display: flex; overflow-x: auto; padding: 10px; border-bottom: 1px solid #222; scrollbar-width: none; }
+.tab-btn { background: transparent; border: 1px solid #333; color: #888; padding: 8px 15px; margin-right: 10px; border-radius: 4px; cursor: pointer; font-size: 0.65rem; white-space: nowrap; }
+.tab-btn.active { border-color: var(--purple); color: var(--purple); box-shadow: 0 0 10px var(--purple); }
 
-.highlight { color: var(--red); text-shadow: 0 0 10px var(--red); }
-.logo-wrapper { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 15px; }
-.tech-badge { background: var(--red); color: #000; font-weight: bold; font-size: 1.2rem; padding: 5px 10px; border-radius: 5px; }
-.owner-tag { text-align: center; font-size: 0.6rem; color: #888; letter-spacing: 2px; margin-top: 5px; }
+.search-wrapper { padding: 15px; display: flex; gap: 10px; position: sticky; top: 0; background: var(--bg); z-index: 999; }
+#catalog-search { flex: 2; padding: 12px; background: #111; border: 1px solid var(--red); color: white; outline: none; }
+.request-btn { flex: 1; background: var(--purple); color: white; border: none; font-size: 0.6rem; font-weight: bold; border-radius: 4px; cursor: pointer; }
 
-.tab-scroll-wrapper { display: flex; overflow-x: auto; gap: 10px; padding: 15px; border-bottom: 2px solid var(--purple); background: rgba(0,0,0,0.9); scrollbar-width: none; }
-.tab-btn { background: #111; border: 1px solid #333; color: #888; padding: 8px 15px; border-radius: 5px; min-width: 90px; font-size: 0.6rem; cursor: pointer; }
-.tab-btn.active { border-color: var(--purple); color: #fff; background: #1a0033; box-shadow: 0 0 10px var(--purple); }
+header { padding: 25px; text-align: center; border-bottom: 2px solid var(--purple); }
+.catalog-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
+.item-card { background: var(--card); border: 1px solid #222; border-radius: 5px; overflow: hidden; cursor: pointer; }
+.item-card img { width: 100%; height: 110px; object-fit: cover; }
+.item-details { padding: 10px; }
+.item-price { color: var(--red); font-weight: bold; font-size: 0.8rem; }
 
-.product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; }
-.product-card { background: #0a0a0a; border: 1px solid #222; border-radius: 8px; overflow: hidden; text-align: center; padding-bottom: 10px; }
-.product-card img { width: 100%; height: 150px; object-fit: cover; }
-.product-card h4 { font-size: 0.7rem; margin: 8px; color: #eee; height: 30px; overflow: hidden; }
-.price-tag { color: var(--purple); font-size: 0.8rem; font-weight: bold; margin-bottom: 8px; }
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 11000; }
+.receipt-box { background: #000; border: 2px solid var(--purple); padding: 25px; width: 85%; max-width: 320px; box-shadow: 0 0 20px var(--purple); }
+.receipt-sub { font-size: 0.6rem; color: #666; text-align: center; }
+.neon-line { border: 0; border-top: 1px solid var(--red); margin: 10px 0; }
 
-.tos-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.98); z-index:9999; display:flex; align-items:center; justify-content:center; transition: 0.5s; }
-.tos-box { background:#000; border:2px solid var(--red); padding:25px; width:85%; max-width:400px; border-radius:10px; text-align:center; }
-.tos-list { text-align:left; font-size:0.75rem; color:#ccc; margin:15px 0; padding:0; list-style:none; }
-.tos-list li { border-left: 2px solid var(--red); padding-left: 10px; margin-bottom: 10px; }
-
-.review-item { font-size: 0.7rem; border-left: 2px solid var(--purple); padding: 8px 12px; margin: 10px 15px; background: #050505; }
-
-.contact-hub { position: fixed; bottom: 0; width: 100%; background: #000; border-top: 2px solid var(--purple); display: flex; gap: 10px; padding: 12px; box-sizing: border-box; z-index: 1000; }
-.contact-group { flex: 1; display: flex; flex-direction: column; gap: 5px; }
-.btn { padding: 10px; text-decoration: none; color: #fff; text-align: center; border-radius: 4px; font-size: 0.7rem; font-weight: bold; border: none; cursor: pointer; }
-.wa { background: #25D366; } .wa-alt { background: var(--purple); }
-.call { border: 1px solid var(--purple); } .call-alt { border: 1px solid var(--red); }
-.tab-content { display: none; } .tab-content.active { display: block; }
+#qr-wrap { text-align: center; padding: 20px; border-top: 1px solid #222; }
+#branded-qr { width: 220px; border: 1px solid var(--purple); border-radius: 8px; }
+.tos-btn { background: transparent; border: 1px solid var(--purple); color: var(--purple); padding: 8px 15px; cursor: pointer; margin-top: 10px; width: 100%; }
+footer { text-align: center; padding: 20px; font-size: 0.6rem; color: #444; }
