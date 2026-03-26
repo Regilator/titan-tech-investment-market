@@ -1,9 +1,9 @@
-Samsung Firmware Flash|10 USD|assets/REPAIRS/flash.png|REPAIRS
-iPhone iCloud Bypass|15 USD|assets/REPAIRS/bypass.png|REPAIRS
-Windows 11 Pro Install|10 USD|assets/REPAIRS/win11.png|REPAIRS
-Google Account (FRP) Removal|7 USD|assets/REPAIRS/frp.png|REPAIRS
-Laptop Hardware Cleaning|5 USD|assets/REPAIRS/clean.png|REPAIRS
-Driver & Software Setup|5 USD|assets/REPAIRS/soft.png|REPAIRS
-System Speed Optimization|5 USD|assets/REPAIRS/boost.png|REPAIRS
-The Flash|            inbox for price|assets/MOVIES/the_flash.png|MOVIES
-Mortal Kombat|                                            inbox for price|assets/MOVIES/mk.png|MOVIES
+Samsung Firmware Flash|10 USD|assets/REPAIRS/flash.png|Repairs
+iPhone iCloud Bypass|15 USD|assets/REPAIRS/bypass.png|Repairs
+Windows 11 Pro Install|10 USD|assets/REPAIRS/win11.png|Repairs
+Google Account (FRP) Removal|7 USD|assets/REPAIRS/frp.png|Repairs
+Laptop Hardware Cleaning|5 USD|assets/REPAIRS/clean.png|Repairs
+Driver & Software Setup|5 USD|assets/REPAIRS/soft.png|Repairs
+System Speed Optimization|5 USD|assets/REPAIRS/boost.png|Repairs
+The Flash|            inbox for price|assets/MOVIES/the_flash.png|Movies
+Mortal Kombat|                                            inbox for price|assets/MOVIES/mk.png|Movies
