@@ -5,13 +5,15 @@ h1, h2, h3, .tab-btn { font-family: 'Orbitron', sans-serif; }
 #status-indicator { padding: 10px; text-align: center; font-weight: bold; border-bottom: 1px solid #222; background: #080808; font-size: 0.7rem; position: sticky; top: 0; z-index: 1000; }
 #status-dot { height: 8px; width: 8px; border-radius: 50%; display: inline-block; margin-right: 5px; background: #555; }
 
+#terminal-search:focus { border-color: var(--red) !important; box-shadow: 0 0 10px var(--red); transition: 0.3s; }
+
 .highlight { color: var(--red); text-shadow: 0 0 10px var(--red); }
 .logo-wrapper { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 15px; }
-.tech-badge { background: var(--red); color: #000; font-weight: bold; font-size: 1.2rem; padding: 5px 10px; border-radius: 5px; box-shadow: 0 0 10px var(--red); }
+.tech-badge { background: var(--red); color: #000; font-weight: bold; font-size: 1.2rem; padding: 5px 10px; border-radius: 5px; }
 .owner-tag { text-align: center; font-size: 0.6rem; color: #888; letter-spacing: 2px; margin-top: 5px; }
 
 .tab-scroll-wrapper { display: flex; overflow-x: auto; gap: 10px; padding: 15px; border-bottom: 2px solid var(--purple); background: rgba(0,0,0,0.9); scrollbar-width: none; }
-.tab-btn { background: #111; border: 1px solid #333; color: #888; padding: 8px 15px; border-radius: 5px; min-width: 90px; font-size: 0.6rem; cursor: pointer; transition: 0.3s; }
+.tab-btn { background: #111; border: 1px solid #333; color: #888; padding: 8px 15px; border-radius: 5px; min-width: 90px; font-size: 0.6rem; cursor: pointer; }
 .tab-btn.active { border-color: var(--purple); color: #fff; background: #1a0033; box-shadow: 0 0 10px var(--purple); }
 
 .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; }
@@ -21,11 +23,11 @@ h1, h2, h3, .tab-btn { font-family: 'Orbitron', sans-serif; }
 .price-tag { color: var(--purple); font-size: 0.8rem; font-weight: bold; margin-bottom: 8px; }
 
 .tos-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.98); z-index:9999; display:flex; align-items:center; justify-content:center; transition: 0.5s; }
-.tos-box { background:#000; border:2px solid var(--red); padding:25px; width:85%; max-width:400px; border-radius:10px; text-align:center; box-shadow: 0 0 30px rgba(255,0,0,0.3); }
+.tos-box { background:#000; border:2px solid var(--red); padding:25px; width:85%; max-width:400px; border-radius:10px; text-align:center; }
 .tos-list { text-align:left; font-size:0.75rem; color:#ccc; margin:15px 0; padding:0; list-style:none; }
 .tos-list li { border-left: 2px solid var(--red); padding-left: 10px; margin-bottom: 10px; }
 
-.review-item { font-size: 0.7rem; border-left: 2px solid var(--purple); padding: 8px 12px; margin: 10px 15px; background: #050505; border-radius: 0 5px 5px 0; }
+.review-item { font-size: 0.7rem; border-left: 2px solid var(--purple); padding: 8px 12px; margin: 10px 15px; background: #050505; }
 
 .contact-hub { position: fixed; bottom: 0; width: 100%; background: #000; border-top: 2px solid var(--purple); display: flex; gap: 10px; padding: 12px; box-sizing: border-box; z-index: 1000; }
 .contact-group { flex: 1; display: flex; flex-direction: column; gap: 5px; }
