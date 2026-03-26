@@ -1,6 +1,7 @@
-Phone Flashing|$15.00|assets/SERVICES/flash.webp|SERVICES
-Windows Install|$20.00|assets/SERVICES/win.webp|SERVICES
-Screen Repair|$45.00|assets/SERVICES/screen.webp|SERVICES
-Avatar 2|Free|assets/MOVIES/avatar.webp|MOVIES
-House of Dragon|Free|assets/TV SHOWS/hod.webp|TV SHOWS
-GTA V|$5.00|assets/GAMES/gta.webp|GAMES
+Samsung Firmware Flash|10 USD|assets/REPAIRS/flash.png|REPAIRS
+iPhone iCloud Bypass|15 USD|assets/REPAIRS/bypass.png|REPAIRS
+Windows 11 Pro Install|10 USD|assets/REPAIRS/win11.png|REPAIRS
+Google Account (FRP) Removal|7 USD|assets/REPAIRS/frp.png|REPAIRS
+Laptop Hardware Cleaning|5 USD|assets/REPAIRS/clean.png|REPAIRS
+Driver & Software Setup|5 USD|assets/REPAIRS/soft.png|REPAIRS
+System Speed Optimization|5 USD|assets/REPAIRS/boost.png|REPAIRS
