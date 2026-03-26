@@ -3,189 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TITAN TECH OMEGA | Official Hub</title>
+    <title>TITAN TECH OMEGA</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
-    <style>
-        :root {
-            --primary-glow: #00f2ff;
-            --accent-glow: #ff0055;
-            --bg-dark: #0a0a0a;
-            --card-bg: #151515;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-        body {
-            background-color: var(--bg-dark);
-            color: white;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            overflow-x: hidden;
-        }
-
-        /* --- SPLASH SCREEN --- */
-        #splash-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: var(--bg-dark); display: flex; flex-direction: column;
-            justify-content: center; align-items: center; z-index: 9999;
-            transition: opacity 0.5s ease;
-        }
-        .glow-text { font-size: 1.8rem; letter-spacing: 4px; text-shadow: 0 0 15px var(--primary-glow); }
-        .omega { color: var(--accent-glow); text-shadow: 0 0 15px var(--accent-glow); }
-        .loader { width: 200px; height: 3px; background: #222; margin-top: 20px; border-radius: 5px; overflow: hidden; }
-        .progress { width: 0%; height: 100%; background: var(--primary-glow); animation: load 2.5s forwards ease-in-out; }
-        @keyframes load { to { width: 100%; } }
-
-        /* --- TOS OVERLAY --- */
-        #tos-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); z-index: 9000; display: none;
-            justify-content: center; align-items: center; padding: 20px;
-        }
-        .tos-box {
-            background: var(--card-bg); border: 1px solid var(--primary-glow);
-            padding: 25px; border-radius: 15px; max-width: 400px; text-align: center;
-            box-shadow: 0 0 20px rgba(0, 242, 255, 0.2);
-        }
-        .tos-btn {
-            background: var(--primary-glow); color: black; border: none;
-            padding: 12px 30px; border-radius: 25px; margin-top: 20px; font-weight: bold;
-        }
-
-        /* --- HEADER & STATUS --- */
-        header { padding: 20px; text-align: center; border-bottom: 1px solid #333; }
-        #status-indicator { font-size: 0.8rem; font-weight: bold; margin-top: 5px; }
-        .status-online { color: #00ff88; text-shadow: 0 0 10px #00ff88; }
-        .status-offline { color: #ff4444; }
-
-        /* --- SEARCH BAR --- */
-        .search-container { padding: 15px; position: sticky; top: 0; background: var(--bg-dark); z-index: 100; }
-        #catalog-search {
-            width: 100%; padding: 15px; border-radius: 30px; border: 1px solid #444;
-            background: #1a1a1a; color: white; outline: none; transition: 0.3s;
-        }
-        #catalog-search:focus { border-color: var(--primary-glow); box-shadow: 0 0 10px var(--primary-glow); }
-
-        /* --- CATALOG GRID --- */
-        #catalog-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 15px; padding: 15px;
-        }
-        .item-card {
-            background: var(--card-bg); border-radius: 12px; overflow: hidden;
-            border: 1px solid #222; transition: transform 0.2s;
-        }
-        .item-card img { width: 100%; height: 150px; object-fit: cover; }
-        .item-info { padding: 10px; }
-        .item-price { color: var(--primary-glow); font-weight: bold; }
-
-        /* --- FOOTER --- */
-        footer { padding: 30px; text-align: center; font-size: 0.7rem; color: #666; }
-    </style>
+    <meta name="theme-color" content="#ff0000">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
-
-    <div id="splash-screen">
-        <h1 class="glow-text">TITAN TECH <span class="omega">OMEGA</span></h1>
+    <div id="splash">
+        <h1 class="neon-red">TITAN TECH <span class="neon-purple">OMEGA</span></h1>
         <div class="loader"><div class="progress"></div></div>
     </div>
 
     <div id="tos-overlay">
         <div class="tos-box">
-            <h3>SECURITY PROTOCOL</h3>
-            <p style="margin-top: 15px; font-size: 0.9rem; line-height: 1.4;">By entering Titan Tech Omega, you agree to our terms of service regarding tech repairs and software deployment.</p>
-            <button class="tos-btn" onclick="acceptTos()">I ACCEPT</button>
+            <h2 class="neon-red">SECURITY PROTOCOL</h2>
+            <p>Authorized Access: 14 28 Crescent. Agree to initialize Terminal.</p>
+            <button class="tos-btn" onclick="acceptTerms()">INITIALIZE</button>
         </div>
     </div>
 
     <header>
-        <h2 style="letter-spacing: 2px;">TITAN TECH <span class="omega">Ω</span></h2>
-        <div id="status-indicator">CHECKING SYSTEM...</div>
-        <p style="font-size: 0.7rem; color: #888;">14 28 Crescent, Warren Park 1</p>
+        <h1 class="neon-red">TITAN TECH <span class="neon-purple">Ω</span></h1>
+        <div id="status-indicator">SYNCING...</div>
     </header>
 
-    <div class="search-container">
-        <input type="text" id="catalog-search" placeholder="Search Inventory (e.g. Screen, Battery)..." onkeyup="filterCatalog()">
+    <nav class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('ALL')">ALL</button>
+        <button class="tab-btn" onclick="switchTab('SERVICES')">REPAIRS/FLASH</button>
+        <button class="tab-btn" onclick="switchTab('MOVIES')">MOVIES</button>
+        <button class="tab-btn" onclick="switchTab('TV SHOWS')">TV SHOWS</button>
+        <button class="tab-btn" onclick="switchTab('GAMES')">GAMES</button>
+        <button class="tab-btn" onclick="switchTab('SOFTWARE')">SOFTWARE</button>
+        <button class="tab-btn" onclick="switchTab('HACK')">HACK</button>
+        <button class="tab-btn" onclick="switchTab('MUSIC')">MUSIC</button>
+    </nav>
+
+    <div class="search-wrapper">
+        <input type="text" id="catalog-search" placeholder="Search services or media...">
+        <button class="request-btn" onclick="sendWhatsAppRequest()">+ REQUEST</button>
     </div>
 
-    <main id="catalog-grid">
-        </main>
+    <main id="catalog-grid" class="catalog-container"></main>
 
-    <footer>
-        <p>&copy; 2026 REGILATOR - POWERED BY TITAN TECH HUB</p>
-        <p>Launched: April 1, 2026</p>
-    </footer>
+    <div id="receipt-modal" class="modal-overlay">
+        <div class="receipt-box">
+            <h2 class="neon-purple">TITAN TECH Ω</h2>
+            <p class="receipt-sub">OFFICIAL DIGITAL INVOICE</p>
+            <hr class="neon-line">
+            <div id="receipt-content">
+                <p><strong>CUST:</strong> <span id="rec-cust">---</span></p>
+                <p><strong>ITEM:</strong> <span id="rec-item">---</span></p>
+                <p><strong>PRICE:</strong> <span id="rec-price">---</span></p>
+                <p><strong>DATE:</strong> <span id="rec-date">---</span></p>
+            </div>
+            <hr class="neon-line">
+            <button class="tos-btn" onclick="closeReceipt()">CLOSE</button>
+            <button class="tos-btn" style="border-color:var(--red); color:var(--red);" onclick="window.print()">PRINT</button>
+        </div>
+    </div>
 
-    <script>
-        // 1. Splash & ToS Logic
-        window.onload = () => {
-            setTimeout(() => {
-                document.getElementById('splash-screen').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('splash-screen').style.display = 'none';
-                    if(!localStorage.getItem('tos_accepted')) {
-                        document.getElementById('tos-overlay').style.display = 'flex';
-                    }
-                }, 500);
-            }, 2500);
-            updateStatus();
-            loadCatalog();
-        };
+    <div id="qr-wrap">
+        <h4 class="neon-purple">TITAN TECH TERMINAL</h4>
+        <img src="97093.jpg" alt="Titan Tech QR" id="branded-qr">
+    </div>
 
-        function acceptTos() {
-            localStorage.setItem('tos_accepted', 'true');
-            document.getElementById('tos-overlay').style.display = 'none';
-        }
-
-        // 2. Real-Time Business Status (8 AM - 9 PM)
-        function updateStatus() {
-            const now = new Date();
-            const hour = now.getHours();
-            const statusEl = document.getElementById('status-indicator');
-            if (hour >= 8 && hour < 21) {
-                statusEl.innerHTML = "● BUSINESS ONLINE (8AM-9PM)";
-                statusEl.className = "status-online";
-            } else {
-                statusEl.innerHTML = "○ BUSINESS OFFLINE (REOPENS 8AM)";
-                statusEl.className = "status-offline";
-            }
-        }
-
-        // 3. Catalog Loader (Loads from catalog.txt)
-        // Format: Name|Price|ImageURL|Category
-        async function loadCatalog() {
-            try {
-                const response = await fetch('catalog.txt');
-                const data = await response.text();
-                const items = data.split('\n').filter(line => line.trim() !== "");
-                const grid = document.getElementById('catalog-grid');
-                grid.innerHTML = "";
-
-                items.forEach(line => {
-                    const [name, price, img, cat] = line.split('|');
-                    const card = `
-                        <div class="item-card" data-name="${name.toLowerCase()}">
-                            <img src="${img}" alt="${name}" loading="lazy">
-                            <div class="item-info">
-                                <h4 style="font-size: 0.9rem;">${name}</h4>
-                                <p class="item-price">${price}</p>
-                            </div>
-                        </div>`;
-                    grid.innerHTML += card;
-                });
-            } catch (e) {
-                console.log("Error loading catalog. Use 'Name|Price|Image.webp' format.");
-            }
-        }
-
-        // 4. Search Filter
-        function filterCatalog() {
-            const query = document.getElementById('catalog-search').value.toLowerCase();
-            const cards = document.querySelectorAll('.item-card');
-            cards.forEach(card => {
-                const name = card.getAttribute('data-name');
-                card.style.display = name.includes(query) ? "block" : "none";
-            });
-        }
-    </script>
+    <footer><p>&copy; 2026 REGILATOR | HARARE</p></footer>
+    <script src="app.js"></script>
 </body>
 </html>
