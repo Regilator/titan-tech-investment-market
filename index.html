@@ -6,12 +6,13 @@
     <title>TITAN TECH OMEGA | Regilator Terminal</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;500&display=swap" rel="stylesheet">
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
-</head><meta name="google-site-verification" content="UTdbkkoWC2JzbVE3yL6UPGHbv5uLIHgNeI31dwxyFys" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <meta name="google-site-verification" content="UTdbkkoWC2JzbVE3yL6UPGHbv5uLIHgNeI31dwxyFys" />
+</head>
 <body>
-<div id="status-indicator" style="padding: 10px; text-align: center; font-weight: bold; border-bottom: 1px solid #222;">
-    <span id="status-dot" style="height: 10px; width: 10px; border-radius: 50%; display: inline-block; margin-right: 8px;"></span>
+
+<div id="status-indicator">
+    <span id="status-dot"></span>
     <span id="status-text">INITIALIZING...</span>
 </div>
 
@@ -24,7 +25,7 @@
             <li>💾 <b>Data Policy:</b> All transfers are final.</li>
             <li>⚡ <b>Omega-20:</b> Specials are First-Come, First-Served.</li>
         </ul>
-        <button class="btn wa" onclick="acceptToS()" style="width:100%; cursor:pointer;">I ACCEPT PROTOCOL</button>
+        <button class="btn wa" onclick="acceptToS()" style="width:100%;">I ACCEPT PROTOCOL</button>
     </div>
 </div>
 
@@ -35,7 +36,7 @@
             <h1>TITAN <span class="highlight">TECH</span></h1>
         </div>
         <p class="owner-tag">BY REGILATOR | <span class="verify-check">✓ VERIFIED</span></p>
-        <div id="status-bar" class="status-glow">SYSTEM LOADING...</div>
+        <div id="status-bar" class="status-glow">SYSTEM READY</div>
     </div>
 </header>
 
@@ -50,12 +51,6 @@
         <button class="tab-btn" onclick="openTab(event, 'dev-folder')">🛡️ HACK</button>
     </div>
 
-    <div class="launch-banner shadow-pulse">
-        <div class="glitch-text">⚠️ PROTOCOL OMEGA-20</div>
-        <h3>THE ELITE 20 EXCLUSIVE</h3>
-        <p>First 20 customers on launch get 1 FREE MOVIE!</p>
-    </div>
-
     <div id="movies-folder" class="tab-content active"><div id="movies-list" class="product-grid"></div></div>
     <div id="tv-folder" class="tab-content"><div id="tv-list" class="product-grid"></div></div>
     <div id="games-folder" class="tab-content"><div id="games-list" class="product-grid"></div></div>
@@ -64,24 +59,15 @@
     <div id="software-folder" class="tab-content"><div id="software-list" class="product-grid"></div></div>
     <div id="dev-folder" class="tab-content"><div id="dev-list" class="product-grid"></div></div>
 
-    <section class="about-titan">
-        <h3>THE TITAN PROTOCOL</h3>
-        <p>14 28 Crescent, Warren Park 1. Authorized by <b>Regilator</b>.</p>
-        <div class="action-grid">
-            <div class="action-item">✔️ 4K Media</div>
-            <div class="action-item">✔️ Gaming</div>
-            <div class="action-item">✔️ Hacking</div>
-        </div>
-    </section>
-
     <section class="review-box">
         <h4>CUSTOMER INTEL</h4>
         <div id="display-reviews"></div>
     </section>
 
-    <section class="price-list">
-        <h3>🚀 MOBILE SERVICE</h3>
-        <div class="tier"><span>📍 Warren Park 1</span><b>$2.00</b></div>
+    <section class="qr-download-zone">
+        <h3 style="color:var(--purple); font-family:'Orbitron'; font-size:0.8rem;">OFFICIAL TERMINAL QR</h3>
+        <div id="qrcode"></div>
+        <button class="btn wa-alt" onclick="shareSite()" style="margin-top:15px; width:80%;">📤 SHARE & WIN</button>
     </section>
 </main>
 
@@ -97,11 +83,5 @@
 </footer>
 
 <script src="script.js"></script>
-    <section class="qr-download-zone" style="text-align:center; padding:40px 20px; background:#0a0a0a; border-top:1px solid #222;">
-    <h3 style="color:var(--purple); font-family:'Orbitron'; font-size:0.9rem;">SCAN TO DOWNLOAD APK</h3>
-    <div id="qrcode" style="display: flex; justify-content: center; margin: 20px 0;"></div>
-    <p style="font-size:0.7rem; color:#666;">Point your camera to install the Terminal App</p>
-</section>
-
 </body>
 </html>
