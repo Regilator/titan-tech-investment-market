@@ -5,3 +5,5 @@ Google Account (FRP) Removal|7 USD|assets/REPAIRS/frp.png|REPAIRS
 Laptop Hardware Cleaning|5 USD|assets/REPAIRS/clean.png|REPAIRS
 Driver & Software Setup|5 USD|assets/REPAIRS/soft.png|REPAIRS
 System Speed Optimization|5 USD|assets/REPAIRS/boost.png|REPAIRS
+The Flash|            inbox for price|assets/MOVIES/the_flash.png|MOVIES
+Mortal Kombat|                                            inbox for price|assets/MOVIES/mk.png|MOVIES
