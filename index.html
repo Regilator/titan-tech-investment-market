@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ff0000">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
+
     <div id="splash">
         <h1 class="neon-red">TITAN TECH <span class="neon-purple">OMEGA</span></h1>
         <div class="loader"><div class="progress"></div></div>
@@ -18,14 +18,14 @@
     <div id="tos-overlay">
         <div class="tos-box">
             <h2 class="neon-red">SECURITY PROTOCOL</h2>
-            <p>Authorized Access: 14 28 Crescent. Agree to initialize Terminal.</p>
+            <p>Accessing Titan Tech Database... Harare Terminal Initializing.</p>
             <button class="tos-btn" onclick="acceptTerms()">INITIALIZE</button>
         </div>
     </div>
 
     <header>
         <h1 class="neon-red">TITAN TECH <span class="neon-purple">Ω</span></h1>
-        <div id="status-indicator">SYNCING...</div>
+        <div id="status-indicator">SYSTEM SYNCING...</div>
     </header>
 
     <nav class="tab-bar">
@@ -40,7 +40,7 @@
     </nav>
 
     <div class="search-wrapper">
-        <input type="text" id="catalog-search" placeholder="Search services or media...">
+        <input type="text" id="catalog-search" placeholder="Search tech catalog...">
         <button class="request-btn" onclick="sendWhatsAppRequest()">+ REQUEST</button>
     </div>
 
@@ -59,16 +59,20 @@
             </div>
             <hr class="neon-line">
             <button class="tos-btn" onclick="closeReceipt()">CLOSE</button>
-            <button class="tos-btn" style="border-color:var(--red); color:var(--red);" onclick="window.print()">PRINT</button>
+            <button class="tos-btn" style="border-color:var(--red); color:var(--red);" onclick="window.print()">PRINT/SAVE</button>
         </div>
     </div>
 
     <div id="qr-wrap">
-        <h4 class="neon-purple">TITAN TECH TERMINAL</h4>
+        <h4 class="neon-purple">SCAN TO SHARE TERMINAL</h4>
+        <p style="color: #666; font-size: 0.7rem; margin-bottom: 10px;">TITAN TECH INVESTMENT | HARARE</p>
         <img src="97093.jpg" alt="Titan Tech QR" id="branded-qr">
     </div>
 
-    <footer><p>&copy; 2026 REGILATOR | HARARE</p></footer>
+    <footer>
+        <p>&copy; 2026 REGILATOR | WARREN PARK 1 | HARARE</p>
+    </footer>
+
     <script src="app.js"></script>
 </body>
 </html>
