@@ -10,6 +10,24 @@
 
 </head><meta name="google-site-verification" content="UTdbkkoWC2JzbVE3yL6UPGHbv5uLIHgNeI31dwxyFys" />
 <body>
+    async function checkLiveStatus() {
+    try {
+        const res = await fetch('status.txt');
+        const status = await res.text();
+        const text = document.getElementById('status-text');
+        
+        if (status.trim() === "ONLINE") {
+            text.innerText = "🟢 TERMINAL LIVE AT 14 28 CRESCENT";
+            text.style.color = "#00ff00";
+        } else {
+            text.innerText = "🔴 TERMINAL STANDBY (OFFLINE)";
+            text.style.color = "#ff0000";
+        }
+    } catch (e) {
+        console.log("Status check failed");
+    }
+}
+
 
 <div id="tos-overlay" class="tos-overlay">
     <div class="tos-box">
