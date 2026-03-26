@@ -1,34 +1,30 @@
---- 🔥 TODAY'S OMEGA SPECIALS ---
-OMEGA-20 DEAL | FIRST 20 CUSTOMERS | 1 FREE MOVIE | special.jpg
-GAMER BUNDLE | BUY 3 PC GAMES | GET 1 FREE | bundle.jpg
+--- MOVIES ---
+Deadpool & Wolverine | $1.00 | 4K Ultra HD | deadpool.jpg
+Moana 2 | $1.00 | Animated 4K | moana2.jpg
+Gladiator II | $1.00 | Action 4K | gladiator.jpg
+Joker: Folie à Deux | $1.00 | 4K HDR | joker2.jpg
 
---- 🎬 MOVIES ---
-Deadpool & Wolverine | $1 | 4K | deadpool.jpg
-Moana 2 | $1 | Family | moana2.jpg
-Furiosa | $1 | Action | furiosa.jpg
+--- TV SHOWS ---
+The Last of Us S2 | $2.00 | Full Season | tlou2.jpg
+House of the Dragon | $2.00 | S1 & S2 | hotd.jpg
 
---- 📺 TV SHOWS ---
-The Last of Us S2 | $2 | Full HD | lastofus.jpg
-House of the Dragon | $2 | S1-S2 | dragon.jpg
-The Boys S4 | $1 | Action | boys.jpg
+--- PC GAMES ---
+FC 25 | $5.00 | Full Unlocked | fc25.jpg
+GTA V | $3.00 | Premium Edition | gtav.jpg
+Black Ops 6 | $10.00 | Pre-Order | bo6.jpg
 
---- 🎮 PC GAMES ---
-GTA V | $5 | Modded | gta5.jpg
-FIFA 25 | $5 | Updated | fifa25.jpg
-Elden Ring | $5 | RPG | elden.jpg
+--- MOBILE ---
+Minecraft PE | FREE | Official APK | mc.jpg
+GTA San Andreas | $1.00 | Remastered | gtasa.jpg
 
---- 📱 MOBILE GAMES & TOOLS ---
-GTA San Andreas | $2 | Android | gtasa.jpg
-WhatsApp Anti-Ban | CONTACT | Pro Tool | wtools.jpg
+--- MUSIC ---
+Winky D - Greatest Hits | $1.00 | High Quality | winkyd.jpg
+Killer T - Recent | $1.00 | Full Album | killert.jpg
 
---- 💿 MUSIC & MP3 ---
-Zimdancehall 2026 | $1 | Full Pack | zim.jpg
-Global Top 40 | $1 | Hits | top40.jpg
+--- SOFT ---
+Adobe Photoshop 2024 | $5.00 | Activated | ps.jpg
+Office 365 | $3.00 | Lifetime | office.jpg
 
---- 💻 PC SOFTWARE ---
-Windows 11 Pro | $5 | Install | win11.jpg
-Adobe Suite 2026 | CONTACT | Graphics | adobe.jpg
-
---- 🛡️ CODING & HACKING ---
-Python Course | CONTACT | PDF Pack | python.jpg
-Termux Hacking Pack | CONTACT | Scripts | hack.jpg
+--- HACK ---
+Python Termux Setup | CONTACT | Full Install | python.jpg
+WhatsApp Bot Script | CONTACT | Anti-Ban | bot.jpg
