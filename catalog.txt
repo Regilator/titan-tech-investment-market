@@ -1,30 +1,6 @@
---- MOVIES ---
-Deadpool & Wolverine | $1.00 | 4K Ultra HD | deadpool.jpg
-Moana 2 | $1.00 | Animated 4K | moana2.jpg
-Gladiator II | $1.00 | Action 4K | gladiator.jpg
-Joker: Folie à Deux | $1.00 | 4K HDR | joker2.jpg
-
---- TV SHOWS ---
-The Last of Us S2 | $2.00 | Full Season | tlou2.jpg
-House of the Dragon | $2.00 | S1 & S2 | hotd.jpg
-
---- PC GAMES ---
-FC 25 | $5.00 | Full Unlocked | fc25.jpg
-GTA V | $3.00 | Premium Edition | gtav.jpg
-Black Ops 6 | $10.00 | Pre-Order | bo6.jpg
-
---- MOBILE ---
-Minecraft PE | FREE | Official APK | mc.jpg
-GTA San Andreas | $1.00 | Remastered | gtasa.jpg
-
---- MUSIC ---
-Winky D - Greatest Hits | $1.00 | High Quality | winkyd.jpg
-Killer T - Recent | $1.00 | Full Album | killert.jpg
-
---- SOFT ---
-Adobe Photoshop 2024 | $5.00 | Activated | ps.jpg
-Office 365 | $3.00 | Lifetime | office.jpg
-
---- HACK ---
-Python Termux Setup | CONTACT | Full Install | python.jpg
-WhatsApp Bot Script | CONTACT | Anti-Ban | bot.jpg
+Phone Flashing|$15.00|assets/SERVICES/flash.webp|SERVICES
+Windows Install|$20.00|assets/SERVICES/win.webp|SERVICES
+Screen Repair|$45.00|assets/SERVICES/screen.webp|SERVICES
+Avatar 2|Free|assets/MOVIES/avatar.webp|MOVIES
+House of Dragon|Free|assets/TV SHOWS/hod.webp|TV SHOWS
+GTA V|$5.00|assets/GAMES/gta.webp|GAMES
