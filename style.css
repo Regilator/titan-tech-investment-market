@@ -1,16 +1,20 @@
 :root { --red: #ff0000; --purple: #A020F0; --bg: #050505; --card: #121212; }
 body { background: var(--bg); color: white; margin: 0; font-family: 'Consolas', monospace; overflow-x: hidden; }
 
+/* Splash & Loading */
 #splash { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; transition: 0.6s; }
 .progress { width: 0%; height: 3px; background: var(--red); animation: load 2.5s forwards; }
 @keyframes load { to { width: 100%; } }
 .neon-red { color: var(--red); text-shadow: 0 0 10px var(--red); }
 .neon-purple { color: var(--purple); text-shadow: 0 0 10px var(--purple); }
 
-.tab-bar { display: flex; overflow-x: auto; padding: 10px; border-bottom: 1px solid #222; scrollbar-width: none; }
+/* Navigation Tabs */
+.tab-bar { display: flex; overflow-x: auto; padding: 10px; border-bottom: 1px solid #222; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.tab-bar::-webkit-scrollbar { display: none; }
 .tab-btn { background: transparent; border: 1px solid #333; color: #888; padding: 8px 15px; margin-right: 10px; border-radius: 4px; cursor: pointer; font-size: 0.65rem; white-space: nowrap; }
 .tab-btn.active { border-color: var(--purple); color: var(--purple); box-shadow: 0 0 10px var(--purple); }
 
+/* Search & UI */
 .search-wrapper { padding: 15px; display: flex; gap: 10px; position: sticky; top: 0; background: var(--bg); z-index: 999; }
 #catalog-search { flex: 2; padding: 12px; background: #111; border: 1px solid var(--red); color: white; outline: none; }
 .request-btn { flex: 1; background: var(--purple); color: white; border: none; font-size: 0.6rem; font-weight: bold; border-radius: 4px; cursor: pointer; }
@@ -22,12 +26,12 @@ header { padding: 25px; text-align: center; border-bottom: 2px solid var(--purpl
 .item-details { padding: 10px; }
 .item-price { color: var(--red); font-weight: bold; font-size: 0.8rem; }
 
+/* Large QR Section */
+#qr-wrap { text-align: center; padding: 40px 15px; border-top: 1px solid #222; background: #000; }
+#branded-qr { width: 90%; max-width: 350px; height: auto; border: 3px solid var(--purple); border-radius: 12px; box-shadow: 0 0 25px rgba(160, 32, 240, 0.4); margin: 15px auto; display: block; }
+
+/* Modals & Buttons */
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 11000; }
 .receipt-box { background: #000; border: 2px solid var(--purple); padding: 25px; width: 85%; max-width: 320px; box-shadow: 0 0 20px var(--purple); }
-.receipt-sub { font-size: 0.6rem; color: #666; text-align: center; }
-.neon-line { border: 0; border-top: 1px solid var(--red); margin: 10px 0; }
-
-#qr-wrap { text-align: center; padding: 20px; border-top: 1px solid #222; }
-#branded-qr { width: 220px; border: 1px solid var(--purple); border-radius: 8px; }
 .tos-btn { background: transparent; border: 1px solid var(--purple); color: var(--purple); padding: 8px 15px; cursor: pointer; margin-top: 10px; width: 100%; }
 footer { text-align: center; padding: 20px; font-size: 0.6rem; color: #444; }
