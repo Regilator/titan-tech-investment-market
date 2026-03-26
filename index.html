@@ -1,13 +1,17 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>TITAN TECH OMEGA | Regilator Terminal</title>
+    <meta name="google-site-verification" content="UTdbkkoWC2JzbVE3yL6UPGHbv5uLIHgNeI31dwxyFys" />
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;500&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <meta name="google-site-verification" content="UTdbkkoWC2JzbVE3yL6UPGHbv5uLIHgNeI31dwxyFys" />
 </head>
 <body>
 
@@ -64,10 +68,10 @@
         <div id="display-reviews"></div>
     </section>
 
-    <section class="qr-download-zone">
+    <section class="qr-download-zone" style="text-align:center;">
         <h3 style="color:var(--purple); font-family:'Orbitron'; font-size:0.8rem;">OFFICIAL TERMINAL QR</h3>
-        <div id="qrcode"></div>
-        <button class="btn wa-alt" onclick="shareSite()" style="margin-top:15px; width:80%;">📤 SHARE & WIN</button>
+        <div id="qrcode" style="display:flex; justify-content:center; margin:15px auto; background:white; padding:10px; width:fit-content; border-radius:5px;"></div>
+        <button class="btn wa-alt" onclick="shareSite()" style="width:80%; margin-top:10px;">📤 SHARE TERMINAL</button>
     </section>
 </main>
 
