@@ -1,6 +1,6 @@
 Samsung Firmware Flash|10 USD|assets/REPAIRS/flash.png|Repairs
 iPhone iCloud Bypass|15 USD|assets/REPAIRS/bypass.png|Repairs
-Windows 11 Pro Install|10 USD|assets/REPAIRS/win11.png|Repairs
+Windows 11 Pro Install|10 USD|assets/Repairs/win11.png|Repairs
 Google Account (FRP) Removal|7 USD|assets/REPAIRS/frp.png|Repairs
 Laptop Hardware Cleaning|5 USD|assets/REPAIRS/clean.png|Repairs
 Driver & Software Setup|5 USD|assets/REPAIRS/soft.png|Repairs
