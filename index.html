@@ -3,32 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TITAN TECH OMEGA</title>
+    <title>TITAN TECH OMEGA | HARARE</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div id="splash">
         <h1 class="neon-red">TITAN TECH <span class="neon-purple">OMEGA</span></h1>
-        <div class="loader"><div class="progress"></div></div>
+        <div class="loader-container">
+            <div class="progress-bar"></div>
+        </div>
+        <p style="font-size: 0.6rem; margin-top: 10px; color: #444; letter-spacing: 2px;">INITIALIZING SYSTEM v3.0...</p>
     </div>
 
     <div id="countdown-banner">
-        <p>OMEGA PROTOCOL INITIALIZING IN: <span id="timer" class="neon-red">--:--:--</span></p>
+        <p>OMEGA PROTOCOL DEPLOYMENT: <span id="timer" class="neon-red">--:--:--</span></p>
     </div>
 
     <header>
         <h1 class="neon-red">TITAN TECH <span class="neon-purple">Ω</span></h1>
-        <p style="font-size: 0.6rem; color: #666; letter-spacing: 2px;">WARREN PARK 1 | HARARE</p>
+        <p class="location-tag">14 28 CRESCENT | WARREN PARK 1</p>
     </header>
 
-    <section id="about-terminal">
-        <div class="status-box">
-            <p><strong>OPERATOR:</strong> LOD OF TECH</p>
-            <p><strong>LAUNCH:</strong> <span class="neon-red">01 APRIL 2026</span></p>
-            <p class="bio-text">Premium Hub for 4K Media, Pro Phone Flashing, and Windows Systems.</p>
+    <section id="operator-profile">
+        <div class="status-card">
+            <p><strong>OFFICER:</strong> LOD OF TECH</p>
+            <p><strong>BATTALION:</strong> TITAN TECH INVESTMENT</p>
+            <p><strong>ESTABLISHED:</strong> MARCH 2026</p>
+            <div class="bio-line"></div>
+            <p class="description">Harare's elite hub for 4K Media, Professional Mobile Flashing, and Windows System Engineering.</p>
         </div>
     </section>
+
+    <div class="contact-grid">
+        <a href="tel:+263715913665" class="contact-card neon-red">
+            <span class="label">LINE 1: ADMIN</span>
+            <span class="phone">+263 71 591 3665</span>
+        </a>
+        <a href="tel:+263781847711" class="contact-card neon-purple">
+            <span class="label">LINE 2: TECH</span>
+            <span class="phone">+263 78 184 7711</span>
+        </a>
+    </div>
 
     <nav class="tab-bar">
         <button class="tab-btn active" onclick="switchTab('ALL')">ALL</button>
@@ -41,36 +57,56 @@
         <button class="tab-btn" onclick="switchTab('HACK')">HACK</button>
     </nav>
 
-    <div class="contact-grid">
-        <a href="tel:+263715913665" class="contact-card neon-red"><span>CALL ADMIN</span></a>
-        <a href="tel:+263781847711" class="contact-card neon-purple"><span>CALL TECH</span></a>
-    </div>
-
     <div class="search-wrapper">
-        <input type="text" id="catalog-search" placeholder="Search tech catalog...">
-        <button class="request-btn" onclick="sendWhatsAppRequest()">+ REQUEST</button>
+        <input type="text" id="catalog-search" placeholder="Search the Omega database...">
+        <button class="request-btn" onclick="sendWhatsAppRequest()">SEND REQUEST</button>
     </div>
 
-    <main id="catalog-grid" class="catalog-container"></main>
+    <main id="catalog-grid" class="catalog-container">
+        </main>
 
     <section id="location-hub">
-        <h3 class="neon-purple">OPERATIONS CENTER</h3>
+        <h3 class="section-title neon-purple">OPERATIONS CENTER</h3>
         <div class="location-box">
-            <iframe width="100%" height="200" frameborder="0" style="border:0; border-radius: 8px; filter: invert(90%) hue-rotate(180deg);" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3798.114742517876!2d30.9855555!3d-17.8333333!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1931a4e7f8e8e8e7%3A0x8e8e8e8e8e8e8e8e!2sWarren%20Park%201%2C%20Harare!5e0!3m2!1sen!2szw!4v1711461600000!5m2!1sen!2szw"></iframe>
-            <p style="font-size: 0.7rem; margin-top: 10px;">📍 14 28 Crescent, Warren Park 1, Harare</p>
+            <iframe 
+                width="100%" 
+                height="220" 
+                frameborder="0" 
+                style="border:0; border-radius: 8px; filter: invert(90%) hue-rotate(180deg);" 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3798.123456789!2d31.0!3d-17.8!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTfCsDQ4JzAwLjAiUyAzMcKwMDAnMDAuMCJF!5e0!3m2!1sen!2szw!4v1711464400000!5m2!1sen!2szw" 
+                allowfullscreen>
+            </iframe>
+            <div class="address-text">
+                <p>📍 14 28 Crescent, Warren Park 1, Harare</p>
+                <p>⏰ 08:00 - 21:00 (Open Daily)</p>
+            </div>
         </div>
     </section>
 
-    <div id="qr-wrap">
-        <h4 class="neon-purple">SCAN TO SHARE</h4>
-        <div class="qr-container"><img id="digital-qr" src="" alt="QR"></div>
-        <div class="qr-action-box">
-            <button class="download-btn" onclick="downloadDigitalQR()">💾 SAVE QR</button>
-            <button class="share-btn" onclick="shareTerminal()">🔗 SHARE LINK</button>
+    <section id="reviews">
+        <h3 class="section-title neon-red">CUSTOMER LOGS</h3>
+        <div class="review-scroll">
+            <div class="review-card"><p>"Best flashing in Harare!"</p><span>- Tinashe M.</span></div>
+            <div class="review-card"><p>"Fast Windows install."</p><span>- Simba 01</span></div>
+            <div class="review-card"><p>"Movies are crystal clear."</p><span>- Grace T.</span></div>
         </div>
-    </div>
+    </section>
 
-    <footer><p>© 2026 TITAN TECH INVESTMENT | HARARE</p></footer>
+    <section id="qr-protocol">
+        <h4 class="neon-purple">SCAN TO SHARE TERMINAL</h4>
+        <div class="qr-frame">
+            <img id="digital-qr" src="" alt="Titan Tech Branded QR">
+        </div>
+        <div class="qr-actions">
+            <button class="action-btn purple-glow" onclick="downloadDigitalQR()">💾 SAVE QR</button>
+            <button class="action-btn red-glow" onclick="shareTerminal()">🔗 SHARE LINK</button>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 TITAN TECH INVESTMENT | OMEGA PROTOCOL v3.0</p>
+        <p style="color: #333; font-size: 0.5rem; margin-top: 5px;">DEVELOPED BY LOD OF TECH</p>
+    </footer>
 
     <script src="app.js"></script>
 </body>
