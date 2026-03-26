@@ -105,3 +105,24 @@ window.onload = () => {
         });
     }
 };
+function updateBusinessStatus() {
+    const now = new Date();
+    const hour = now.getHours();
+    const dot = document.getElementById('status-dot');
+    const text = document.getElementById('status-text');
+
+    // Business Hours: 8 AM to 9 PM (Adjust as needed)
+    if (hour >= 8 && hour < 21) {
+        dot.style.backgroundColor = "#00ff00"; // Green
+        text.innerText = "🟢 ONLINE | TERMINAL ACTIVE";
+        text.style.color = "#00ff00";
+    } else {
+        dot.style.backgroundColor = "#ff0000"; // Red
+        text.innerText = "🔴 OFFLINE | BACK AT 08:00 AM";
+        text.style.color = "#ff0000";
+    }
+}
+
+// Call this inside your window.onload
+updateBusinessStatus();
+
