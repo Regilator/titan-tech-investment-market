@@ -1,37 +1,44 @@
-let currentCategory = 'ALL';
-
-// TITAN TECH OFFICIAL BUSINESS LINES
 const WHATSAPP_LINES = [
-    { label: "Line 1 (Sales)", number: "263715913665" },
-    { label: "Line 2 (Tech)", number: "263719597612" }
+    { label: "LINE 1 (Admin/Sales)", number: "263715913665" },
+    { label: "LINE 2 (Tech/Partner)", number: "263781847711" }
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Splash Handler
-    setTimeout(() => {
-        document.getElementById('splash').style.opacity = '0';
-        setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 600);
-    }, 2800);
+    // Hide splash
+    setTimeout(() => { document.getElementById('splash').style.opacity = '0'; 
+        setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 800);
+    }, 2500);
 
-    // Initializers
-    if(localStorage.getItem('titan_omega_auth')) {
-        document.getElementById('tos-overlay').style.display = 'none';
-    }
-    
-    updateStatus();
+    startCountdown();
+    generateDigitalQR();
     loadCatalog();
     
     document.getElementById('catalog-search').addEventListener('keyup', (e) => {
-        filterGrid(e.target.value.toLowerCase());
+        const cat = document.querySelector('.tab-btn.active').innerText;
+        filterGrid(e.target.value.toLowerCase(), cat);
     });
 });
 
-function switchTab(cat) {
-    currentCategory = cat.toUpperCase();
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.innerText.toUpperCase() === currentCategory);
-    });
-    filterGrid(document.getElementById('catalog-search').value.toLowerCase());
+function startCountdown() {
+    const launchDate = new Date("April 1, 2026 00:00:00").getTime();
+    setInterval(() => {
+        const now = new Date().getTime();
+        const dist = launchDate - now;
+        if (dist < 0) {
+            document.getElementById("timer").innerHTML = "TERMINAL ONLINE";
+            return;
+        }
+        const d = Math.floor(dist / (1000 * 60 * 60 * 24));
+        const h = Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((dist % (1000 * 60)) / 1000);
+        document.getElementById("timer").innerHTML = `${d}d ${h}h ${m}m ${s}s`;
+    }, 1000);
+}
+
+function generateDigitalQR() {
+    const currentUrl = window.location.href;
+    document.getElementById('digital-qr').src = `https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=${encodeURIComponent(currentUrl)}`;
 }
 
 async function loadCatalog() {
@@ -40,50 +47,42 @@ async function loadCatalog() {
         const data = await res.text();
         const grid = document.getElementById('catalog-grid');
         grid.innerHTML = data.split('\n').filter(l => l.includes('|')).map(line => {
-            const [n, p, i, c] = line.split('|');
-            return `
-                <div class="item-card" data-name="${n.toLowerCase()}" data-cat="${c.trim().toUpperCase()}" onclick="generateReceipt('${n}', '${p}')">
-                    <img src="${i.trim()}" loading="lazy" onerror="this.src='https://via.placeholder.com/150?text=TITAN+TECH'">
-                    <div class="item-details"><h4>${n}</h4><p class="item-price">${p}</p></div>
-                </div>`;
+            const [name, price, img, cat] = line.split('|');
+            return `<div class="item-card" data-name="${name.toLowerCase()}" data-cat="${cat.trim().toUpperCase()}">
+                <img src="${img.trim()}" onerror="this.src='https://via.placeholder.com/150?text=TITAN+TECH'">
+                <div class="item-details"><strong>${name}</strong><br><span style="color:var(--red)">${price}</span></div></div>`;
         }).join('');
-        filterGrid('');
-    } catch (e) { console.error("Database Sync Failed."); }
+    } catch (e) { console.error("Catalog Fetch Failed."); }
 }
 
-function filterGrid(query) {
+function switchTab(cat) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.innerText === cat));
+    filterGrid(document.getElementById('catalog-search').value.toLowerCase(), cat);
+}
+
+function filterGrid(q, cat) {
     document.querySelectorAll('.item-card').forEach(card => {
-        const nameMatch = card.dataset.name.includes(query);
-        const catMatch = (currentCategory === 'ALL' || card.dataset.cat === currentCategory);
-        card.style.display = (nameMatch && catMatch) ? 'block' : 'none';
+        const match = card.dataset.name.includes(q) && (cat === 'ALL' || card.dataset.cat === cat);
+        card.style.display = match ? 'block' : 'none';
     });
 }
 
 function sendWhatsAppRequest() {
     const item = prompt("What are you looking for?");
     if (!item) return;
-    const choice = prompt("Select Line (Type 1 or 2):\n1. Sales / Inquiries\n2. Tech Support / Flashing");
-    let line = (choice === "2") ? WHATSAPP_LINES[1].number : WHATSAPP_LINES[0].number;
-    const msg = encodeURIComponent(`TITAN TECH REQUEST: Is [${item}] available at the shop?`);
-    window.open(`https://wa.me/${line}?text=${msg}`, '_blank');
+    const choice = prompt("Select Service Line:\n1. Admin/Sales (0715913665)\n2. Tech/Partner (0781847711)");
+    const num = (choice === "2") ? WHATSAPP_LINES[1].number : WHATSAPP_LINES[0].number;
+    window.open(`https://wa.me/${num}?text=${encodeURIComponent('TITAN OMEGA REQUEST: ' + item)}`, '_blank');
 }
 
-function generateReceipt(n, p) {
-    const cust = prompt("Customer Name:");
-    if (!cust) return;
-    document.getElementById('rec-cust').innerText = cust.toUpperCase();
-    document.getElementById('rec-item').innerText = n.toUpperCase();
-    document.getElementById('rec-price').innerText = p;
-    document.getElementById('rec-date').innerText = new Date().toLocaleDateString();
-    document.getElementById('receipt-modal').style.display = 'flex';
+async function shareTerminal() {
+    try {
+        await navigator.share({ title: 'TITAN TECH OMEGA', text: 'Professional Tech Services in Harare!', url: window.location.href });
+    } catch (e) { window.open(`https://wa.me/?text=${encodeURIComponent(window.location.href)}`); }
 }
 
-function closeReceipt() { document.getElementById('receipt-modal').style.display = 'none'; }
-function acceptTerms() { localStorage.setItem('titan_omega_auth', 'true'); document.getElementById('tos-overlay').style.display = 'none'; }
-function updateStatus() {
-    const h = new Date().getHours();
-    const s = document.getElementById('status-indicator');
-    s.innerHTML = (h >= 8 && h < 21) ? '<span style="color:#00ff88">● ONLINE</span>' : '<span style="color:#ff4444">○ OFFLINE</span>';
+async function downloadDigitalQR() {
+    const res = await fetch(document.getElementById('digital-qr').src);
+    const blob = await res.blob();
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "Titan_Tech_QR.png"; a.click();
 }
-
-if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
