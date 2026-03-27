@@ -7,15 +7,16 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 let activeOrder = null;
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Hide splash
-    setTimeout(() => { document.getElementById('splash').style.opacity = '0'; 
-    setTimeout(() => document.getElementById('splash').style.display = 'none', 500); }, 2000);
+// TARGET DATE: April 1, 2026
+const OPEN_DATE = new Date("April 1, 2026 08:00:00").getTime();
 
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 2000);
+    
     loadCatalog();
+    startClocks(); // Start both the System Clock and the Countdown
     generateQR();
 
-    // Search
     document.getElementById('catalog-search').addEventListener('input', (e) => {
         const term = e.target.value.toLowerCase();
         document.querySelectorAll('.item-card').forEach(card => {
@@ -23,6 +24,30 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+function startClocks() {
+    const liveClock = document.getElementById('live-clock');
+    const countdownClock = document.getElementById('countdown-clock');
+
+    setInterval(() => {
+        const now = new Date();
+        
+        // 1. System Clock (HH:MM:SS)
+        liveClock.innerText = now.toLocaleTimeString('en-GB');
+
+        // 2. Opening Countdown
+        const diff = OPEN_DATE - now.getTime();
+        if (diff > 0) {
+            const d = Math.floor(diff / 86400000);
+            const h = Math.floor((diff % 86400000) / 3600000);
+            const m = Math.floor((diff % 3600000) / 60000);
+            const s = Math.floor((diff % 60000) / 1000);
+            countdownClock.innerText = `${d}d ${h}h ${m}m ${s}s`;
+        } else {
+            countdownClock.innerText = "WE ARE LIVE!";
+        }
+    }, 1000);
+}
 
 function loadCatalog() {
     db.ref('catalog').on('value', snap => {
@@ -38,20 +63,17 @@ function renderGrid(data, filter = 'ALL') {
     Object.keys(data).forEach(id => {
         const item = data[id];
         if (filter !== 'ALL' && item.cat !== filter) return;
-
-        // Correctly handle the images you uploaded
-        // If the path is assets/movies/pic.png, it will try to find it.
-        // If it fails, it shows the Red T logo instead!
+        
         let visual = (item.img && item.img !== "") ? 
-            `<img src="${item.img}" onerror="this.outerHTML='<div class=\'titan-logo-css\' style=\'transform:scale(0.6); margin:35px auto;\'></div>'">` : 
-            `<div class="titan-logo-css" style="transform:scale(0.6); margin:35px auto;"></div>`;
+            `<img src="${item.img}" onerror="this.src='https://via.placeholder.com/150?text=TITAN'">` : 
+            `<div class="titan-logo-css" style="transform:scale(0.6); margin:30px auto;"></div>`;
 
         grid.innerHTML += `
             <div class="item-card" onclick="selectItem('${item.name}', '${item.price}')">
                 ${visual}
                 <div style="padding:10px;">
                     <div style="font-size:10px; height:30px; overflow:hidden;">${item.name}</div>
-                    <div style="color:#FF0000; font-weight:bold; margin-top:5px;">${item.price}</div>
+                    <div style="color:var(--titan-red); font-weight:bold; margin-top:5px;">${item.price}</div>
                 </div>
             </div>`;
     });
@@ -65,20 +87,21 @@ function selectItem(name, price) {
 
 function checkout() {
     db.ref('sales').push({ name: activeOrder.name, price: activeOrder.price, time: new Date().toLocaleString() });
-    window.open(`https://wa.me/263715913665?text=TITAN+ORDER:+${encodeURIComponent(activeOrder.name)}+(${activeOrder.price})`);
-}
-
-function switchTab(cat) {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.innerText.includes(cat) || (cat==='ALL' && b.innerText==='ALL')));
-    const isV = (cat === 'VOUCHERS');
-    document.getElementById('catalog-grid').style.display = isV ? 'none' : 'grid';
-    document.getElementById('voucher-zone').style.display = isV ? 'block' : 'none';
-    if(!isV) renderGrid(JSON.parse(localStorage.getItem('titan_data')) || {}, cat);
+    window.open(`https://wa.me/263715913665?text=TITAN+ORDER:+${encodeURIComponent(activeOrder.name)}`);
 }
 
 function generateQR() {
     const qr = document.getElementById('titan-digital-qr');
-    if(qr) qr.src = `https://quickchart.io/qr?text=${encodeURIComponent(window.location.href)}&size=150&centerImageUrl=https://img.icons8.com/color/96/shield.png`;
+    if(qr) qr.src = `https://quickchart.io/qr?text=${encodeURIComponent(window.location.href)}&size=150`;
+}
+
+function switchTab(cat) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    const isV = (cat === 'VOUCHERS');
+    document.getElementById('catalog-grid').style.display = isV ? 'none' : 'grid';
+    document.getElementById('voucher-zone').style.display = isV ? 'block' : 'none';
+    if(!isV) renderGrid(JSON.parse(localStorage.getItem('titan_data')) || {}, cat);
 }
 
 function revealVoucher() {
@@ -87,6 +110,6 @@ function revealVoucher() {
         if(snap.exists()){
             document.getElementById('voucher-pin-out').innerText = snap.val();
             document.getElementById('reveal-display').style.display = 'block';
-        } else { alert("CODE EXPIRED OR INVALID"); }
+        } else { alert("INVALID CODE"); }
     });
 }
