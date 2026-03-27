@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TITAN TECH INVESTMENT | OMEGA</title>
+    <title>TITAN TECH | OMEGA HUB</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,13 +12,13 @@
         <div class="splash-content">
             <h1 class="neon-text">TITAN OMEGA</h1>
             <div class="loader-bar"><div class="progress"></div></div>
-            <p style="font-size:10px; letter-spacing:2px;">INITIALIZING SYSTEMS...</p>
+            <p style="font-size:10px; letter-spacing:2px;">INITIALIZING OMEGA SALES...</p>
         </div>
     </div>
 
     <div class="news-ticker">
         <div class="ticker-content">
-            SYSTEMS ONLINE... NEW ARRIVALS: THE FLASH (2023), MORTAL KOMBAT XL, WINDOWS 11 PRO... CONTACT TECH FOR SOFTWARE REQUESTS... FASTEST REPAIRS IN WARREN PARK...
+            MOBILE DELIVERY AVAILABLE... 10 MOVIES FOR $1... 2 SEASONS FOR $1... GAMES BY SIZE... REPAIRS AT 14 28 CRESCENT...
         </div>
     </div>
 
@@ -26,9 +26,9 @@
         <h1 class="neon-text">TITAN TECH</h1>
         <div class="status-container">
             <span id="status-light" class="offline"></span>
-            <span id="status-text">SYSTEM OFFLINE</span>
+            <span id="status-text">OFFLINE</span>
         </div>
-        <div id="timer" class="countdown">00d 00h 00m 00s</div>
+        <button onclick="openMap()" class="map-btn">📍 FIND SHOP</button>
     </header>
 
     <nav class="tabs">
@@ -41,24 +41,32 @@
 
     <main>
         <div class="action-bar">
-            <input type="text" id="catalog-search" placeholder="Search the Omega database...">
-            <button onclick="sendGeneralRequest()" class="request-btn">SEND REQUEST</button>
+            <input type="text" id="catalog-search" placeholder="Search Titan database...">
+            <button onclick="sendGeneralRequest()" class="request-btn">REQUEST</button>
         </div>
-
-        <div id="catalog-grid" class="grid">
-            </div>
+        <div id="catalog-grid" class="grid"></div>
     </main>
 
-    <section class="reviews-section">
-        <h3 class="neon-text-small">CUSTOMER FEEDBACK</h3>
-        <div class="reviews-container" id="reviews-list"></div>
-        <div style="text-align:center; margin-top:15px;">
-            <button onclick="requestReview()" class="review-btn">STRIKE A REVIEW ⚡</button>
+    <div id="cart-bar" class="cart-hidden">
+        <div class="cart-left">
+            <span id="cart-count">0 Items</span><br>
+            <span id="cart-total">$0.00</span>
         </div>
-    </section>
+        <div class="cart-center">
+            <label class="mobile-toggle">
+                <input type="checkbox" id="mobile-service-check" onchange="updateCartUI()">
+                <span class="slider"></span>
+            </label>
+            <span style="font-size: 8px; color: var(--purple); display: block; margin-top:2px;">MOBILE</span>
+        </div>
+        <div class="cart-right">
+            <button onclick="clearCart()" class="clear-btn">CLR</button>
+            <button onclick="checkout()" class="checkout-btn">ORDER ⚡</button>
+        </div>
+    </div>
 
     <footer>
-        <img id="digital-qr" src="" alt="Scan Me">
+        <img id="digital-qr" src="">
         <p>14 28 Crescent, Warren Park 1, Harare</p>
     </footer>
 
