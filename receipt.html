@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TITAN TECH | RECEIPT</title>
+    <style>
+        body { background: #000; color: #fff; font-family: 'Courier New', monospace; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .receipt-card { border: 2px solid #A020F0; padding: 25px; width: 100%; max-width: 350px; background: #0a0a0a; box-shadow: 0 0 15px rgba(160, 32, 240, 0.4); }
+        .logo { color: #A020F0; font-size: 24px; font-weight: bold; text-align: center; margin-bottom: 5px; }
+        .info { font-size: 11px; color: #666; text-align: center; margin-bottom: 20px; border-bottom: 1px dashed #333; padding-bottom: 10px; }
+        .item-row { display: flex; justify-content: space-between; margin: 10px 0; font-size: 13px; }
+        .total-box { border-top: 2px solid #A020F0; margin-top: 20px; padding-top: 15px; display: flex; justify-content: space-between; font-weight: bold; font-size: 18px; color: #00ff00; }
+        .footer { font-size: 9px; color: #444; text-align: center; margin-top: 30px; line-height: 1.4; }
+        .btn-print { background: #A020F0; color: white; border: none; padding: 12px; margin-top: 20px; width: 100%; max-width: 350px; cursor: pointer; font-weight: bold; }
+        @media print { .btn-print { display: none; } body { background: white; color: black; } .receipt-card { border: 1px solid black; box-shadow: none; } }
+    </style>
+</head>
+<body>
+    <div class="receipt-card">
+        <div class="logo">TITAN TECH</div>
+        <div class="info">
+            14 28 CRESCENT, WARREN PARK 1<br>
+            DATE: <span id="date"></span><br>
+            ID: <span id="trans-id"></span>
+        </div>
+        <div id="items-container"></div>
+        <div class="total-box">
+            <span>TOTAL:</span>
+            <span id="total-price">$0.00</span>
+        </div>
+        <div class="footer">
+            THANKS FOR CHOOSING TITAN OMEGA<br>
+            NO REFUNDS ONCE ACTIVATED<br>
+            VERIFIED SECURE TRANSACTION
+        </div>
+    </div>
+    <button class="btn-print" onclick="window.print()">PRINT / SAVE AS PDF</button>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        document.getElementById('date').innerText = new Date().toLocaleDateString();
+        document.getElementById('trans-id').innerText = Math.random().toString(36).substr(2, 7).toUpperCase();
+        document.getElementById('total-price').innerText = `$${params.get('total') || '0.00'}`;
+        
+        const items = JSON.parse(decodeURIComponent(params.get('items') || '[]'));
+        const container = document.getElementById('items-container');
+        items.forEach(i => {
+            if(i.name) container.innerHTML += `<div class="item-row"><span>${i.name}</span><span>ITEM</span></div>`;
+        });
+    </script>
+</body>
+</html>
