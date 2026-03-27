@@ -1,3 +1,17 @@
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+    projectId: "YOUR_PROJECT",
+    storageBucket: "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const messaging = firebase.messaging();
+
 let cart = [];
 const WHATSAPP_LINES = ["263715913665", "263781847711"];
 
@@ -5,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 2800);
     updateShopStatus();
     loadCatalog();
+    loadLatestAlert();
     generateBrandedQR();
     
     document.getElementById('catalog-search').addEventListener('input', (e) => {
@@ -13,113 +28,88 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-function updateShopStatus() {
-    const hours = new Date().getHours();
-    const light = document.getElementById('status-light');
-    const text = document.getElementById('status-text');
-    if (hours >= 8 && hours < 19) {
-        light.className = 'online'; text.innerText = 'ONLINE';
-    } else {
-        light.className = 'offline'; text.innerText = 'OFFLINE';
-    }
-}
-
-async function loadCatalog() {
-    try {
-        const res = await fetch('catalog.txt');
-        const text = await res.text();
+function loadCatalog() {
+    db.ref('catalog').on('value', (snapshot) => {
+        const data = snapshot.val();
         const grid = document.getElementById('catalog-grid');
-        grid.innerHTML = text.split('\n').filter(l => l.includes('|')).map(line => {
-            const [name, price, img, cat] = line.split('|').map(s => s.trim());
-            let label = (cat === "MOVIES") ? "10 FOR $1" : (cat === "SERIES") ? "2 SEASONS $1" : (cat === "GAMES") ? "BY SIZE" : (cat === "HACK" && price === "") ? "INQUIRE" : price;
+        if (!data) return;
+
+        grid.innerHTML = Object.keys(data).map(id => {
+            const item = data[id];
+            const out = item.stock <= 0;
+            let label = (item.cat === "MOVIES") ? "10 FOR $1" : (item.cat === "SERIES") ? "2 SEASONS $1" : item.price || "INQUIRE";
+            const trailerBtn = item.vid ? `<button class="tab-btn" style="font-size:8px; margin-top:5px; border-color:var(--purple);" onclick="event.stopPropagation(); playTrailer('${item.vid}')">🎬 TRAILER</button>` : "";
+
             return `
-                <div class="item-card" data-name="${name.toLowerCase()}" data-cat="${cat.toUpperCase()}" onclick="toggleCart('${name}', '${price}', '${cat}', this)">
-                    <img src="${img}" onerror="this.src='https://via.placeholder.com/150'">
+                <div class="item-card ${out ? 'out-of-stock' : ''}" onclick="${out ? '' : `toggleCart('${item.name}', '${item.price}', '${item.cat}', this)`}">
+                    ${out ? '<div class="sold-out-badge">SOLD OUT</div>' : ''}
+                    <img src="${item.img}" onerror="this.src='https://via.placeholder.com/150'">
                     <div class="item-details">
-                        <strong>${name}</strong><br>
-                        <span style="color:var(--red); font-weight:bold;">${label}</span>
+                        <strong>${item.name}</strong><br>
+                        <span style="color:var(--red); font-weight:bold;">${label}</span><br>
+                        ${trailerBtn}
                     </div>
                 </div>`;
         }).join('');
-    } catch (e) { console.log("Catalog Error"); }
+    });
+}
+
+function generateBrandedQR() {
+    // Generates QR Code with Purple markers and space for your logo
+    const currentURL = window.location.href;
+    const qrImg = document.getElementById('digital-qr');
+    qrImg.src = `https://quickchart.io/qr?text=${encodeURIComponent(currentURL)}&size=200&markerColor=%23A020F0&centerImageUrl=https://yourdomain.com/assets/titan-logo.png`;
 }
 
 function toggleCart(name, price, cat, el) {
     const idx = cart.findIndex(i => i.name === name);
-    if (idx > -1) {
-        cart.splice(idx, 1);
-        el.classList.remove('selected');
-    } else {
-        cart.push({ name, price, cat });
-        el.classList.add('selected');
-    }
+    if (idx > -1) { cart.splice(idx, 1); el.classList.remove('selected'); }
+    else { cart.push({ name, price, cat }); el.classList.add('selected'); }
     updateCartUI();
 }
 
 function updateCartUI() {
     const bar = document.getElementById('cart-bar');
-    const count = document.getElementById('cart-count');
-    const totalDisp = document.getElementById('cart-total');
     const isMobile = document.getElementById('mobile-service-check').checked;
-
     if (cart.length > 0) {
         bar.classList.remove('cart-hidden');
         let total = 0;
         let movies = cart.filter(i => i.cat === "MOVIES").length;
         let series = cart.filter(i => i.cat === "SERIES").length;
-        let others = cart.filter(i => i.cat !== "MOVIES" && i.cat !== "SERIES" && i.cat !== "GAMES");
-
-        total += Math.ceil(movies / 10) * 1;
-        total += Math.ceil(series / 2) * 1;
-        others.forEach(i => total += (parseFloat(i.price.replace('$', '')) || 0));
-
-        count.innerText = `${cart.length} Item(s)`;
-        totalDisp.innerText = isMobile ? `Est: $${total} + Travel` : `Est Total: $${total}`;
-        totalDisp.style.color = isMobile ? 'var(--purple)' : 'white';
-    } else {
-        bar.classList.add('cart-hidden');
-    }
-}
-
-function clearCart() {
-    cart = [];
-    document.querySelectorAll('.item-card').forEach(c => c.classList.remove('selected'));
-    document.getElementById('mobile-service-check').checked = false;
-    updateCartUI();
+        total += Math.ceil(movies / 10) + Math.ceil(series / 2);
+        cart.filter(i => !['MOVIES','SERIES'].includes(i.cat)).forEach(i => total += (parseFloat(i.price.replace('$','')) || 0));
+        document.getElementById('cart-count').innerText = `${cart.length} Items`;
+        document.getElementById('cart-total').innerText = isMobile ? `Est: $${total} + Travel` : `Total: $${total}`;
+    } else { bar.classList.add('cart-hidden'); }
 }
 
 function checkout() {
     const isMobile = document.getElementById('mobile-service-check').checked;
-    const choice = confirm("Send to Admin (OK) or Tech (Cancel)?");
-    const num = choice ? WHATSAPP_LINES[0] : WHATSAPP_LINES[1];
+    const num = confirm("Send to Admin (OK) or Tech (Cancel)?") ? WHATSAPP_LINES[0] : WHATSAPP_LINES[1];
     let list = cart.map(i => `- ${i.name}`).join('\n');
-    let mobileNote = isMobile ? "\n\n🚀 *REQUESTING MOBILE SERVICE*\n📍 My location for fee calculation: " : "";
-    let msg = `TITAN ORDER ⚡\n\n${list}${mobileNote}\n\nPlease confirm availability.`;
-    window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`, '_blank');
+    let msg = `TITAN ORDER ⚡\n\n${list}${isMobile ? '\n\n🚀 *REQUEST MOBILE DELIVERY*' : ''}`;
+    window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`);
 }
 
-function openMap() {
-    window.open("https://www.google.com/maps?q=-17.8248,31.0530", "_blank");
+function playTrailer(id) {
+    document.getElementById('video-container').innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1" allow="autoplay" allowfullscreen></iframe>`;
+    document.getElementById('trailer-modal').classList.remove('modal-hidden');
 }
 
-function filterGrid(q, cat) {
-    document.querySelectorAll('.item-card').forEach(card => {
-        const match = card.dataset.name.includes(q) && (cat === 'ALL' || card.dataset.cat === cat);
-        card.style.display = match ? 'block' : 'none';
+function closeTrailer() {
+    document.getElementById('trailer-modal').classList.add('modal-hidden');
+    document.getElementById('video-container').innerHTML = "";
+}
+
+function loadLatestAlert() {
+    db.ref('latest_alert').on('value', snap => {
+        if (snap.val()) document.getElementById('ticker-msg').innerText = `📢 ${snap.val().title}: ${snap.val().body} | DEALS: 10 MOVIES FOR $1...`;
     });
 }
 
-function switchTab(cat) {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.innerText === cat));
-    filterGrid(document.getElementById('catalog-search').value.toLowerCase(), cat);
-}
-
-function generateBrandedQR() {
-    const qr = document.getElementById('digital-qr');
-    if(qr) qr.src = `https://quickchart.io/qr?text=${encodeURIComponent(window.location.href)}&size=200&markerColor=%23A020F0`;
-}
-
-function sendGeneralRequest() {
-    const item = prompt("What are you looking for?");
-    if(item) window.open(`https://wa.me/${WHATSAPP_LINES[0]}?text=REQUEST: ${item}`);
-}
+function updateShopStatus() { const h = new Date().getHours(); document.getElementById('status-light').className = (h>=8 && h<19) ? 'online' : 'offline'; document.getElementById('status-text').innerText = (h>=8 && h<19) ? 'ONLINE' : 'OFFLINE'; }
+function switchTab(cat) { document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.innerText === cat)); filterGrid('', cat); }
+function filterGrid(q, cat) { document.querySelectorAll('.item-card').forEach(c => { const m = c.innerText.toLowerCase().includes(q) && (cat==='ALL' || c.innerHTML.includes(cat)); c.style.display = m ? 'block' : 'none'; }); }
+function openMap() { window.open("https://www.google.com/maps/search/14+28+Crescent+Warren+Park+1"); }
+function clearCart() { cart = []; document.querySelectorAll('.item-card').forEach(c => c.classList.remove('selected')); updateCartUI(); }
+function sendGeneralRequest() { const r = prompt("What do you need?"); if(r) window.open(`https://wa.me/${WHATSAPP_LINES[0]}?text=REQUEST: ${r}`); }
