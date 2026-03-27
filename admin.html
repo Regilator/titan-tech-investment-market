@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TITAN ADMIN | OMEGA CONTROL</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <style>
+        .admin-container { padding: 20px; max-width: 600px; margin: auto; }
+        .admin-box { background: #111; padding: 20px; border: 1px solid var(--purple); margin-bottom: 20px; border-radius: 8px; }
+        .admin-box h3 { color: var(--purple); margin-top: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; background: #000; border: 1px solid #333; color: white; border-radius: 4px; box-sizing: border-box; }
+        .admin-btn { width: 100%; padding: 15px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
+        .btn-sync { background: var(--purple); color: white; }
+        .btn-alert { background: var(--red); color: white; }
+        .btn-receipt { background: #00ff00; color: black; }
+        .inventory-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #222; font-size: 12px; }
+        .stock-tag { color: var(--red); font-weight: bold; }
+        .del-btn { background: none; border: 1px solid #444; color: #666; padding: 4px 8px; border-radius: 3px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="assets/titan-logo.png" style="width:40px; margin:10px auto; display:block;" alt="T">
+        <h1 class="neon-text">TITAN ADMIN</h1>
+    </header>
+
+    <div class="admin-container">
+        <div class="admin-box">
+            <h3>ADD NEW PRODUCT</h3>
+            <input type="text" id="itemName" placeholder="Product Name">
+            <input type="text" id="itemPrice" placeholder="Price (e.g. $5 or 10 for $1)">
+            <input type="text" id="itemImg" placeholder="Image URL (assets/images/...)">
+            <select id="itemCat">
+                <option>MOVIES</option><option>SERIES</option><option>GAMES</option>
+                <option>SOFTWARE</option><option>HACK</option><option>REPAIRS</option><option>MUSIC</option>
+            </select>
+            <input type="text" id="itemVid" placeholder="YouTube Trailer ID (Optional)">
+            <input type="number" id="itemStock" placeholder="Stock Quantity">
+            <button class="admin-btn btn-sync" onclick="addItem()">SYNC TO CATALOG</button>
+        </div>
+
+        <div class="admin-box">
+            <h3>GLOBAL NOTIFICATION 📢</h3>
+            <input type="text" id="notifTitle" placeholder="Headline (e.g. NEW MOVIE)">
+            <input type="text" id="notifBody" placeholder="Message (e.g. GTA VI now available!)">
+            <button class="admin-btn btn-alert" onclick="sendAlert()">PUSH TO ALL PHONES</button>
+        </div>
+
+        <div class="admin-box">
+            <h3>DIGITAL INVOICE 📄</h3>
+            <textarea id="receiptData" placeholder="Items (one per line)"></textarea>
+            <input type="number" id="receiptTotal" placeholder="Total Amount (USD)">
+            <button class="admin-btn btn-receipt" onclick="generateReceipt()">GENERATE RECEIPT</button>
+        </div>
+
+        <div class="admin-box">
+            <h3>LIVE INVENTORY</h3>
+            <div id="admin-list"></div>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+            projectId: "YOUR_PROJECT",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // Access Control
+        const key = prompt("ENTER TITAN OMEGA KEY:");
+        if (key !== "titan2026") { alert("DENIED"); window.location.href="index.html"; }
+
+        function addItem() {
+            const item = {
+                name: document.getElementById('itemName').value,
+                price: document.getElementById('itemPrice').value,
+                img: document.getElementById('itemImg').value,
+                cat: document.getElementById('itemCat').value,
+                vid: document.getElementById('itemVid').value || "",
+                stock: parseInt(document.getElementById('itemStock').value) || 0
+            };
+            db.ref('catalog').push(item).then(() => alert("Synced!"));
+        }
+
+        function sendAlert() {
+            db.ref('latest_alert').set({
+                title: document.getElementById('notifTitle').value,
+                body: document.getElementById('notifBody').value,
+                time: Date.now()
+            }).then(() => alert("Alert Pushed!"));
+        }
+
+        function generateReceipt() {
+            const items = document.getElementById('receiptData').value.split('\n').map(l => ({name: l.trim()}));
+            const total = document.getElementById('receiptTotal').value;
+            const url = `receipt.html?items=${encodeURIComponent(JSON.stringify(items))}&total=${total}`;
+            window.open(url, '_blank');
+        }
+
+        // Real-time Inventory List
+        db.ref('catalog').on('value', snap => {
+            const data = snap.val();
+            const list = document.getElementById('admin-list');
+            list.innerHTML = "";
+            for (let id in data) {
+                list.innerHTML += `
+                    <div class="inventory-item">
+                        <span>${data[id].name} <span class="stock-tag">[Qty: ${data[id].stock}]</span></span>
+                        <button class="del-btn" onclick="db.ref('catalog/${id}').remove()">DEL</button>
+                    </div>`;
+            }
+        });
+    </script>
+</body>
+</html>
