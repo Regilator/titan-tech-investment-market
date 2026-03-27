@@ -7,14 +7,16 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 let activeOrder = null;
 
+// COUNTDOWN TO APRIL 1, 2026
 const OPEN_DATE = new Date("April 1, 2026 08:00:00").getTime();
 
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 2000);
     
     loadCatalog();
+    loadReviews();
     startClocks();
-    generateQR();
+    generateStylishQR();
 
     document.getElementById('catalog-search').addEventListener('input', (e) => {
         const term = e.target.value.toLowerCase();
@@ -45,6 +47,16 @@ function startClocks() {
     }, 1000);
 }
 
+function generateStylishQR() {
+    const qrImg = document.getElementById('titan-digital-qr');
+    if (qrImg) {
+        const currentUrl = window.location.href;
+        // Stylish QR with Round Dots and a Shield/Logo Icon in the center
+        const qrUrl = `https://quickchart.io/qr?text=${encodeURIComponent(currentUrl)}&size=200&dark=000000&light=ffffff&ecLevel=H&centerImageUrl=https://img.icons8.com/color/96/shield.png&margin=1`;
+        qrImg.src = qrUrl;
+    }
+}
+
 function loadCatalog() {
     db.ref('catalog').on('value', snap => {
         const data = snap.val() || {};
@@ -60,7 +72,6 @@ function renderGrid(data, filter = 'ALL') {
         const item = data[id];
         if (filter !== 'ALL' && item.cat !== filter) return;
         
-        // Dynamic path system + fallback to Red T Logo
         let visual = (item.img && item.img !== "") ? 
             `<img src="${item.img}" onerror="this.outerHTML='<div class=\'titan-logo-css\' style=\'transform:scale(0.5); margin:35px auto;\'></div>'">` : 
             `<div class="titan-logo-css" style="transform:scale(0.5); margin:35px auto;"></div>`;
@@ -76,12 +87,36 @@ function renderGrid(data, filter = 'ALL') {
     });
 }
 
-function generateQR() {
-    const qrImg = document.getElementById('titan-digital-qr');
-    if (qrImg) {
-        const currentUrl = window.location.href;
-        qrImg.src = `https://quickchart.io/qr?text=${encodeURIComponent(currentUrl)}&size=150&centerImageUrl=https://img.icons8.com/color/96/shield.png`;
-    }
+// REVIEWS LOGIC
+function submitReview() {
+    const name = document.getElementById('revName').value;
+    const stars = document.getElementById('revStars').value;
+    const text = document.getElementById('revText').value;
+    if(!name || !text) return;
+
+    db.ref('pending_reviews').push({ name, stars, text, date: new Date().toLocaleDateString() })
+    .then(() => {
+        document.getElementById('revStatus').innerText = "Review Sent! ✅";
+        document.getElementById('revName').value = ""; document.getElementById('revText').value = "";
+    });
+}
+
+function loadReviews() {
+    db.ref('reviews').on('value', snap => {
+        const display = document.getElementById('reviews-display');
+        display.innerHTML = "";
+        const data = snap.val();
+        if(!data) return;
+        Object.keys(data).forEach(id => {
+            const r = data[id];
+            display.innerHTML += `
+                <div style="background:#111; padding:10px; border-radius:8px; margin-bottom:10px; border-left:3px solid var(--titan-purple);">
+                    <div style="color:gold;">${"⭐".repeat(r.stars)}</div>
+                    <div style="font-size:12px; margin:5px 0;">"${r.text}"</div>
+                    <small style="color:#555;">- ${r.name}</small>
+                </div>`;
+        });
+    });
 }
 
 function selectItem(name, price) {
@@ -101,6 +136,7 @@ function switchTab(cat) {
     const isV = (cat === 'VOUCHERS');
     document.getElementById('catalog-grid').style.display = isV ? 'none' : 'grid';
     document.getElementById('voucher-zone').style.display = isV ? 'block' : 'none';
+    document.getElementById('reviews-section').style.display = isV ? 'none' : 'block';
     if(!isV) renderGrid(JSON.parse(localStorage.getItem('titan_data')) || {}, cat);
 }
 
