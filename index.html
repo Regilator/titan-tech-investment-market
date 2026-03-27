@@ -49,10 +49,25 @@
             <button class="tab-btn" onclick="switchTab('SOFTWARE')">💻 SOFT</button>
             <button class="tab-btn" onclick="switchTab('MUSIC')">🎵 MUSIC</button>
             <button class="tab-btn" onclick="switchTab('HACK')">💀 HACK</button>
+            <button class="tab-btn vouchers" onclick="switchTab('VOUCHERS')">🎫 VOUCHERS</button>
         </div>
 
         <div id="catalog-grid" class="grid-layout">
             </div>
+
+        <div id="voucher-zone" class="voucher-hidden">
+            <div class="voucher-portal-box">
+                <h3 class="voucher-title">TITAN DIGITAL PORTAL</h3>
+                <p class="voucher-subtitle">Scan to access the main hub</p>
+                
+                <div class="qr-container">
+                    <img id="titan-digital-qr" src="" alt="Titan QR Code">
+                </div>
+                
+                <p style="font-size: 10px; color: #888; font-family: 'Roboto Mono'; margin-top: 15px;">lodoftech.github.io/titan-tech-hub</p>
+            </div>
+        </div>
+
     </main>
 
     <div id="cart-bar" class="cart-hidden">
