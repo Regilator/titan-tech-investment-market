@@ -8,66 +8,69 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <link rel="stylesheet" href="style.css">
     <style>
-        body { padding: 20px; font-family: 'Orbitron', sans-serif; background: #0a0a0a; color: white; }
-        .admin-box { 
-            background: #151515; border: 2px solid #A020F0; 
-            padding: 20px; border-radius: 15px; max-width: 500px; margin: auto;
-            display: none; /* Hidden until PIN is correct */
-        }
-        .login-box {
-            background: #151515; border: 2px solid #ff0000; 
-            padding: 30px; border-radius: 15px; text-align: center;
-            max-width: 400px; margin: 100px auto;
-        }
-        input, select { 
-            width: 100%; padding: 12px; margin: 10px 0; 
-            background: #000; color: #00f2ff; border: 1px solid #333; 
-            border-radius: 5px; box-sizing: border-box;
-        }
-        button { 
-            width: 100%; padding: 15px; background: #A020F0; 
-            color: white; border: none; font-weight: bold; 
-            cursor: pointer; border-radius: 5px; margin-top: 10px;
-        }
-        button:active { transform: scale(0.98); }
+        body { padding: 15px; font-family: 'Orbitron', sans-serif; background: #0a0a0a; color: white; }
+        .admin-box { background: #111; border: 2px solid #A020F0; padding: 20px; border-radius: 15px; max-width: 600px; margin: auto; display: none; }
+        .section-card { background: #000; border: 1px solid #333; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
+        input, select { width: 100%; padding: 12px; margin: 8px 0; background: #111; color: #00f2ff; border: 1px solid #444; border-radius: 5px; box-sizing: border-box; font-family: 'Roboto Mono'; }
+        .btn-post { background: #A020F0; color: white; border: none; padding: 12px; font-weight: bold; border-radius: 5px; width: 100%; cursor: pointer; }
+        .btn-gen { background: #00f2ff; color: #000; border: none; padding: 12px; font-weight: bold; border-radius: 5px; width: 100%; cursor: pointer; }
+        .login-box { background: #151515; border: 2px solid #ff0000; padding: 30px; border-radius: 15px; text-align: center; max-width: 400px; margin: 100px auto; }
+        .inventory-item, .log-item { display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid #222; font-size: 11px; font-family: 'Roboto Mono'; }
+        .del-btn { background: #ff0000; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; }
+        .revenue-badge { background: #00ff00; color: black; padding: 10px; border-radius: 5px; text-align: center; font-weight: bold; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
     <div id="login-screen" class="login-box">
-        <h2 style="color: #ff0000;">TITAN SECURE ACCESS</h2>
-        <p style="font-size: 12px;">ENTER ADMIN PIN TO MANAGE STOCK</p>
-        <input type="password" id="pinInput" placeholder="Enter PIN">
-        <button onclick="checkPin()">ACCESS SYSTEM 🔑</button>
+        <h2 style="color: #ff0000;">TITAN SECURE</h2>
+        <input type="password" id="pinInput" placeholder="ENTER ADMIN PIN">
+        <button onclick="checkPin()" class="btn-post">ACCESS SYSTEM</button>
     </div>
 
     <div id="admin-interface" class="admin-box">
-        <h2 style="color: #A020F0; text-align: center;">TITAN STOCK MANAGER</h2>
-        <hr border="1" color="#333">
-        
-        <label>Product Name:</label>
-        <input type="text" id="itemName" placeholder="e.g. Mortal Kombat XL">
-        
-        <label>Price:</label>
-        <input type="text" id="itemPrice" placeholder="e.g. $10">
-        
-        <label>Image Path:</label>
-        <input type="text" id="itemImg" placeholder="assets/games/mkxl.png">
-        
-        <label>Category:</label>
-        <select id="itemCat">
-            <option value="REPAIRS">🔧 REPAIRS</option>
-            <option value="MOVIES">🎬 MOVIES</option>
-            <option value="TV_SHOWS">📺 TV SHOWS</option>
-            <option value="GAMES">🎮 GAMES</option>
-            <option value="SOFTWARE">💻 SOFT</option>
-            <option value="MUSIC">🎵 MUSIC</option>
-            <option value="HACK">💀 HACK</option>
-        </select>
+        <h2 style="color: #A020F0; text-align: center; margin-top:0;">TITAN CONTROL PANEL</h2>
 
-        <button onclick="uploadToTitan()">UPLOAD TO CATALOG ⚡</button>
-        <p id="status" style="text-align:center; margin-top:15px; font-weight: bold;"></p>
-        <button onclick="location.reload()" style="background:#333; font-size: 10px;">LOGOUT</button>
+        <div class="section-card">
+            <h4 style="color: #00ff00; margin-top:0;">💰 SALES LOG</h4>
+            <div id="total-revenue" class="revenue-badge">Total Revenue: $0.00</div>
+            <div id="sales-list" style="max-height: 150px; overflow-y: auto; background: #080808; padding: 5px;">
+                </div>
+            <button onclick="clearLogs()" style="background:none; border:none; color:red; font-size:9px; margin-top:5px; cursor:pointer;">Clear Sales History</button>
+        </div>
+
+        <div class="section-card">
+            <h4 style="color: #A020F0; margin-top:0;">📦 ADD STOCK</h4>
+            <input type="text" id="itemName" placeholder="Item Name">
+            <input type="text" id="itemPrice" placeholder="Price (e.g. $10)">
+            <input type="text" id="itemImg" placeholder="Image Path (assets/...)">
+            <select id="itemCat">
+                <option value="REPAIRS">🔧 REPAIRS</option>
+                <option value="MOVIES">🎬 MOVIES</option>
+                <option value="TV_SHOWS">📺 TV SHOWS</option>
+                <option value="GAMES">🎮 GAMES</option>
+                <option value="SOFTWARE">💻 SOFT</option>
+                <option value="MUSIC">🎵 MUSIC</option>
+                <option value="HACK">💀 HACK</option>
+            </select>
+            <button onclick="uploadItem()" class="btn-post">POST TO WEBSITE ⚡</button>
+        </div>
+
+        <div class="section-card" style="border-color: #00f2ff;">
+            <h4 style="color: #00f2ff; margin-top:0;">🎫 VOUCHER GEN</h4>
+            <input type="text" id="voucherPin" placeholder="REAL PIN/LINK">
+            <button onclick="generateVoucher()" class="btn-gen">GENERATE & SAVE</button>
+            <div id="gen-result" style="display:none; text-align:center; margin-top:10px; border:1px dashed #00f2ff; padding:5px;">
+                <strong id="final-secret-code" style="color:#00f2ff; font-size:18px;"></strong>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <h4 style="color: #ff0000; margin-top:0;">🗑️ LIVE STOCK LIST</h4>
+            <div id="live-inventory-list" style="max-height: 200px; overflow-y: auto;"></div>
+        </div>
+
+        <button onclick="location.reload()" style="background:none; border:none; color:#444; width:100%; font-size:10px; cursor:pointer;">LOGOUT</button>
     </div>
 
     <script>
@@ -79,48 +82,69 @@
         const db = firebase.database();
 
         function checkPin() {
-            const enteredPin = document.getElementById('pinInput').value;
-            const correctPin = "Reggiex123x123";
-
-            if (enteredPin === correctPin) {
+            if (document.getElementById('pinInput').value === "Reggiex123x123") {
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('admin-interface').style.display = 'block';
-            } else {
-                alert("ACCESS DENIED: Incorrect PIN");
-            }
+                loadInventory();
+                loadSales();
+            } else { alert("WRONG PIN"); }
         }
 
-        function uploadToTitan() {
+        function uploadItem() {
             const name = document.getElementById('itemName').value;
             const price = document.getElementById('itemPrice').value;
             const img = document.getElementById('itemImg').value;
             const cat = document.getElementById('itemCat').value;
-            const status = document.getElementById('status');
-
-            if(!name || !price) {
-                status.innerText = "⚠️ Missing info!";
-                status.style.color = "orange";
-                return;
-            }
-
-            // Push creates a new entry with a unique ID
-            const newPostRef = db.ref('catalog').push();
-            newPostRef.set({
-                name: name,
-                price: price,
-                img: img,
-                cat: cat
-            }).then(() => {
-                status.innerText = "✅ SYSTEM UPDATED!";
-                status.style.color = "#00ff00";
-                // Clear inputs for next item
+            if(!name || !price) return;
+            db.ref('catalog').push({ name, price, img, cat }).then(() => {
                 document.getElementById('itemName').value = "";
-                document.getElementById('itemPrice').value = "";
-            }).catch((error) => {
-                status.innerText = "❌ ERROR: " + error.message;
-                status.style.color = "red";
             });
         }
+
+        function generateVoucher() {
+            const realPin = document.getElementById('voucherPin').value;
+            if(!realPin) return;
+            const randomCode = "TITAN-" + Math.random().toString(36).substr(2, 4).toUpperCase();
+            db.ref('vouchers/' + randomCode).set(realPin).then(() => {
+                document.getElementById('gen-result').style.display = 'block';
+                document.getElementById('final-secret-code').innerText = randomCode;
+                document.getElementById('voucherPin').value = "";
+            });
+        }
+
+        function loadInventory() {
+            db.ref('catalog').on('value', snap => {
+                const listDiv = document.getElementById('live-inventory-list');
+                listDiv.innerHTML = "";
+                const data = snap.val();
+                if(!data) return;
+                Object.keys(data).forEach(id => {
+                    listDiv.innerHTML += `<div class="inventory-item"><span>${data[id].name}</span><button class="del-btn" onclick="deleteItem('${id}')">DEL</button></div>`;
+                });
+            });
+        }
+
+        function deleteItem(id) { if(confirm("Delete item?")) db.ref('catalog/' + id).remove(); }
+
+        function loadSales() {
+            db.ref('sales').on('value', snap => {
+                const logDiv = document.getElementById('sales-list');
+                const revDiv = document.getElementById('total-revenue');
+                logDiv.innerHTML = "";
+                let total = 0;
+                const data = snap.val();
+                if(!data) { revDiv.innerText = "Total Revenue: $0.00"; return; }
+                Object.keys(data).reverse().forEach(id => {
+                    const sale = data[id];
+                    const p = parseFloat(sale.price.replace('$', '')) || 0;
+                    total += p;
+                    logDiv.innerHTML += `<div class="log-item"><span>${sale.name}</span><span style="color:#00ff00;">${sale.price}</span></div>`;
+                });
+                revDiv.innerText = `Total Revenue: $${total.toFixed(2)}`;
+            });
+        }
+
+        function clearLogs() { if(confirm("Clear all logs?")) db.ref('sales').remove(); }
     </script>
 </body>
 </html>
