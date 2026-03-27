@@ -1,101 +1,50 @@
 :root { 
-    --purple: #A020F0; 
-    --red: #FF0000; 
-    --black: #050505; 
-    --glow: 0 0 10px var(--red), 0 0 20px var(--red);
+    --purple: #A020F0; --red: #FF0000; --black: #050505; 
+    --glow: 0 0 10px var(--red); --purple-glow: 0 0 10px var(--purple);
 }
 
-body { 
-    background: var(--black); 
-    color: white; 
-    font-family: 'Courier New', monospace; 
-    margin: 0; 
-    padding-bottom: 90px; 
-    overflow-x: hidden; 
-}
+body { background: var(--black); color: white; font-family: 'Courier New', monospace; margin: 0; padding-bottom: 100px; overflow-x: hidden; }
 
-/* --- PURE CSS DIGITAL T LOGO --- */
-.titan-logo-css {
-    position: relative;
-    width: 40px;
-    height: 45px;
-    margin: 10px auto;
-    display: flex;
-    justify-content: center;
-}
+/* DIGITAL LOGO (PURE CSS) */
+.titan-logo-css { position: relative; width: 40px; height: 45px; margin: 10px auto; display: flex; justify-content: center; }
+.titan-logo-css::before { content: ""; position: absolute; top: 0; width: 40px; height: 8px; background: var(--red); box-shadow: var(--glow); }
+.titan-logo-css::after { content: ""; position: absolute; top: 0; width: 8px; height: 45px; background: var(--red); box-shadow: var(--glow); }
+.digital-pulse { animation: pulse 2s infinite ease-in-out; }
+@keyframes pulse { 0%, 100% { filter: brightness(1); transform: scale(1); } 50% { filter: brightness(1.4); transform: scale(1.05); } }
 
-/* Horizontal Top Bar of T */
-.titan-logo-css::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    width: 40px;
-    height: 8px;
-    background: var(--red);
-    box-shadow: var(--glow);
-}
+/* UI ELEMENTS */
+#splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 5000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.creator-credit { font-size: 10px; color: #555; margin-top: 20px; letter-spacing: 3px; }
+.creator-credit span { color: var(--purple); text-shadow: var(--purple-glow); }
 
-/* Vertical Stem of T */
-.titan-logo-css::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    width: 8px;
-    height: 45px;
-    background: var(--red);
-    box-shadow: var(--glow);
-}
+#launch-timer { background: #0a0a0a; border-bottom: 1px solid var(--purple); padding: 10px; text-align: center; }
+#countdown-clock { font-size: 18px; font-weight: bold; color: white; text-shadow: var(--purple-glow); }
 
-/* Pulse Animation for the Digital T */
-.digital-pulse {
-    animation: pulse-red 2s infinite ease-in-out;
-}
-
-@keyframes pulse-red {
-    0% { filter: brightness(1) drop-shadow(0 0 2px var(--red)); transform: scale(1); }
-    50% { filter: brightness(1.5) drop-shadow(0 0 15px var(--red)); transform: scale(1.05); }
-    100% { filter: brightness(1) drop-shadow(0 0 2px var(--red)); transform: scale(1); }
-}
-
-/* --- UI COMPONENTS --- */
-#splash { 
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-    background: #000; display: flex; flex-direction: column; 
-    align-items: center; justify-content: center; z-index: 3000; 
-}
-
-.loader-bar { width: 150px; height: 2px; background: #222; margin-top: 20px; overflow: hidden; }
-.progress { width: 100%; height: 100%; background: var(--red); animation: load 2.5s forwards; }
-@keyframes load { 0% { transform: translateX(-100%); } 100% { transform: translateX(0); } }
-
-.news-ticker { background: #000; border-bottom: 1px solid var(--red); overflow: hidden; white-space: nowrap; padding: 5px 0; }
-.ticker-content { display: inline-block; padding-left: 100%; animation: ticker 25s linear infinite; color: var(--red); font-size: 11px; }
-@keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
-
-.neon-text { color: var(--purple); text-shadow: 0 0 10px var(--purple); text-align: center; }
-
-/* TABS */
-.tabs { display: flex; overflow-x: auto; gap: 10px; padding: 10px; border-bottom: 1px solid #222; }
-.tab-btn { background: transparent; border: 1px solid #333; color: #666; padding: 8px 15px; border-radius: 4px; white-space: nowrap; font-size: 11px; font-weight: bold; }
+.tabs { display: flex; overflow-x: auto; gap: 8px; padding: 10px; border-bottom: 1px solid #222; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab-btn { flex: 0 0 auto; background: #000; border: 1px solid #333; color: #666; padding: 8px 14px; border-radius: 4px; font-size: 10px; font-weight: bold; text-transform: uppercase; }
 .tab-btn.active { color: white; border-color: var(--purple); background: rgba(160,32,240,0.1); }
 
-/* GRID & CARDS */
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; padding: 15px; }
-.item-card { background: #111; border: 1px solid #333; border-radius: 6px; overflow: hidden; position: relative; }
-.item-card.selected { border-color: var(--purple); box-shadow: 0 0 10px var(--purple); }
-.item-card img { width: 100%; height: 140px; object-fit: cover; }
+.item-card { background: #111; border: 1px solid #333; border-radius: 6px; overflow: hidden; text-align: center; position: relative; transition: 0.3s; }
+.item-card img, .titan-digital-suite-icon { width: 100%; height: 130px; object-fit: cover; background: #000; display: flex; align-items: center; justify-content: center; }
 
-/* CART & NOTIFICATIONS */
-#cart-bar { 
-    position: fixed; bottom: 0; width: 100%; height: 80px; 
-    background: #0a0a0a; border-top: 2px solid var(--purple); 
-    display: flex; align-items: center; justify-content: space-between; 
-    padding: 0 15px; box-sizing: border-box; z-index: 2000; 
-}
-.cart-hidden { transform: translateY(100%); }
-.checkout-btn { background: var(--purple); color: white; border: none; padding: 12px 18px; font-weight: bold; cursor: pointer; }
+/* ENGINEERING ICON */
+.titan-digital-suite-icon { position: relative; border: 2px solid var(--red); box-shadow: var(--glow); width: 60px !important; height: 60px !important; margin: 35px auto; border-radius: 50%; }
+.titan-digital-suite-icon::after { content: ""; position: absolute; width: 2px; height: 45px; background: var(--red); transform: rotate(30deg); top: 5px; }
 
-/* MODAL */
-#trailer-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 4000; display: flex; align-items: center; justify-content: center; }
-.modal-hidden { visibility: hidden; opacity: 0; }
-iframe { width: 90%; aspect-ratio: 16/9; border: 2px solid var(--purple); }
+/* VOUCHER */
+.voucher-container { position: relative; width: 280px; height: 140px; margin: auto; background: #1a1a1a; border: 2px solid var(--purple); border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.voucher-pin { font-size: 20px; color: #00ff00; letter-spacing: 2px; z-index: 1; }
+#scratch-canvas { position: absolute; top: 0; left: 0; z-index: 2; touch-action: none; }
+
+#cart-bar { position: fixed; bottom: 0; width: 100%; height: 80px; background: #050505; border-top: 2px solid var(--purple); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 2000; }
+.cart-hidden { display: none; }
+.checkout-btn { background: var(--purple); color: white; border: none; padding: 12px 20px; font-weight: bold; border-radius: 4px; box-shadow: var(--purple-glow); }
+
+#catalog-search { width: 100%; background: #111; border: 1px solid #333; color: white; padding: 12px; border-radius: 4px; box-sizing: border-box; margin-bottom: 10px; outline: none; }
+#offline-tag { color: var(--red); font-size: 9px; text-align: center; display: none; padding: 5px; }
+
+.creator-footer { text-align: center; padding: 20px; border-top: 1px solid #111; }
+.creator-footer p { font-size: 9px; color: #444; margin: 3px; letter-spacing: 1px; }
+.creator-footer span { color: var(--purple); font-weight: bold; }
