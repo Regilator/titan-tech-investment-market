@@ -1,45 +1,99 @@
-:root { --purple: #A020F0; --red: #FF0000; --black: #050505; }
-body { background: var(--black); color: white; font-family: 'Courier New', monospace; margin: 0; padding-bottom: 90px; overflow-x: hidden; }
+:root { 
+    --purple: #A020F0; 
+    --red: #FF0000; 
+    --black: #050505; 
+    --glow: 0 0 10px var(--red), 0 0 20px var(--red);
+}
 
-/* LOGO STYLES */
-.splash-logo { width: 80px; margin-bottom: 20px; }
-.header-logo { width: 40px; display: block; margin: 10px auto 0; }
-.qr-container { position: relative; display: inline-block; margin-top: 20px; border: 2px solid var(--purple); padding: 5px; background: white; border-radius: 8px; }
-#digital-qr { width: 120px; height: 120px; display: block; }
+body { 
+    background: var(--black); 
+    color: white; 
+    font-family: 'Courier New', monospace; 
+    margin: 0; 
+    padding-bottom: 90px; 
+    overflow-x: hidden; 
+}
 
-/* SPLASH */
-#splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 3000; transition: 0.8s; }
-.loader-bar { width: 150px; height: 2px; background: #222; overflow: hidden; }
+/* --- PURE CSS DIGITAL T LOGO --- */
+.titan-logo-css {
+    position: relative;
+    width: 40px;
+    height: 45px;
+    margin: 10px auto;
+    display: flex;
+    justify-content: center;
+}
+
+/* Horizontal Top Bar of T */
+.titan-logo-css::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 40px;
+    height: 8px;
+    background: var(--red);
+    box-shadow: var(--glow);
+}
+
+/* Vertical Stem of T */
+.titan-logo-css::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 8px;
+    height: 45px;
+    background: var(--red);
+    box-shadow: var(--glow);
+}
+
+/* Pulse Animation for the Digital T */
+.digital-pulse {
+    animation: pulse-red 2s infinite ease-in-out;
+}
+
+@keyframes pulse-red {
+    0% { filter: brightness(1) drop-shadow(0 0 2px var(--red)); transform: scale(1); }
+    50% { filter: brightness(1.5) drop-shadow(0 0 15px var(--red)); transform: scale(1.05); }
+    100% { filter: brightness(1) drop-shadow(0 0 2px var(--red)); transform: scale(1); }
+}
+
+/* --- UI COMPONENTS --- */
+#splash { 
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background: #000; display: flex; flex-direction: column; 
+    align-items: center; justify-content: center; z-index: 3000; 
+}
+
+.loader-bar { width: 150px; height: 2px; background: #222; margin-top: 20px; overflow: hidden; }
 .progress { width: 100%; height: 100%; background: var(--red); animation: load 2.5s forwards; }
 @keyframes load { 0% { transform: translateX(-100%); } 100% { transform: translateX(0); } }
 
-/* TICKER & HEADER */
 .news-ticker { background: #000; border-bottom: 1px solid var(--red); overflow: hidden; white-space: nowrap; padding: 5px 0; }
 .ticker-content { display: inline-block; padding-left: 100%; animation: ticker 25s linear infinite; color: var(--red); font-size: 11px; }
 @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
-.contact-header { display: flex; flex-direction: column; align-items: center; gap: 5px; margin-top: 10px; }
-.contact-line { font-size: 12px; border: 1px solid #333; padding: 6px 15px; border-radius: 20px; cursor: pointer; color: white; }
-.neon-text { color: var(--purple); text-shadow: 0 0 10px var(--purple); text-align: center; margin: 5px 0; }
+
+.neon-text { color: var(--purple); text-shadow: 0 0 10px var(--purple); text-align: center; }
 
 /* TABS */
-.tabs { display: flex; overflow-x: auto; gap: 10px; padding: 10px; scrollbar-width: none; border-bottom: 1px solid #222; }
-.tabs::-webkit-scrollbar { display: none; }
+.tabs { display: flex; overflow-x: auto; gap: 10px; padding: 10px; border-bottom: 1px solid #222; }
 .tab-btn { background: transparent; border: 1px solid #333; color: #666; padding: 8px 15px; border-radius: 4px; white-space: nowrap; font-size: 11px; font-weight: bold; }
 .tab-btn.active { color: white; border-color: var(--purple); background: rgba(160,32,240,0.1); }
 
-/* GRID */
+/* GRID & CARDS */
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; padding: 15px; }
 .item-card { background: #111; border: 1px solid #333; border-radius: 6px; overflow: hidden; position: relative; }
 .item-card.selected { border-color: var(--purple); box-shadow: 0 0 10px var(--purple); }
 .item-card img { width: 100%; height: 140px; object-fit: cover; }
-.item-details { padding: 8px; text-align: center; font-size: 11px; }
 
-/* STOCK & CART */
-.out-of-stock { opacity: 0.5; filter: grayscale(1); pointer-events: none; }
-.sold-out-badge { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); background: var(--red); color: white; padding: 5px; font-weight: bold; border: 1px solid white; z-index: 5; }
-#cart-bar { position: fixed; bottom: 0; width: 100%; height: 80px; background: #0a0a0a; border-top: 2px solid var(--purple); display: flex; align-items: center; justify-content: space-between; padding: 0 15px; box-sizing: border-box; z-index: 2000; }
+/* CART & NOTIFICATIONS */
+#cart-bar { 
+    position: fixed; bottom: 0; width: 100%; height: 80px; 
+    background: #0a0a0a; border-top: 2px solid var(--purple); 
+    display: flex; align-items: center; justify-content: space-between; 
+    padding: 0 15px; box-sizing: border-box; z-index: 2000; 
+}
 .cart-hidden { transform: translateY(100%); }
-.checkout-btn { background: var(--purple); color: white; border: none; padding: 12px 18px; border-radius: 4px; font-weight: bold; }
+.checkout-btn { background: var(--purple); color: white; border: none; padding: 12px 18px; font-weight: bold; cursor: pointer; }
 
 /* MODAL */
 #trailer-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 4000; display: flex; align-items: center; justify-content: center; }
