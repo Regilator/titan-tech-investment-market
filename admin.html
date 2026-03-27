@@ -8,21 +8,20 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <link rel="stylesheet" href="style.css">
     <style>
-        body { padding: 15px; font-family: 'Orbitron', sans-serif; background: #050505; color: white; }
+        body { padding: 15px; font-family: 'Orbitron'; background: #050505; color: white; }
         .admin-box { background: #0a0a0a; border: 2px solid #A020F0; padding: 20px; border-radius: 15px; max-width: 600px; margin: auto; display: none; }
         .section-card { background: #000; border: 1px solid #222; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
-        input, select { width: 100%; padding: 12px; margin: 8px 0; background: #111; color: #00f2ff; border: 1px solid #333; border-radius: 5px; box-sizing: border-box; font-family: 'Roboto Mono'; }
+        input, select { width: 100%; padding: 12px; margin: 8px 0; background: #111; color: #00f2ff; border: 1px solid #333; border-radius: 5px; box-sizing: border-box; }
         .btn-post { background: #A020F0; color: white; border: none; padding: 15px; border-radius: 5px; width: 100%; cursor: pointer; font-weight: bold; }
-        .login-box { background: #111; border: 2px solid #ff0000; padding: 30px; border-radius: 15px; text-align: center; max-width: 400px; margin: 80px auto; }
-        .revenue-badge { background: #00ff00; color: black; padding: 15px; border-radius: 5px; text-align: center; font-weight: bold; font-size: 20px; margin-bottom: 10px; }
+        .revenue-badge { background: #00ff00; color: black; padding: 15px; border-radius: 5px; text-align: center; font-weight: bold; font-size: 20px; }
     </style>
 </head>
 <body>
 
-    <div id="login-screen" class="login-box">
-        <h2 style="color: #ff0000;">TITAN SECURITY</h2>
+    <div id="login-screen" style="text-align:center; margin-top:100px;">
+        <h2 style="color:red;">TITAN SECURITY</h2>
         <input type="password" id="pinInput" placeholder="ENTER PIN">
-        <button onclick="checkPin()" class="btn-post">INITIALIZE</button>
+        <button onclick="checkPin()" class="btn-post">LOGIN</button>
     </div>
 
     <div id="admin-interface" class="admin-box">
@@ -31,14 +30,14 @@
         <div class="section-card">
             <h4 style="color: #00ff00;">💰 REVENUE</h4>
             <div id="total-revenue" class="revenue-badge">$0.00</div>
-            <div id="sales-list" style="max-height: 100px; overflow-y: auto; font-size: 10px;"></div>
+            <div id="sales-list" style="max-height: 100px; overflow-y: auto; font-size: 10px; margin-top:10px;"></div>
         </div>
 
         <div class="section-card">
             <h4 style="color: #A020F0;">📦 ADD STOCK</h4>
             <input type="text" id="itemName" placeholder="Item Name">
-            <input type="text" id="itemPrice" placeholder="Price (e.g. $10)">
-            <input type="text" id="itemImgName" placeholder="Filename (e.g. flash.png)">
+            <input type="text" id="itemPrice" placeholder="Price">
+            <input type="text" id="itemImgName" placeholder="Filename (e.g. nfs.png)">
             <select id="itemCat">
                 <option value="repairs">🔧 REPAIRS</option>
                 <option value="movies">🎬 MOVIES</option>
@@ -48,19 +47,17 @@
                 <option value="music">🎵 MUSIC</option>
                 <option value="hack">💀 HACK</option>
             </select>
-            <button onclick="uploadItem()" class="btn-post">POST TO HUB</button>
-            <div id="status" style="text-align: center; color: #00ff00; font-size: 12px; margin-top: 5px;"></div>
+            <button onclick="uploadItem()" class="btn-post">DEPLOY</button>
         </div>
 
-        <div class="section-card" style="border-color: #00f2ff; text-align: center;">
-            <h4 style="color: #00f2ff;">🛡️ HUB QR TOOL</h4>
-            <p style="font-size: 10px; color: #888;">Save your site QR to share on status:</p>
-            <button onclick="downloadQR()" style="background: #00f2ff; color: black;" class="btn-post">DOWNLOAD TITAN QR 📥</button>
+        <div class="section-card" style="border-color: gold;">
+            <h4 style="color: gold;">⭐ PENDING REVIEWS</h4>
+            <div id="pending-reviews-list"></div>
         </div>
 
         <div class="section-card">
-            <h4 style="color: #ff0000;">🗑️ MANAGE STOCK</h4>
-            <div id="live-inventory-list"></div>
+            <h4 style="color: #00f2ff;">🛡️ QR TOOL</h4>
+            <button onclick="downloadQR()" style="background:#00f2ff; color:black;" class="btn-post">DOWNLOAD STYLISH QR</button>
         </div>
     </div>
 
@@ -73,8 +70,8 @@
             if (document.getElementById('pinInput').value === "Reggiex123x123") {
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('admin-interface').style.display = 'block';
-                loadInventory(); loadSales();
-            } else { alert("INVALID PIN"); }
+                loadInventory(); loadSales(); loadPendingReviews();
+            } else { alert("ACCESS DENIED"); }
         }
 
         function uploadItem() {
@@ -82,57 +79,50 @@
             const price = document.getElementById('itemPrice').value;
             const fileName = document.getElementById('itemImgName').value;
             const cat = document.getElementById('itemCat').value;
-            const fullPath = "assets/" + cat + "/" + fileName;
-
-            db.ref('catalog').push({ name, price, img: fullPath, cat: cat.toUpperCase() })
-            .then(() => {
-                document.getElementById('status').innerText = "✅ POSTED";
-                document.getElementById('itemName').value = ""; document.getElementById('itemImgName').value = "";
-                setTimeout(() => document.getElementById('status').innerText = "", 2000);
-            });
+            db.ref('catalog').push({ name, price, img: `assets/${cat}/${fileName}`, cat: cat.toUpperCase() });
         }
 
-        function downloadQR() {
-            // Links to your specific site URL QR
-            const siteUrl = "https://regilator.github.io/titan-tech-investment-market/";
-            const qrUrl = `https://quickchart.io/qr?text=${encodeURIComponent(siteUrl)}&size=300&centerImageUrl=https://img.icons8.com/color/96/shield.png`;
-            
-            const link = document.createElement('a');
-            link.href = qrUrl;
-            link.download = "TITAN_HUB_QR.png";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        function loadInventory() {
-            db.ref('catalog').on('value', snap => {
-                const listDiv = document.getElementById('live-inventory-list');
-                listDiv.innerHTML = "";
+        function loadPendingReviews() {
+            db.ref('pending_reviews').on('value', snap => {
+                const list = document.getElementById('pending-reviews-list');
+                list.innerHTML = "";
                 const data = snap.val();
                 if(!data) return;
                 Object.keys(data).forEach(id => {
-                    listDiv.innerHTML += `<div style="display:flex; justify-content:space-between; padding:8px; border-bottom:1px solid #111;">
-                        <span style="font-size:10px;">${data[id].name}</span>
-                        <button style="background:red; color:white; border:none; padding:3px 8px; border-radius:3px;" onclick="db.ref('catalog/${id}').remove()">DEL</button>
+                    const r = data[id];
+                    list.innerHTML += `<div style="padding:10px; border-bottom:1px solid #111;">
+                        <p>${r.text}</p>
+                        <button onclick="approveReview('${id}')" style="background:green; color:white;">APPROVE</button>
+                        <button onclick="db.ref('pending_reviews/${id}').remove()" style="background:red; color:white;">DELETE</button>
                     </div>`;
                 });
             });
         }
 
+        function approveReview(id) {
+            db.ref('pending_reviews/'+id).once('value', snap => {
+                db.ref('reviews').push(snap.val()).then(() => db.ref('pending_reviews/'+id).remove());
+            });
+        }
+
+        function downloadQR() {
+            const siteUrl = "https://regilator.github.io/titan-tech-investment-market/";
+            const qrUrl = `https://quickchart.io/qr?text=${encodeURIComponent(siteUrl)}&size=300&ecLevel=H&centerImageUrl=https://img.icons8.com/color/96/shield.png`;
+            window.open(qrUrl, '_blank');
+        }
+
         function loadSales() {
             db.ref('sales').on('value', snap => {
-                const logDiv = document.getElementById('sales-list');
-                const revDiv = document.getElementById('total-revenue');
-                logDiv.innerHTML = ""; let total = 0;
                 const data = snap.val();
+                let total = 0;
+                const log = document.getElementById('sales-list');
+                log.innerHTML = "";
                 if(!data) return;
-                Object.keys(data).reverse().forEach(id => {
-                    const sale = data[id];
-                    total += parseFloat(sale.price.replace('$', '')) || 0;
-                    logDiv.innerHTML += `<div style="padding:2px;">${sale.name} - ${sale.price}</div>`;
+                Object.keys(data).forEach(id => {
+                    total += parseFloat(data[id].price.replace('$','')) || 0;
+                    log.innerHTML += `<div>${data[id].name} - ${data[id].price}</div>`;
                 });
-                revDiv.innerText = "$" + total.toFixed(2);
+                document.getElementById('total-revenue').innerText = "$" + total.toFixed(2);
             });
         }
     </script>
