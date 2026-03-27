@@ -19,7 +19,7 @@
 
     <header>
         <div class="header-content">
-            <div class="titan-logo-css" style="transform: scale(0.4);"></div>
+            <div class="titan-logo-css logo-small"></div>
             <div class="header-text">
                 <h2>TITAN TECH HUB</h2>
                 <div class="admin-contacts">
@@ -30,7 +30,7 @@
         </div>
         <div class="ticker-wrap">
             <div class="ticker">
-                GRAND OPENING: <span id="countdown-clock">--d --h --m --s</span> | 10 MOVIES $1 | REPAIRS (IPHONE/SAMSUNG) | WINDOWS & HACK TOOLS...
+                GRAND OPENING: <span id="countdown-clock">--d --h --m --s</span> | 10 MOVIES $1 | REPAIRS (IPHONE/SAMSUNG) | REVEAL VOUCHERS ONLINE...
             </div>
         </div>
     </header>
@@ -52,22 +52,26 @@
             <button class="tab-btn vouchers" onclick="switchTab('VOUCHERS')">🎫 VOUCHERS</button>
         </div>
 
-        <div id="catalog-grid" class="grid-layout">
-            </div>
+        <div id="catalog-grid" class="grid-layout"></div>
 
-        <div id="voucher-zone" class="voucher-hidden">
+        <div id="voucher-zone" style="display:none; padding: 20px;">
             <div class="voucher-portal-box">
-                <h3 class="voucher-title">TITAN DIGITAL PORTAL</h3>
-                <p class="voucher-subtitle">Scan to access the main hub</p>
-                
-                <div class="qr-container">
-                    <img id="titan-digital-qr" src="" alt="Titan QR Code">
+                <h3 class="voucher-title">TITAN REVEAL PORTAL</h3>
+                <input type="text" id="secret-code-input" placeholder="ENTER CODE HERE..." style="text-align:center; text-transform:uppercase;">
+                <button onclick="revealVoucher()" style="background: #00f2ff; color: black; font-weight:bold; width:100%; padding:15px; margin-top:10px; border-radius:5px;">REVEAL PIN 🔓</button>
+
+                <div id="reveal-display" style="margin-top: 25px; display: none;">
+                    <div style="border: 2px dashed #00f2ff; padding: 15px; background: #000;">
+                        <p style="font-size: 10px; color: #888;">YOUR PIN:</p>
+                        <h2 id="voucher-pin-out" style="color: #00ff00; letter-spacing: 3px;">--------</h2>
+                    </div>
                 </div>
                 
-                <p style="font-size: 10px; color: #888; font-family: 'Roboto Mono'; margin-top: 15px;">lodoftech.github.io/titan-tech-hub</p>
+                <div class="qr-box" style="margin-top:30px; background:white; padding:10px; border-radius:10px; display:inline-block;">
+                    <img id="titan-digital-qr" src="" alt="Titan QR" style="width:150px; display:block;">
+                </div>
             </div>
         </div>
-
     </main>
 
     <div id="cart-bar" class="cart-hidden">
