@@ -1,4 +1,3 @@
-// --- TITAN TECH CONFIG (FIREBASE COMPAT) ---
 const firebaseConfig = {
   apiKey: "AIzaSyBRHHvX9TMDsJQ8PzD7FMsq00VMUVnx_UI",
   authDomain: "titan-tech-hub.firebaseapp.com",
@@ -10,128 +9,104 @@ const firebaseConfig = {
   databaseURL: "https://titan-tech-hub-default-rtdb.firebaseio.com"
 };
 
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-let cartItem = null;
+let activeOrder = null;
 const OPEN_DATE = new Date("April 1, 2026 08:00:00").getTime();
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Hide Splash Screen (2.5s)
     setTimeout(() => { 
-        const splash = document.getElementById('splash');
-        if(splash) splash.style.display = 'none'; 
+        document.getElementById('splash').style.opacity = '0';
+        setTimeout(() => document.getElementById('splash').style.display = 'none', 500);
     }, 2500);
     
-    // 2. Start Countdown
     setInterval(updateCountdown, 1000);
-    
-    // 3. Load Real-time Catalog
     loadCatalog();
-    
-    // 4. PRE-GENERATE DIGITAL QR (POINTS TO YOUR SITE URL)
-    const siteUrl = window.location.href; //lodoftech.github.io/titan-tech-hub
+
     const qrImg = document.getElementById('titan-digital-qr');
     if(qrImg) {
-        // QuickChart API creates the custom purple QR with a Titan logo
-        qrImg.src = `https://quickchart.io/qr?text=${encodeURIComponent(siteUrl)}&size=150&margin=0&light=ffffff&ecLevel=Q&format=png&centerImageUrl=https://img.icons8.com/color/144/iron-man.png&markerColor=%23A020F0`;
+        qrImg.src = `https://quickchart.io/qr?text=${encodeURIComponent(window.location.href)}&size=150&centerImageUrl=https://img.icons8.com/color/144/iron-man.png`;
     }
 
-    // 5. Search Logic
-    const searchInput = document.getElementById('catalog-search');
-    if(searchInput) {
-        searchInput.addEventListener('input', (e) => {
-            const q = e.target.value.toLowerCase();
-            document.querySelectorAll('.item-card').forEach(card => {
-                const name = card.innerText.toLowerCase();
-                card.style.display = name.includes(q) ? 'block' : 'none';
-            });
+    document.getElementById('catalog-search').addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        document.querySelectorAll('.item-card').forEach(card => {
+            card.style.display = card.innerText.toLowerCase().includes(term) ? 'block' : 'none';
         });
-    }
+    });
 });
 
 function loadCatalog() {
     db.ref('catalog').on('value', snap => {
         const data = snap.val() || {};
-        // Cache the catalog in local storage for offline use
-        localStorage.setItem('titan_catalog_cache', JSON.stringify(data));
-        
-        // Initial render: show 'ALL' items
+        localStorage.setItem('titan_cache', JSON.stringify(data));
         renderGrid(data);
     });
 }
 
-function renderGrid(data, category = 'ALL') {
+function renderGrid(data, filter = 'ALL') {
     const grid = document.getElementById('catalog-grid');
     grid.innerHTML = "";
-    
     Object.keys(data).forEach(id => {
         const item = data[id];
+        if (filter !== 'ALL' && item.cat !== filter) return;
         
-        // Filter by chosen category
-        if (category !== 'ALL' && item.cat !== category) return;
-        
-        // Use default T logo if no img provided in JSON
-        let visual = (item.img && item.img !== "") ? 
-                     `<img src="${item.img}" onerror="this.src='https://via.placeholder.com/150?text=TITAN'">` : 
-                     `<div class="titan-logo-css" style="transform:scale(0.8); margin:45px auto;"></div>`;
+        let imgTag = (item.img && item.img !== "") ? `<img src="${item.img}" onerror="this.src='https://via.placeholder.com/150?text=TITAN'">` : `<div class="titan-logo-css" style="transform:scale(0.7); margin:40px auto;"></div>`;
 
         grid.innerHTML += `
-            <div class="item-card" onclick="selectItemForCart('${item.name}', '${item.price}')">
-                ${visual}
+            <div class="item-card" onclick="selectItem('${item.name}', '${item.price}')">
+                ${imgTag}
                 <div style="padding:10px;">
-                    <div style="font-size:10px; font-weight:bold; height:30px; overflow:hidden; color:white;">${item.name}</div>
-                    <div style="color:#FF0000; font-weight:bold; margin-top:5px;">${item.price}</div>
+                    <div style="font-size:10px; color:white; height:30px; overflow:hidden;">${item.name}</div>
+                    <div style="color:red; font-weight:bold; margin-top:5px;">${item.price}</div>
                 </div>
             </div>`;
     });
 }
 
-function selectItemForCart(name, price) {
-    cartItem = { name, price };
-    const cartBar = document.getElementById('cart-bar');
-    const totalDisp = document.getElementById('cart-total');
-    
-    if(cartBar) cartBar.classList.remove('cart-hidden');
-    if(totalDisp) totalDisp.innerText = `Order: ${name} (${price})`;
+function selectItem(name, price) {
+    activeOrder = { name, price };
+    document.getElementById('cart-bar').classList.remove('cart-hidden');
+    document.getElementById('cart-total').innerText = `Order: ${name}`;
 }
 
 function checkout() {
-    const msg = `TITAN ORDER: ${cartItem.name} (${cartItem.price})`;
-    window.open(`https://wa.me/263715913665?text=${encodeURIComponent(msg)}`);
+    // 1. LOG THE SALE TO FIREBASE ADMIN
+    db.ref('sales').push({
+        name: activeOrder.name,
+        price: activeOrder.price,
+        time: new Date().toLocaleString()
+    });
+
+    // 2. SEND WHATSAPP MESSAGE
+    const text = `TITAN ORDER: ${activeOrder.name} (${activeOrder.price})`;
+    window.open(`https://wa.me/263715913665?text=${encodeURIComponent(text)}`);
 }
 
 function switchTab(cat) {
-    // 1. Update active tab styling
-    document.querySelectorAll('.tab-btn').forEach(b => {
-        const isMatch = b.innerText.includes(cat) || (cat === 'ALL' && b.innerText === 'ALL');
-        b.classList.toggle('active', isMatch);
-    });
-    
-    // 2. Hide/Show the main catalog grid
-    const grid = document.getElementById('catalog-grid');
-    const searchBar = document.querySelector('.search-container');
-    grid.style.display = (cat === 'VOUCHERS') ? 'none' : 'grid';
-    searchBar.style.display = (cat === 'VOUCHERS') ? 'none' : 'block';
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    const isVoucher = (cat === 'VOUCHERS');
+    document.getElementById('catalog-grid').style.display = isVoucher ? 'none' : 'grid';
+    document.getElementById('voucher-zone').style.display = isVoucher ? 'block' : 'none';
+    document.querySelector('.search-container').style.display = isVoucher ? 'none' : 'block';
+    if(!isVoucher) renderGrid(JSON.parse(localStorage.getItem('titan_cache')) || {}, cat);
+}
 
-    // 3. Hide/Show the new Voucher/QR Portal zone
-    const voucherZone = document.getElementById('voucher-zone');
-    voucherZone.style.display = (cat === 'VOUCHERS') ? 'block' : 'none';
-    
-    // 4. If showing regular catalog, re-render filtered list
-    if (cat !== 'VOUCHERS') {
-        const data = JSON.parse(localStorage.getItem('titan_catalog_cache')) || {};
-        renderGrid(data, cat);
-    }
+function revealVoucher() {
+    const code = document.getElementById('secret-code-input').value.toUpperCase();
+    db.ref('vouchers/' + code).once('value').then(snap => {
+        if(snap.exists()){
+            document.getElementById('voucher-pin-out').innerText = snap.val();
+            document.getElementById('reveal-display').style.display = 'block';
+        } else { alert("CODE NOT FOUND!"); }
+    });
 }
 
 function updateCountdown() {
     const gap = OPEN_DATE - new Date().getTime();
     const d = Math.floor(gap / (1000 * 60 * 60 * 24));
-    const h = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const m = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
-    const s = Math.floor((gap % (1000 * 60)) / 1000);
     const clock = document.getElementById('countdown-clock');
-    if(clock) clock.innerText = `${d}d ${h}h ${m}m ${s}s`;
+    if(clock) clock.innerText = `${d}d ${Math.floor((gap % (86400000)) / 3600000)}h ${Math.floor((gap % 3600000) / 60000)}m`;
 }
