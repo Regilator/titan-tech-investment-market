@@ -71,10 +71,27 @@
                         <h2 id="voucher-pin-out">--------</h2>
                     </div>
                 </div>
-                <div class="qr-box">
+                <div class="qr-container-stylish">
                     <img id="titan-digital-qr" src="" alt="Titan QR">
-                    <p style="color: black; font-size: 8px; margin-top: 5px; font-weight: bold;">SCAN TO SHARE</p>
+                    <p style="color: #000; font-size: 9px; font-weight: bold; margin-top: 8px;">TITAN SECURE CONNECT</p>
                 </div>
+            </div>
+        </div>
+
+        <div id="reviews-section" style="padding: 20px; margin-top: 20px;">
+            <h3 style="color: var(--titan-purple); border-bottom: 1px solid #222; padding-bottom: 10px;">CLIENT FEEDBACK</h3>
+            <div id="reviews-display"></div>
+            <div class="review-form-card">
+                <p style="font-size: 12px; margin-bottom: 5px; color: var(--neon-blue);">LEAVE A REVIEW:</p>
+                <input type="text" id="revName" placeholder="Name">
+                <select id="revStars">
+                    <option value="5">⭐⭐⭐⭐⭐</option>
+                    <option value="4">⭐⭐⭐⭐</option>
+                    <option value="3">⭐⭐⭐</option>
+                </select>
+                <input type="text" id="revText" placeholder="Message...">
+                <button onclick="submitReview()" class="btn-post" style="padding:10px;">SEND REVIEW</button>
+                <p id="revStatus" style="font-size: 10px; color: #00ff00;"></p>
             </div>
         </div>
     </main>
