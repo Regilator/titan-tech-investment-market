@@ -30,32 +30,35 @@
         </div>
         <div class="ticker-wrap">
             <div class="ticker">
-                GRAND OPENING: <span id="countdown-clock">--d --h --m --s</span> | 10 MOVIES $1 | ENG TOOLS (UZ/NUST/CUT) | WINDOWS & PHONE REPAIRS...
+                GRAND OPENING: <span id="countdown-clock">--d --h --m --s</span> | 10 MOVIES $1 | REPAIRS (IPHONE/SAMSUNG) | WINDOWS & HACK TOOLS...
             </div>
         </div>
     </header>
 
     <main>
         <div class="search-container">
-            <input type="text" id="catalog-search" placeholder="Search (e.g. AutoCAD, GTA, Windows)...">
+            <input type="text" id="catalog-search" placeholder="Search (e.g. Mortal Kombat, iCloud, Windows)...">
         </div>
 
         <div class="tabs-container">
             <button class="tab-btn active" onclick="switchTab('ALL')">ALL</button>
-            <button class="tab-btn" onclick="switchTab('ENG_SUITE')">🛠️ ENG</button>
-            <button class="tab-btn" onclick="switchTab('GAMING')">🎮 GAMES</button>
-            <button class="tab-btn" onclick="switchTab('MOVIES')">🎬 MOVIES</button>
             <button class="tab-btn" onclick="switchTab('REPAIRS')">🔧 REPAIRS</button>
-            <button class="tab-btn" onclick="switchTab('VOUCHERS')">🎫 VOUCHERS</button>
+            <button class="tab-btn" onclick="switchTab('MOVIES')">🎬 MOVIES</button>
+            <button class="tab-btn" onclick="switchTab('TV_SHOWS')">📺 TV SHOWS</button>
+            <button class="tab-btn" onclick="switchTab('GAMES')">🎮 GAMES</button>
+            <button class="tab-btn" onclick="switchTab('SOFTWARE')">💻 SOFT</button>
+            <button class="tab-btn" onclick="switchTab('MUSIC')">🎵 MUSIC</button>
+            <button class="tab-btn" onclick="switchTab('HACK')">💀 HACK</button>
         </div>
 
-        <div id="catalog-grid" class="grid-layout"></div>
+        <div id="catalog-grid" class="grid-layout">
+            </div>
     </main>
 
     <div id="cart-bar" class="cart-hidden">
         <div class="cart-content">
             <span id="cart-total">$0.00</span>
-            <button id="checkout-btn" onclick="checkout()">ORDER ON WHATSAPP ⚡</button>
+            <button id="checkout-btn" onclick="checkout()">ORDER VIA WHATSAPP ⚡</button>
         </div>
     </div>
 
