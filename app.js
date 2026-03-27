@@ -16,7 +16,9 @@ let cart = [];
 const WHATSAPP_LINES = ["263715913665", "263781847711"];
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Hide splash screen
     setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 2800);
+    
     updateShopStatus();
     loadCatalog();
     loadLatestAlert();
@@ -28,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// LOAD FIREBASE CATALOG
 function loadCatalog() {
     db.ref('catalog').on('value', (snapshot) => {
         const data = snapshot.val();
@@ -54,13 +57,15 @@ function loadCatalog() {
     });
 }
 
+// QR CODE GENERATION
 function generateBrandedQR() {
-    // Generates QR Code with Purple markers and space for your logo
-    const currentURL = window.location.href;
     const qrImg = document.getElementById('digital-qr');
-    qrImg.src = `https://quickchart.io/qr?text=${encodeURIComponent(currentURL)}&size=200&markerColor=%23A020F0&centerImageUrl=https://yourdomain.com/assets/titan-logo.png`;
+    const currentURL = window.location.href;
+    // Branded with your purple identity
+    qrImg.src = `https://quickchart.io/qr?text=${encodeURIComponent(currentURL)}&size=200&markerColor=%23A020F0&darkColor=%23000000`;
 }
 
+// CART LOGIC
 function toggleCart(name, price, cat, el) {
     const idx = cart.findIndex(i => i.name === name);
     if (idx > -1) { cart.splice(idx, 1); el.classList.remove('selected'); }
@@ -78,7 +83,6 @@ function updateCartUI() {
         let series = cart.filter(i => i.cat === "SERIES").length;
         total += Math.ceil(movies / 10) + Math.ceil(series / 2);
         cart.filter(i => !['MOVIES','SERIES'].includes(i.cat)).forEach(i => total += (parseFloat(i.price.replace('$','')) || 0));
-        document.getElementById('cart-count').innerText = `${cart.length} Items`;
         document.getElementById('cart-total').innerText = isMobile ? `Est: $${total} + Travel` : `Total: $${total}`;
     } else { bar.classList.add('cart-hidden'); }
 }
@@ -86,8 +90,7 @@ function updateCartUI() {
 function checkout() {
     const isMobile = document.getElementById('mobile-service-check').checked;
     const num = confirm("Send to Admin (OK) or Tech (Cancel)?") ? WHATSAPP_LINES[0] : WHATSAPP_LINES[1];
-    let list = cart.map(i => `- ${i.name}`).join('\n');
-    let msg = `TITAN ORDER ⚡\n\n${list}${isMobile ? '\n\n🚀 *REQUEST MOBILE DELIVERY*' : ''}`;
+    let msg = `TITAN ORDER ⚡\n\n${cart.map(i => `- ${i.name}`).join('\n')}${isMobile ? '\n\n🚀 *REQUEST MOBILE DELIVERY*' : ''}`;
     window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`);
 }
 
@@ -107,9 +110,6 @@ function loadLatestAlert() {
     });
 }
 
-function updateShopStatus() { const h = new Date().getHours(); document.getElementById('status-light').className = (h>=8 && h<19) ? 'online' : 'offline'; document.getElementById('status-text').innerText = (h>=8 && h<19) ? 'ONLINE' : 'OFFLINE'; }
+function updateShopStatus() { const h = new Date().getHours(); document.getElementById('status-light').className = (h>=8 && h<19) ? 'online' : 'offline'; }
 function switchTab(cat) { document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.innerText === cat)); filterGrid('', cat); }
 function filterGrid(q, cat) { document.querySelectorAll('.item-card').forEach(c => { const m = c.innerText.toLowerCase().includes(q) && (cat==='ALL' || c.innerHTML.includes(cat)); c.style.display = m ? 'block' : 'none'; }); }
-function openMap() { window.open("https://www.google.com/maps/search/14+28+Crescent+Warren+Park+1"); }
-function clearCart() { cart = []; document.querySelectorAll('.item-card').forEach(c => c.classList.remove('selected')); updateCartUI(); }
-function sendGeneralRequest() { const r = prompt("What do you need?"); if(r) window.open(`https://wa.me/${WHATSAPP_LINES[0]}?text=REQUEST: ${r}`); }
