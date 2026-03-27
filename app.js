@@ -31,13 +31,13 @@ async function loadCatalog() {
         const grid = document.getElementById('catalog-grid');
         grid.innerHTML = text.split('\n').filter(l => l.includes('|')).map(line => {
             const [name, price, img, cat] = line.split('|').map(s => s.trim());
-            let label = (cat === "MOVIES") ? "10 FOR $1" : (cat === "SERIES" || cat === "TV SHOWS") ? "2 SEASONS $1" : (cat === "GAMES") ? "BY SIZE" : price;
+            let label = (cat === "MOVIES") ? "10 FOR $1" : (cat === "SERIES") ? "2 SEASONS $1" : (cat === "GAMES") ? "BY SIZE" : (cat === "HACK" && price === "") ? "INQUIRE" : price;
             return `
                 <div class="item-card" data-name="${name.toLowerCase()}" data-cat="${cat.toUpperCase()}" onclick="toggleCart('${name}', '${price}', '${cat}', this)">
                     <img src="${img}" onerror="this.src='https://via.placeholder.com/150'">
                     <div class="item-details">
                         <strong>${name}</strong><br>
-                        <span style="color:var(--red);">${label}</span>
+                        <span style="color:var(--red); font-weight:bold;">${label}</span>
                     </div>
                 </div>`;
         }).join('');
@@ -66,8 +66,8 @@ function updateCartUI() {
         bar.classList.remove('cart-hidden');
         let total = 0;
         let movies = cart.filter(i => i.cat === "MOVIES").length;
-        let series = cart.filter(i => i.cat === "SERIES" || i.cat === "TV SHOWS").length;
-        let others = cart.filter(i => i.cat !== "MOVIES" && i.cat !== "SERIES" && i.cat !== "TV SHOWS" && i.cat !== "GAMES");
+        let series = cart.filter(i => i.cat === "SERIES").length;
+        let others = cart.filter(i => i.cat !== "MOVIES" && i.cat !== "SERIES" && i.cat !== "GAMES");
 
         total += Math.ceil(movies / 10) * 1;
         total += Math.ceil(series / 2) * 1;
@@ -90,7 +90,7 @@ function clearCart() {
 
 function checkout() {
     const isMobile = document.getElementById('mobile-service-check').checked;
-    const choice = confirm("Send order to Admin (OK) or Tech (Cancel)?");
+    const choice = confirm("Send to Admin (OK) or Tech (Cancel)?");
     const num = choice ? WHATSAPP_LINES[0] : WHATSAPP_LINES[1];
     let list = cart.map(i => `- ${i.name}`).join('\n');
     let mobileNote = isMobile ? "\n\n🚀 *REQUESTING MOBILE SERVICE*\n📍 My location for fee calculation: " : "";
@@ -99,7 +99,7 @@ function checkout() {
 }
 
 function openMap() {
-    window.open("https://www.google.com/maps/search/14+28+Crescent+Warren+Park+1+Harare", "_blank");
+    window.open("https://www.google.com/maps?q=-17.8248,31.0530", "_blank");
 }
 
 function filterGrid(q, cat) {
