@@ -46,23 +46,42 @@ async function loadCatalog() {
         const text = await res.text();
         const grid = document.getElementById('catalog-grid');
         grid.innerHTML = text.split('\n').filter(l => l.includes('|')).map(line => {
-            const [name, price, img, cat] = line.split('|');
+            const parts = line.split('|');
+            const name = parts[0].trim();
+            const priceVal = parts[1].trim();
+            const img = parts[2].trim();
+            const cat = parts[3].trim().toUpperCase();
+
+            // TITAN TECH SMART PRICING LOGIC
+            let displayPrice = "";
+            if (cat === "MOVIES") {
+                displayPrice = "10 MOVIES FOR $1";
+            } else if (cat === "TV SHOWS" || cat === "SERIES") {
+                displayPrice = "2 SEASONS FOR $1";
+            } else if (cat === "GAMES") {
+                displayPrice = "PRICE BY GB SIZE";
+            } else if (cat === "HACK" && priceVal === "") {
+                displayPrice = "INQUIRE PRICE";
+            } else {
+                displayPrice = priceVal; // Shows the USD price for Repairs/Software
+            }
+
             return `
-                <div class="item-card" onclick="buyItem('${name.trim()}', '${price.trim()}')" data-name="${name.toLowerCase()}" data-cat="${cat.trim().toUpperCase()}">
-                    <img src="${img.trim()}" loading="lazy" onerror="this.src='https://via.placeholder.com/150?text=TITAN+TECH'">
+                <div class="item-card" onclick="buyItem('${name}', '${displayPrice}')" data-name="${name.toLowerCase()}" data-cat="${cat}">
+                    <img src="${img}" loading="lazy" onerror="this.src='https://via.placeholder.com/150?text=TITAN+TECH'">
                     <div class="item-details">
                         <strong>${name}</strong><br>
-                        <span style="color:var(--red); font-weight:bold;">${price}</span>
+                        <span style="color:var(--red); font-weight:bold; font-size:10px;">${displayPrice}</span>
                     </div>
                 </div>`;
         }).join('');
     } catch (e) { console.error("Catalog Error"); }
 }
 
-function buyItem(name, price) {
-    const choice = confirm(`Order ${name} for ${price}?\n\nOK = Admin Line\nCancel = Tech Line`);
+function buyItem(name, priceInfo) {
+    const choice = confirm(`Order ${name}?\nRate: ${priceInfo}\n\nOK = Admin Line\nCancel = Tech Line`);
     const num = choice ? WHATSAPP_LINES[0].number : WHATSAPP_LINES[1].number;
-    const msg = `TITAN REQUEST ⚡\nItem: ${name}\nPrice: ${price}\nIs this available?`;
+    const msg = `TITAN REQUEST ⚡\nItem: ${name}\nRate: ${priceInfo}\nIs this available?`;
     window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
@@ -90,8 +109,7 @@ function filterGrid(q, cat) {
 function loadReviews() {
     const reviews = [
         { msg: "Fastest bypass in Harare!", user: "Tinashe M." },
-        { msg: "Games working 100% on my PC.", user: "Gift_Tech" },
-        { msg: "Titan Tech is the only shop I trust.", user: "Sarah Z." }
+        { msg: "Games working 100%.", user: "Gift_Tech" }
     ];
     document.getElementById('reviews-list').innerHTML = reviews.map(r => `
         <div class="review-card"><p>"${r.msg}"</p><span>- ${r.user}</span></div>
@@ -99,7 +117,7 @@ function loadReviews() {
 }
 
 function requestReview() {
-    const name = prompt("Your Name/Handle:");
+    const name = prompt("Your Name:");
     if(name) window.open(`https://wa.me/${WHATSAPP_LINES[0].number}?text=TITAN FEEDBACK ⚡\nName: ${name}\nReview: `);
 }
 
