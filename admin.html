@@ -6,47 +6,39 @@
     <title>Titan Admin | Lod of Tech</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <style>
-        :root { --neon: #00f2ff; --purple: #A020F0; --red: #ff0000; }
-        body { padding: 15px; font-family: 'Orbitron', sans-serif; background: #050505; color: white; margin: 0; }
-        .admin-box { background: #0a0a0a; border: 2px solid var(--purple); padding: 20px; border-radius: 15px; max-width: 600px; margin: 20px auto; display: none; box-shadow: 0 0 20px var(--purple); }
+        body { padding: 15px; font-family: 'Orbitron', sans-serif; background: #050505; color: white; }
+        .admin-box { background: #0a0a0a; border: 2px solid #A020F0; padding: 20px; border-radius: 15px; max-width: 600px; margin: auto; display: none; }
         .section-card { background: #000; border: 1px solid #222; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
-        input, select { width: 100%; padding: 12px; margin: 8px 0; background: #111; color: var(--neon); border: 1px solid #333; border-radius: 5px; box-sizing: border-box; font-family: 'Roboto Mono'; }
-        .btn-post { background: var(--purple); color: white; border: none; padding: 15px; font-weight: bold; border-radius: 5px; width: 100%; cursor: pointer; text-transform: uppercase; }
-        .login-box { background: #111; border: 2px solid var(--red); padding: 30px; border-radius: 15px; text-align: center; max-width: 400px; margin: 100px auto; }
-        .inventory-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #222; font-size: 11px; font-family: 'Roboto Mono'; }
-        .del-btn { background: var(--red); color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
-        .revenue-badge { background: #00ff00; color: black; padding: 15px; border-radius: 5px; text-align: center; font-weight: bold; margin-bottom: 15px; font-size: 20px; }
-        .status-msg { text-align: center; font-size: 12px; color: #00ff00; margin-top: 10px; min-height: 18px; }
+        input, select { width: 100%; padding: 12px; margin: 8px 0; background: #111; color: #00f2ff; border: 1px solid #333; border-radius: 5px; box-sizing: border-box; font-family: 'Roboto Mono'; }
+        .btn-post { background: #A020F0; color: white; border: none; padding: 15px; border-radius: 5px; width: 100%; cursor: pointer; font-weight: bold; }
+        .login-box { background: #111; border: 2px solid #ff0000; padding: 30px; border-radius: 15px; text-align: center; max-width: 400px; margin: 80px auto; }
+        .revenue-badge { background: #00ff00; color: black; padding: 15px; border-radius: 5px; text-align: center; font-weight: bold; font-size: 20px; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
     <div id="login-screen" class="login-box">
-        <h2 style="color: var(--red); margin-top:0;">TITAN SECURITY</h2>
-        <input type="password" id="pinInput" placeholder="ENTER SYSTEM PIN">
-        <button onclick="checkPin()" class="btn-post">AUTHORIZE ACCESS</button>
+        <h2 style="color: #ff0000;">TITAN SECURITY</h2>
+        <input type="password" id="pinInput" placeholder="ENTER PIN">
+        <button onclick="checkPin()" class="btn-post">INITIALIZE</button>
     </div>
 
     <div id="admin-interface" class="admin-box">
-        <h2 style="color: var(--purple); text-align: center; margin-top:0;">TITAN CONTROL CENTER</h2>
+        <h2 style="color: #A020F0; text-align: center;">TITAN CONTROL</h2>
 
         <div class="section-card">
-            <h4 style="color: #00ff00; margin-top:0;">💰 TOTAL REVENUE</h4>
+            <h4 style="color: #00ff00;">💰 REVENUE</h4>
             <div id="total-revenue" class="revenue-badge">$0.00</div>
-            <div id="sales-list" style="max-height: 100px; overflow-y: auto; background: #050505; font-size: 10px; border: 1px solid #222;">
-                </div>
+            <div id="sales-list" style="max-height: 100px; overflow-y: auto; font-size: 10px;"></div>
         </div>
 
         <div class="section-card">
-            <h4 style="color: var(--purple); margin-top:0;">📦 DEPLOY NEW STOCK</h4>
-            <input type="text" id="itemName" placeholder="Item Name (e.g. Samsung Flash)">
+            <h4 style="color: #A020F0;">📦 ADD STOCK</h4>
+            <input type="text" id="itemName" placeholder="Item Name">
             <input type="text" id="itemPrice" placeholder="Price (e.g. $10)">
-            
-            <p style="font-size: 10px; color: #888; margin: 5px 0;">Filename on GitHub (e.g. flash.png):</p>
-            <input type="text" id="itemImgName" placeholder="filename.png">
-            
+            <input type="text" id="itemImgName" placeholder="Filename (e.g. flash.png)">
             <select id="itemCat">
                 <option value="repairs">🔧 REPAIRS</option>
                 <option value="movies">🎬 MOVIES</option>
@@ -56,73 +48,61 @@
                 <option value="music">🎵 MUSIC</option>
                 <option value="hack">💀 HACK</option>
             </select>
-            <button onclick="uploadItem()" class="btn-post">POST TO TITAN HUB ⚡</button>
-            <div id="status" class="status-msg"></div>
+            <button onclick="uploadItem()" class="btn-post">POST TO HUB</button>
+            <div id="status" style="text-align: center; color: #00ff00; font-size: 12px; margin-top: 5px;"></div>
         </div>
 
-        <div class="section-card" style="border-color: var(--neon);">
-            <h4 style="color: var(--neon); margin-top:0;">🎫 VOUCHER GEN</h4>
-            <input type="text" id="voucherPin" placeholder="REAL PIN / SECRET LINK">
-            <button onclick="generateVoucher()" style="background: var(--neon); color: black;" class="btn-post">CREATE ACCESS KEY 🔓</button>
-            <div id="gen-result" style="display:none; text-align:center; margin-top:10px; border:1px dashed var(--neon); padding:10px;">
-                <small style="color:#888">COPY THIS FOR CUSTOMER:</small><br>
-                <strong id="final-secret-code" style="color:var(--neon); font-size:20px;"></strong>
-            </div>
+        <div class="section-card" style="border-color: #00f2ff; text-align: center;">
+            <h4 style="color: #00f2ff;">🛡️ HUB QR TOOL</h4>
+            <p style="font-size: 10px; color: #888;">Save your site QR to share on status:</p>
+            <button onclick="downloadQR()" style="background: #00f2ff; color: black;" class="btn-post">DOWNLOAD TITAN QR 📥</button>
         </div>
 
         <div class="section-card">
-            <h4 style="color: var(--red); margin-top:0;">🗑️ MANAGE INVENTORY</h4>
-            <div id="live-inventory-list" style="max-height: 250px; overflow-y: auto;">
-                </div>
+            <h4 style="color: #ff0000;">🗑️ MANAGE STOCK</h4>
+            <div id="live-inventory-list"></div>
         </div>
-
-        <button onclick="location.reload()" style="background:none; border:none; color:#444; width:100%; font-size:10px; cursor:pointer;">TERMINATE ADMIN SESSION</button>
     </div>
 
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyBRHHvX9TMDsJQ8PzD7FMsq00VMUVnx_UI",
-            databaseURL: "https://titan-tech-hub-default-rtdb.firebaseio.com"
-        };
+        const firebaseConfig = { apiKey: "AIzaSyBRHHvX9TMDsJQ8PzD7FMsq00VMUVnx_UI", databaseURL: "https://titan-tech-hub-default-rtdb.firebaseio.com" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
         function checkPin() {
-            // Your private access code
             if (document.getElementById('pinInput').value === "Reggiex123x123") {
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('admin-interface').style.display = 'block';
-                loadInventory();
-                loadSales();
-            } else { alert("SYSTEM ALERT: UNAUTHORIZED PIN"); }
+                loadInventory(); loadSales();
+            } else { alert("INVALID PIN"); }
         }
 
         function uploadItem() {
             const name = document.getElementById('itemName').value;
-            const price = document.getElementById('itemPrice').value || "PRICE ON CHAT";
+            const price = document.getElementById('itemPrice').value;
             const fileName = document.getElementById('itemImgName').value;
             const cat = document.getElementById('itemCat').value;
-
-            if(!name || !fileName) {
-                alert("Please provide a Name and Filename!");
-                return;
-            }
-
-            // This matches the exact path structure: assets/category/filename.png
             const fullPath = "assets/" + cat + "/" + fileName;
 
-            db.ref('catalog').push({
-                name: name,
-                price: price,
-                img: fullPath,
-                cat: cat.toUpperCase()
-            })
+            db.ref('catalog').push({ name, price, img: fullPath, cat: cat.toUpperCase() })
             .then(() => {
-                document.getElementById('status').innerText = "✅ DEPLOYED SUCCESSFULLY";
-                document.getElementById('itemName').value = "";
-                document.getElementById('itemImgName').value = "";
-                setTimeout(() => { document.getElementById('status').innerText = ""; }, 2500);
+                document.getElementById('status').innerText = "✅ POSTED";
+                document.getElementById('itemName').value = ""; document.getElementById('itemImgName').value = "";
+                setTimeout(() => document.getElementById('status').innerText = "", 2000);
             });
+        }
+
+        function downloadQR() {
+            // Links to your specific site URL QR
+            const siteUrl = "https://regilator.github.io/titan-tech-investment-market/";
+            const qrUrl = `https://quickchart.io/qr?text=${encodeURIComponent(siteUrl)}&size=300&centerImageUrl=https://img.icons8.com/color/96/shield.png`;
+            
+            const link = document.createElement('a');
+            link.href = qrUrl;
+            link.download = "TITAN_HUB_QR.png";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         function loadInventory() {
@@ -131,53 +111,28 @@
                 listDiv.innerHTML = "";
                 const data = snap.val();
                 if(!data) return;
-                
                 Object.keys(data).forEach(id => {
-                    listDiv.innerHTML += `
-                        <div class="inventory-item">
-                            <span>${data[id].name} (${data[id].cat})</span>
-                            <button class="del-btn" onclick="deleteItem('${id}')">DEL</button>
-                        </div>`;
+                    listDiv.innerHTML += `<div style="display:flex; justify-content:space-between; padding:8px; border-bottom:1px solid #111;">
+                        <span style="font-size:10px;">${data[id].name}</span>
+                        <button style="background:red; color:white; border:none; padding:3px 8px; border-radius:3px;" onclick="db.ref('catalog/${id}').remove()">DEL</button>
+                    </div>`;
                 });
             });
-        }
-
-        function deleteItem(id) {
-            if(confirm("Permanently wipe this item?")) {
-                db.ref('catalog/' + id).remove();
-            }
         }
 
         function loadSales() {
             db.ref('sales').on('value', snap => {
                 const logDiv = document.getElementById('sales-list');
                 const revDiv = document.getElementById('total-revenue');
-                logDiv.innerHTML = "";
-                let total = 0;
+                logDiv.innerHTML = ""; let total = 0;
                 const data = snap.val();
                 if(!data) return;
-
                 Object.keys(data).reverse().forEach(id => {
                     const sale = data[id];
-                    const val = parseFloat(sale.price.replace('$', '')) || 0;
-                    total += val;
-                    logDiv.innerHTML += `
-                        <div style="padding:4px; border-bottom:1px solid #111;">
-                            ${sale.name} - <span style="color:#00ff00;">${sale.price}</span>
-                        </div>`;
+                    total += parseFloat(sale.price.replace('$', '')) || 0;
+                    logDiv.innerHTML += `<div style="padding:2px;">${sale.name} - ${sale.price}</div>`;
                 });
                 revDiv.innerText = "$" + total.toFixed(2);
-            });
-        }
-
-        function generateVoucher() {
-            const val = document.getElementById('voucherPin').value;
-            if(!val) return;
-            const secret = "TITAN-" + Math.random().toString(36).substr(2, 5).toUpperCase();
-            db.ref('vouchers/' + secret).set(val).then(() => {
-                document.getElementById('gen-result').style.display = 'block';
-                document.getElementById('final-secret-code').innerText = secret;
-                document.getElementById('voucherPin').value = "";
             });
         }
     </script>
