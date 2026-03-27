@@ -7,14 +7,13 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 let activeOrder = null;
 
-// TARGET DATE: April 1, 2026
 const OPEN_DATE = new Date("April 1, 2026 08:00:00").getTime();
 
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 2000);
     
     loadCatalog();
-    startClocks(); // Start both the System Clock and the Countdown
+    startClocks();
     generateQR();
 
     document.getElementById('catalog-search').addEventListener('input', (e) => {
@@ -31,11 +30,8 @@ function startClocks() {
 
     setInterval(() => {
         const now = new Date();
-        
-        // 1. System Clock (HH:MM:SS)
         liveClock.innerText = now.toLocaleTimeString('en-GB');
 
-        // 2. Opening Countdown
         const diff = OPEN_DATE - now.getTime();
         if (diff > 0) {
             const d = Math.floor(diff / 86400000);
@@ -64,9 +60,10 @@ function renderGrid(data, filter = 'ALL') {
         const item = data[id];
         if (filter !== 'ALL' && item.cat !== filter) return;
         
+        // Dynamic path system + fallback to Red T Logo
         let visual = (item.img && item.img !== "") ? 
-            `<img src="${item.img}" onerror="this.src='https://via.placeholder.com/150?text=TITAN'">` : 
-            `<div class="titan-logo-css" style="transform:scale(0.6); margin:30px auto;"></div>`;
+            `<img src="${item.img}" onerror="this.outerHTML='<div class=\'titan-logo-css\' style=\'transform:scale(0.5); margin:35px auto;\'></div>'">` : 
+            `<div class="titan-logo-css" style="transform:scale(0.5); margin:35px auto;"></div>`;
 
         grid.innerHTML += `
             <div class="item-card" onclick="selectItem('${item.name}', '${item.price}')">
@@ -79,6 +76,14 @@ function renderGrid(data, filter = 'ALL') {
     });
 }
 
+function generateQR() {
+    const qrImg = document.getElementById('titan-digital-qr');
+    if (qrImg) {
+        const currentUrl = window.location.href;
+        qrImg.src = `https://quickchart.io/qr?text=${encodeURIComponent(currentUrl)}&size=150&centerImageUrl=https://img.icons8.com/color/96/shield.png`;
+    }
+}
+
 function selectItem(name, price) {
     activeOrder = { name, price };
     document.getElementById('cart-bar').classList.remove('cart-hidden');
@@ -88,11 +93,6 @@ function selectItem(name, price) {
 function checkout() {
     db.ref('sales').push({ name: activeOrder.name, price: activeOrder.price, time: new Date().toLocaleString() });
     window.open(`https://wa.me/263715913665?text=TITAN+ORDER:+${encodeURIComponent(activeOrder.name)}`);
-}
-
-function generateQR() {
-    const qr = document.getElementById('titan-digital-qr');
-    if(qr) qr.src = `https://quickchart.io/qr?text=${encodeURIComponent(window.location.href)}&size=150`;
 }
 
 function switchTab(cat) {
