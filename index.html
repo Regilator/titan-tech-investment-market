@@ -12,36 +12,49 @@
         <div class="splash-content">
             <h1 class="neon-text">TITAN OMEGA</h1>
             <div class="loader-bar"><div class="progress"></div></div>
-            <p style="font-size:10px; letter-spacing:2px;">INITIALIZING OMEGA SALES...</p>
+            <p style="font-size:10px; letter-spacing:2px;">SYNCING TITAN SYSTEMS...</p>
         </div>
     </div>
 
     <div class="news-ticker">
         <div class="ticker-content">
-            MOBILE DELIVERY AVAILABLE... 10 MOVIES FOR $1... 2 SEASONS FOR $1... GAMES BY SIZE... REPAIRS AT 14 28 CRESCENT...
+            DEALS: 10 MOVIES FOR $1 | 2 SEASONS FOR $1 | GAMES BY SIZE | REPAIRS AT 14 28 CRESCENT... MOBILE DELIVERY AVAILABLE!
         </div>
     </div>
 
     <header>
         <h1 class="neon-text">TITAN TECH</h1>
+        
+        <div class="contact-header">
+            <div class="contact-line" onclick="window.open('tel:+263715913665')">
+                <span class="icon">📞</span> ADMIN: 071 591 3665
+            </div>
+            <div class="contact-line" onclick="window.open('tel:+263781847711')">
+                <span class="icon">🛠️</span> TECH: 078 184 7711
+            </div>
+        </div>
+
         <div class="status-container">
             <span id="status-light" class="offline"></span>
             <span id="status-text">OFFLINE</span>
         </div>
-        <button onclick="openMap()" class="map-btn">📍 FIND SHOP</button>
+        <button onclick="openMap()" class="map-btn">📍 14 28 CRESCENT, WARREN PARK 1</button>
     </header>
 
     <nav class="tabs">
         <button class="tab-btn active" onclick="switchTab('ALL')">ALL</button>
         <button class="tab-btn" onclick="switchTab('REPAIRS')">REPAIRS</button>
         <button class="tab-btn" onclick="switchTab('MOVIES')">MOVIES</button>
+        <button class="tab-btn" onclick="switchTab('SERIES')">SERIES</button>
         <button class="tab-btn" onclick="switchTab('GAMES')">GAMES</button>
         <button class="tab-btn" onclick="switchTab('SOFTWARE')">SOFTWARE</button>
+        <button class="tab-btn" onclick="switchTab('HACK')">HACK</button>
+        <button class="tab-btn" onclick="switchTab('MUSIC')">MUSIC</button>
     </nav>
 
     <main>
         <div class="action-bar">
-            <input type="text" id="catalog-search" placeholder="Search Titan database...">
+            <input type="text" id="catalog-search" placeholder="Search the database...">
             <button onclick="sendGeneralRequest()" class="request-btn">REQUEST</button>
         </div>
         <div id="catalog-grid" class="grid"></div>
@@ -67,7 +80,7 @@
 
     <footer>
         <img id="digital-qr" src="">
-        <p>14 28 Crescent, Warren Park 1, Harare</p>
+        <p>Titan Tech Investment Market | Harare</p>
     </footer>
 
     <script src="app.js"></script>
