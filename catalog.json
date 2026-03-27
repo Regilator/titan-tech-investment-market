@@ -1,19 +1,12 @@
 {
   "catalog": {
-    "item_001": { "name": "SolidWorks 2024", "price": "$15", "cat": "ENG_SUITE", "img": "" },
-    "item_002": { "name": "AutoCAD 2025", "price": "$12", "cat": "ENG_SUITE", "img": "" },
-    "item_003": { "name": "GTA V Premium", "price": "$10", "cat": "GAMING", "img": "" },
-    "item_004": { "name": "FIFA 24 / FC24", "price": "$15", "cat": "GAMING", "img": "" },
-    "item_005": { "name": "Deadpool & Wolverine", "price": "$2", "cat": "MOVIES", "img": "" },
-    "item_006": { "name": "Gladiator II", "price": "$2", "cat": "MOVIES", "img": "" },
-    "item_007": { "name": "Econet $1 Voucher", "price": "$1.20", "cat": "VOUCHERS", "img": "" },
-    "item_008": { "name": "Titan Premium VPN", "price": "$5", "cat": "SOFT", "img": "" },
-    "item_009": { "name": "Windows 11 Pro Key", "price": "$8", "cat": "SOFT", "img": "" },
-    "item_010": { "name": "Photoshop 2024", "price": "$10", "cat": "ENG_SUITE", "img": "" },
-    "item_011": { "name": "The Last of Us S2", "price": "$3", "cat": "SERIES", "img": "" },
-    "item_012": { "name": "Revit 2024", "price": "$12", "cat": "ENG_SUITE", "img": "" },
-    "item_013": { "name": "Call of Duty: MW3", "price": "$12", "cat": "GAMING", "img": "" },
-    "item_014": { "name": "Office 2021 Suite", "price": "$7", "cat": "SOFT", "img": "" },
-    "item_015": { "name": "Stranger Things S4", "price": "$3", "cat": "SERIES", "img": "" }
+    "item_001": { "name": "SolidWorks 2024", "price": "$15", "cat": "ENG_SUITE", "img": "https://img.icons8.com/color/144/solidworks.png" },
+    "item_002": { "name": "AutoCAD 2025", "price": "$12", "cat": "ENG_SUITE", "img": "https://img.icons8.com/color/144/autodesk-autocad.png" },
+    "item_003": { "name": "Revit 2024", "price": "$12", "cat": "ENG_SUITE", "img": "https://img.icons8.com/color/144/autodesk-revit.png" },
+    "item_004": { "name": "GTA V Premium", "price": "$10", "cat": "GAMING", "img": "https://upload.wikimedia.org/wikipedia/en/a/a5/Grand_Theft_Auto_V.png" },
+    "item_005": { "name": "Deadpool & Wolverine", "price": "$2", "cat": "MOVIES", "img": "https://m.media-amazon.com/images/M/MV5BNzRiMjg0MzUtNTQ1Mi00Y2QyLWEwNjMtOTI3NjYzNjAxYmYyXkEyXkFqcGc@._V1_.jpg" },
+    "item_006": { "name": "Windows 11 Pro Install", "price": "$10", "cat": "REPAIRS", "img": "https://img.icons8.com/color/144/windows-11.png" },
+    "item_007": { "name": "Phone Unlocking", "price": "From $5", "cat": "REPAIRS", "img": "https://img.icons8.com/color/144/smartphone-settings.png" },
+    "item_008": { "name": "Econet $1 Voucher", "price": "$1.20", "cat": "VOUCHERS", "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Econet_Wireless_logo.svg/1200px-Econet_Wireless_logo.svg.png" }
   }
 }
