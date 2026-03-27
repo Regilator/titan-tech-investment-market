@@ -1,18 +1,14 @@
-Samsung Firmware Flash|10 USD|assets/repairs/flash.png|REPAIRS
-iPhone iCloud Bypass|15 USD|assets/repairs/bypass.png|REPAIRS
-Windows 11 Pro Install|10 USD|assets/repairs/win11.png|REPAIRS
-The Flash (2023)|3 USD|assets/movies/the_flash.png|MOVIES
-Superman: Man of Steel|3 USD|assets/movies/superman.png|MOVIES
-Batman: The Dark Knight|3 USD|assets/movies/batman.png|MOVIES
-Snowfall (Full Season)|5 USD|assets/tv_shows/snowfall.png|TV SHOWS
-Power Book IV: Force|5 USD|assets/tv_shows/power.png|TV SHOWS
-Mortal Kombat XL|15 USD|assets/games/mkxl.png|GAMES
-Injustice 2|15 USD|assets/games/injustice2.png|GAMES
-Need For Speed: Heat|15 USD|assets/games/nfs.png|GAMES
-Blur|10 USD|assets/games/blur.png|GAMES
-Adobe Master Collection|15 USD|assets/software/adobe.png|SOFTWARE
-Internet Download Manager|5 USD|assets/software/idm.png|SOFTWARE
-Afrobeat Mega-Mix 2026|2 USD|assets/music/afrobeat.png|MUSIC
-Zimdancehall Hits|2 USD|assets/music/zimdancehall.png|MUSIC
-MTK Professional Meta Tool|50 USD|assets/hack/mtk_tool.png|HACK
-Hydra Tool Dongle|120 USD|assets/hack/hydra.png|HACK
+Samsung Firmware Flash|$10|assets/repairs/flash.png|REPAIRS
+iPhone iCloud Bypass|$15|assets/repairs/bypass.png|REPAIRS
+Windows 11 Pro Install|$10|assets/repairs/win11.png|REPAIRS
+The Flash (2023)||assets/movies/the_flash.png|MOVIES
+Superman: Man of Steel||assets/movies/superman.png|MOVIES
+Snowfall (Full Season)||assets/tv_shows/snowfall.png|TV SHOWS
+Power Book IV: Force||assets/tv_shows/power.png|TV SHOWS
+Mortal Kombat XL||assets/games/mkxl.png|GAMES
+Injustice 2||assets/games/injustice2.png|GAMES
+Adobe Master Collection|$15|assets/software/adobe.png|SOFTWARE
+IDM Full Version|$5|assets/software/idm.png|SOFTWARE
+Afrobeat Mega-Mix 2026|$2|assets/music/afrobeat.png|MUSIC
+MTK Professional Tool||assets/hack/mtk_tool.png|HACK
+Hydra Tool Dongle||assets/hack/hydra.png|HACK
