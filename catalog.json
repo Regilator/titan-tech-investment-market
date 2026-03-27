@@ -1,12 +1,18 @@
 {
   "catalog": {
-    "item_001": { "name": "SolidWorks 2024", "price": "$15", "cat": "ENG_SUITE", "img": "https://img.icons8.com/color/144/solidworks.png" },
-    "item_002": { "name": "AutoCAD 2025", "price": "$12", "cat": "ENG_SUITE", "img": "https://img.icons8.com/color/144/autodesk-autocad.png" },
-    "item_003": { "name": "Revit 2024", "price": "$12", "cat": "ENG_SUITE", "img": "https://img.icons8.com/color/144/autodesk-revit.png" },
-    "item_004": { "name": "GTA V Premium", "price": "$10", "cat": "GAMING", "img": "https://upload.wikimedia.org/wikipedia/en/a/a5/Grand_Theft_Auto_V.png" },
-    "item_005": { "name": "Deadpool & Wolverine", "price": "$2", "cat": "MOVIES", "img": "https://m.media-amazon.com/images/M/MV5BNzRiMjg0MzUtNTQ1Mi00Y2QyLWEwNjMtOTI3NjYzNjAxYmYyXkEyXkFqcGc@._V1_.jpg" },
-    "item_006": { "name": "Windows 11 Pro Install", "price": "$10", "cat": "REPAIRS", "img": "https://img.icons8.com/color/144/windows-11.png" },
-    "item_007": { "name": "Phone Unlocking", "price": "From $5", "cat": "REPAIRS", "img": "https://img.icons8.com/color/144/smartphone-settings.png" },
-    "item_008": { "name": "Econet $1 Voucher", "price": "$1.20", "cat": "VOUCHERS", "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Econet_Wireless_logo.svg/1200px-Econet_Wireless_logo.svg.png" }
+    "item_001": { "name": "Samsung Firmware Flash", "price": "$10", "cat": "REPAIRS", "img": "assets/repairs/flash.png" },
+    "item_002": { "name": "iPhone iCloud Bypass", "price": "$15", "cat": "REPAIRS", "img": "assets/repairs/bypass.png" },
+    "item_003": { "name": "Windows 11 Pro Install", "price": "$10", "cat": "REPAIRS", "img": "assets/repairs/win11.png" },
+    "item_004": { "name": "The Flash (2023)", "price": "$2", "cat": "MOVIES", "img": "assets/movies/the_flash.png" },
+    "item_005": { "name": "Superman: Man of Steel", "price": "$2", "cat": "MOVIES", "img": "assets/movies/superman.png" },
+    "item_006": { "name": "Snowfall (Full Season)", "price": "$3", "cat": "TV_SHOWS", "img": "assets/tv_shows/snowfall.png" },
+    "item_007": { "name": "Power Book IV: Force", "price": "$3", "cat": "TV_SHOWS", "img": "assets/tv_shows/power.png" },
+    "item_008": { "name": "Mortal Kombat XL", "price": "$10", "cat": "GAMES", "img": "assets/games/mkxl.png" },
+    "item_009": { "name": "Injustice 2", "price": "$10", "cat": "GAMES", "img": "assets/games/injustice2.png" },
+    "item_010": { "name": "Adobe Master Collection", "price": "$15", "cat": "SOFTWARE", "img": "assets/software/adobe.png" },
+    "item_011": { "name": "IDM Full Version", "price": "$5", "cat": "SOFTWARE", "img": "assets/software/idm.png" },
+    "item_012": { "name": "Afrobeat Mega-Mix 2026", "price": "$2", "cat": "MUSIC", "img": "assets/music/afrobeat.png" },
+    "item_013": { "name": "MTK Professional Tool", "price": "Contact", "cat": "HACK", "img": "assets/hack/mtk_tool.png" },
+    "item_014": { "name": "Hydra Tool Dongle", "price": "Contact", "cat": "HACK", "img": "assets/hack/hydra.png" }
   }
 }
