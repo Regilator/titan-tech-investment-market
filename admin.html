@@ -8,22 +8,53 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <link rel="stylesheet" href="style.css">
     <style>
-        body { padding: 20px; font-family: 'Roboto Mono', monospace; }
-        .admin-box { background: #151515; border: 2px solid #A020F0; padding: 20px; border-radius: 15px; }
-        input, select { width: 100%; padding: 10px; margin: 10px 0; background: #000; color: #00f2ff; border: 1px solid #333; }
-        button { width: 100%; padding: 15px; background: #A020F0; color: white; border: none; font-weight: bold; cursor: pointer; }
+        body { padding: 20px; font-family: 'Orbitron', sans-serif; background: #0a0a0a; color: white; }
+        .admin-box { 
+            background: #151515; border: 2px solid #A020F0; 
+            padding: 20px; border-radius: 15px; max-width: 500px; margin: auto;
+            display: none; /* Hidden until PIN is correct */
+        }
+        .login-box {
+            background: #151515; border: 2px solid #ff0000; 
+            padding: 30px; border-radius: 15px; text-align: center;
+            max-width: 400px; margin: 100px auto;
+        }
+        input, select { 
+            width: 100%; padding: 12px; margin: 10px 0; 
+            background: #000; color: #00f2ff; border: 1px solid #333; 
+            border-radius: 5px; box-sizing: border-box;
+        }
+        button { 
+            width: 100%; padding: 15px; background: #A020F0; 
+            color: white; border: none; font-weight: bold; 
+            cursor: pointer; border-radius: 5px; margin-top: 10px;
+        }
+        button:active { transform: scale(0.98); }
     </style>
 </head>
 <body>
 
-    <div class="admin-box">
-        <h2 style="color: #A020F0;">TITAN STOCK MANAGER</h2>
-        <p style="font-size: 10px; color: #888;">Adding to: titan-tech-hub-default-rtdb</p>
+    <div id="login-screen" class="login-box">
+        <h2 style="color: #ff0000;">TITAN SECURE ACCESS</h2>
+        <p style="font-size: 12px;">ENTER ADMIN PIN TO MANAGE STOCK</p>
+        <input type="password" id="pinInput" placeholder="Enter PIN">
+        <button onclick="checkPin()">ACCESS SYSTEM 🔑</button>
+    </div>
+
+    <div id="admin-interface" class="admin-box">
+        <h2 style="color: #A020F0; text-align: center;">TITAN STOCK MANAGER</h2>
+        <hr border="1" color="#333">
         
-        <input type="text" id="itemName" placeholder="Item Name (e.g. FIFA 2026)">
-        <input type="text" id="itemPrice" placeholder="Price (e.g. $10)">
-        <input type="text" id="itemImg" placeholder="Image Path (e.g. assets/movies/pic.png)">
+        <label>Product Name:</label>
+        <input type="text" id="itemName" placeholder="e.g. Mortal Kombat XL">
         
+        <label>Price:</label>
+        <input type="text" id="itemPrice" placeholder="e.g. $10">
+        
+        <label>Image Path:</label>
+        <input type="text" id="itemImg" placeholder="assets/games/mkxl.png">
+        
+        <label>Category:</label>
         <select id="itemCat">
             <option value="REPAIRS">🔧 REPAIRS</option>
             <option value="MOVIES">🎬 MOVIES</option>
@@ -35,7 +66,8 @@
         </select>
 
         <button onclick="uploadToTitan()">UPLOAD TO CATALOG ⚡</button>
-        <p id="status" style="text-align:center; margin-top:10px;"></p>
+        <p id="status" style="text-align:center; margin-top:15px; font-weight: bold;"></p>
+        <button onclick="location.reload()" style="background:#333; font-size: 10px;">LOGOUT</button>
     </div>
 
     <script>
@@ -46,6 +78,18 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
+        function checkPin() {
+            const enteredPin = document.getElementById('pinInput').value;
+            const correctPin = "Reggiex123x123";
+
+            if (enteredPin === correctPin) {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('admin-interface').style.display = 'block';
+            } else {
+                alert("ACCESS DENIED: Incorrect PIN");
+            }
+        }
+
         function uploadToTitan() {
             const name = document.getElementById('itemName').value;
             const price = document.getElementById('itemPrice').value;
@@ -54,11 +98,12 @@
             const status = document.getElementById('status');
 
             if(!name || !price) {
-                alert("Please add Name and Price!");
+                status.innerText = "⚠️ Missing info!";
+                status.style.color = "orange";
                 return;
             }
 
-            // Generates a unique ID automatically
+            // Push creates a new entry with a unique ID
             const newPostRef = db.ref('catalog').push();
             newPostRef.set({
                 name: name,
@@ -66,9 +111,11 @@
                 img: img,
                 cat: cat
             }).then(() => {
-                status.innerText = "✅ UPLOADED TO TITAN HUB!";
+                status.innerText = "✅ SYSTEM UPDATED!";
                 status.style.color = "#00ff00";
+                // Clear inputs for next item
                 document.getElementById('itemName').value = "";
+                document.getElementById('itemPrice').value = "";
             }).catch((error) => {
                 status.innerText = "❌ ERROR: " + error.message;
                 status.style.color = "red";
