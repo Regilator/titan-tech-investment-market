@@ -2,100 +2,84 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>TITAN TECH | OMEGA HUB</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-messaging-compat.js"></script>
 </head>
 <body>
 
-    <div id="notif-banner" style="display:none; background:var(--purple); padding:10px; text-align:center; font-size:10px; position:sticky; top:0; z-index:2001;">
-        GET ALERTS FOR NEW MOVIES & TOOLS? 
-        <button onclick="requestPermission()" style="background:white; color:black; border:none; padding:5px 10px; margin-left:10px; border-radius:3px; font-weight:bold;">ENABLE</button>
+    <div id="splash">
+        <div class="titan-logo-css digital-pulse"></div>
+        <h1 class="neon-text">TITAN OMEGA</h1>
+        <div class="loader-bar"><div class="progress"></div></div>
+        <p class="creator-credit">DESIGNED BY <span>LOD OF TECH</span></p>
     </div>
 
-    <div id="splash">
-        <div class="splash-content">
-            <img src="assets/titan-logo.png" class="splash-logo" alt="T">
-            <h1 class="neon-text">TITAN OMEGA</h1>
-            <div class="loader-bar"><div class="progress"></div></div>
-            <p style="font-size:10px; letter-spacing:2px;">SYNCING TITAN NETWORK...</p>
-        </div>
+    <div id="launch-timer">
+        <div class="timer-label">TITAN GRAND OPENING IN:</div>
+        <div id="countdown-clock">00d 00h 00m 00s</div>
     </div>
 
     <div class="news-ticker">
         <div class="ticker-content" id="ticker-msg">
-            DEALS: 10 MOVIES FOR $1 | 2 SEASONS FOR $1 | REPAIRS AT 14 28 CRESCENT... MOBILE DELIVERY AVAILABLE!
+            OFFLINE MODE ACTIVE | 10 MOVIES $1 | 2 SEASONS $1 | ENGINEERING TOOLS (UZ/NUST/CUT) | PHONE FLASHING & WINDOWS INSTALLS...
         </div>
     </div>
 
     <header>
-        <img src="assets/titan-logo.png" class="header-logo" alt="T">
-        <h1 class="neon-text">TITAN TECH</h1>
+        <div class="titan-logo-css" style="transform: scale(0.6); margin-bottom: 0;"></div>
+        <h1 class="neon-text" style="font-size: 1.3rem; margin: 0;">TITAN TECH</h1>
         <div class="contact-header">
             <div class="contact-line" onclick="window.open('tel:+263715913665')">📞 ADMIN: 071 591 3665</div>
-            <div class="contact-line" onclick="window.open('tel:+263781847711')">🛠️ TECH: 078 184 7711</div>
         </div>
-        <div class="status-container">
-            <span id="status-light" class="offline"></span>
-            <span id="status-text">OFFLINE</span>
-        </div>
-        <button onclick="openMap()" class="map-btn">📍 14 28 CRESCENT, WARREN PARK 1</button>
+        <div id="offline-tag">⚠️ OFFLINE: CACHED CATALOG</div>
     </header>
 
     <nav class="tabs">
         <button class="tab-btn active" onclick="switchTab('ALL')">ALL</button>
-        <button class="tab-btn" onclick="switchTab('REPAIRS')">REPAIRS</button>
-        <button class="tab-btn" onclick="switchTab('MOVIES')">MOVIES</button>
-        <button class="tab-btn" onclick="switchTab('SERIES')">SERIES</button>
-        <button class="tab-btn" onclick="switchTab('GAMES')">GAMES</button>
-        <button class="tab-btn" onclick="switchTab('SOFTWARE')">SOFTWARE</button>
-        <button class="tab-btn" onclick="switchTab('HACK')">HACK</button>
-        <button class="tab-btn" onclick="switchTab('MUSIC')">MUSIC</button>
+        <button class="tab-btn" onclick="switchTab('ENG_SUITE')">🛠️ ENG SUITE</button>
+        <button class="tab-btn" onclick="switchTab('REPAIRS')">🔧 REPAIRS</button>
+        <button class="tab-btn" onclick="switchTab('MOVIES')">🎬 MOVIES</button>
+        <button class="tab-btn" onclick="switchTab('SERIES')">📺 SERIES</button>
+        <button class="tab-btn" onclick="switchTab('GAMES')">🎮 GAMES</button>
+        <button class="tab-btn" onclick="switchTab('HACK')">💻 HACK/OS</button>
+        <button class="tab-btn" onclick="switchTab('MUSIC')">🎵 MUSIC</button>
+        <button class="tab-btn" onclick="switchTab('VOUCHERS')">🎫 VOUCHERS</button>
     </nav>
 
     <main>
-        <div class="action-bar">
-            <input type="text" id="catalog-search" placeholder="Search Titan database...">
-            <button onclick="sendGeneralRequest()" class="request-btn">REQUEST</button>
+        <div class="search-container">
+            <input type="text" id="catalog-search" placeholder="Search Titan Catalog...">
         </div>
+
+        <div id="voucher-zone" style="display:none; padding:20px;">
+            <div class="voucher-container">
+                <div class="voucher-header">TITAN AIRTIME HUB</div>
+                <div class="voucher-pin" id="pin-display">**** **** ****</div>
+                <canvas id="scratch-canvas" width="280" height="140"></canvas>
+            </div>
+            <p style="text-align:center; font-size:10px; color:#555; margin-top:10px;">SCRATCH TO REVEAL CODE</p>
+        </div>
+
         <div id="catalog-grid" class="grid"></div>
     </main>
 
     <div id="cart-bar" class="cart-hidden">
-        <div class="cart-left">
-            <span id="cart-count">0 Items</span><br>
-            <span id="cart-total">$0.00</span>
-        </div>
-        <div class="cart-center">
-            <label class="mobile-toggle">
-                <input type="checkbox" id="mobile-service-check" onchange="updateCartUI()">
-                <span class="slider"></span>
-            </label>
-            <span style="font-size: 8px; color: var(--purple); display: block;">MOBILE DELIVERY</span>
-        </div>
-        <div class="cart-right">
-            <button onclick="clearCart()" class="clear-btn">CLR</button>
-            <button onclick="checkout()" class="checkout-btn">ORDER ⚡</button>
-        </div>
-    </div>
-
-    <div id="trailer-modal" class="modal-hidden" onclick="closeTrailer()">
-        <div class="modal-content">
-            <span class="close-modal">×</span>
-            <div id="video-container"></div>
-        </div>
+        <div class="cart-left"><span id="cart-total">$0.00</span></div>
+        <button onclick="checkout()" class="checkout-btn">ORDER VIA WHATSAPP ⚡</button>
     </div>
 
     <footer>
-        <div class="qr-container">
-            <img id="digital-qr" src="" alt="Scan Me">
+        <div class="qr-box"><img id="digital-qr" src=""></div>
+        <div class="creator-footer">
+            <p>SYSTEM ARCHITECT: <span>LOD OF TECH</span></p>
+            <p>© 2026 TITAN TECH INVESTMENT MARKET</p>
         </div>
-        <p>Titan Tech Investment Market | Harare</p>
     </footer>
 
     <script src="app.js"></script>
+    <script>if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }</script>
 </body>
 </html>
