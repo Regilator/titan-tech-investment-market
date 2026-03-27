@@ -1,115 +1,100 @@
-const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-    projectId: "YOUR_PROJECT",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
-};
-
+// --- CONFIG ---
+const firebaseConfig = { /* PASTE YOUR KEYS FROM FIREBASE CONSOLE */ };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
-const messaging = firebase.messaging();
 
 let cart = [];
-const WHATSAPP_LINES = ["263715913665", "263781847711"];
+const OPEN_DATE = new Date("April 1, 2026 08:00:00").getTime();
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Hide splash screen
+    // 1. Splash Logic
     setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 2800);
     
-    updateShopStatus();
-    loadCatalog();
-    loadLatestAlert();
-    generateBrandedQR();
+    // 2. Countdown Logic
+    setInterval(updateCountdown, 1000);
     
+    // 3. Data Logic
+    if (!navigator.onLine) {
+        document.getElementById('offline-tag').style.display = 'block';
+        loadCachedCatalog();
+    } else {
+        loadCatalog();
+    }
+    
+    generateQR();
+
+    // 4. Search Filter
     document.getElementById('catalog-search').addEventListener('input', (e) => {
-        const activeTab = document.querySelector('.tab-btn.active').innerText;
-        filterGrid(e.target.value.toLowerCase(), activeTab);
+        const q = e.target.value.toLowerCase();
+        document.querySelectorAll('.item-card').forEach(card => {
+            card.style.display = card.innerText.toLowerCase().includes(q) ? 'block' : 'none';
+        });
     });
 });
 
-// LOAD FIREBASE CATALOG
+function updateCountdown() {
+    const gap = OPEN_DATE - new Date().getTime();
+    if (gap < 0) { document.getElementById('launch-timer').style.display = 'none'; return; }
+    const d = Math.floor(gap / (1000 * 60 * 60 * 24));
+    const h = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const m = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
+    const s = Math.floor((gap % (1000 * 60)) / 1000);
+    document.getElementById('countdown-clock').innerText = `${d}d ${h}h ${m}s ${s}s`;
+}
+
 function loadCatalog() {
-    db.ref('catalog').on('value', (snapshot) => {
-        const data = snapshot.val();
-        const grid = document.getElementById('catalog-grid');
-        if (!data) return;
-
-        grid.innerHTML = Object.keys(data).map(id => {
-            const item = data[id];
-            const out = item.stock <= 0;
-            let label = (item.cat === "MOVIES") ? "10 FOR $1" : (item.cat === "SERIES") ? "2 SEASONS $1" : item.price || "INQUIRE";
-            const trailerBtn = item.vid ? `<button class="tab-btn" style="font-size:8px; margin-top:5px; border-color:var(--purple);" onclick="event.stopPropagation(); playTrailer('${item.vid}')">🎬 TRAILER</button>` : "";
-
-            return `
-                <div class="item-card ${out ? 'out-of-stock' : ''}" onclick="${out ? '' : `toggleCart('${item.name}', '${item.price}', '${item.cat}', this)`}">
-                    ${out ? '<div class="sold-out-badge">SOLD OUT</div>' : ''}
-                    <img src="${item.img}" onerror="this.src='https://via.placeholder.com/150'">
-                    <div class="item-details">
-                        <strong>${item.name}</strong><br>
-                        <span style="color:var(--red); font-weight:bold;">${label}</span><br>
-                        ${trailerBtn}
-                    </div>
-                </div>`;
-        }).join('');
+    db.ref('catalog').on('value', snap => {
+        const data = snap.val() || {};
+        localStorage.setItem('titan_catalog_cache', JSON.stringify(data));
+        renderGrid(data);
     });
 }
 
-// QR CODE GENERATION
-function generateBrandedQR() {
-    const qrImg = document.getElementById('digital-qr');
-    const currentURL = window.location.href;
-    // Branded with your purple identity
-    qrImg.src = `https://quickchart.io/qr?text=${encodeURIComponent(currentURL)}&size=200&markerColor=%23A020F0&darkColor=%23000000`;
+function loadCachedCatalog() {
+    const data = JSON.parse(localStorage.getItem('titan_catalog_cache'));
+    if (data) renderGrid(data);
 }
 
-// CART LOGIC
-function toggleCart(name, price, cat, el) {
-    const idx = cart.findIndex(i => i.name === name);
-    if (idx > -1) { cart.splice(idx, 1); el.classList.remove('selected'); }
-    else { cart.push({ name, price, cat }); el.classList.add('selected'); }
-    updateCartUI();
+function renderGrid(data, category = 'ALL') {
+    const grid = document.getElementById('catalog-grid');
+    grid.innerHTML = "";
+    Object.keys(data).forEach(id => {
+        const item = data[id];
+        if (category !== 'ALL' && item.cat !== category) return;
+        
+        let visual = (item.img) ? `<img src="${item.img}" onerror="this.src='https://via.placeholder.com/150?text=TITAN'">` : 
+                     (item.cat === 'ENG_SUITE') ? `<div class="titan-digital-suite-icon"></div>` : 
+                     `<div class="titan-logo-css" style="transform:scale(0.8); margin:45px auto;"></div>`;
+
+        grid.innerHTML += `
+            <div class="item-card" onclick="toggleCart('${item.name}', '${item.price}')">
+                ${visual}
+                <div style="padding:10px;">
+                    <div style="font-size:11px; font-weight:bold; height:32px; overflow:hidden;">${item.name}</div>
+                    <div style="color:var(--red); font-weight:bold; margin-top:5px;">${item.price}</div>
+                </div>
+            </div>`;
+    });
 }
 
-function updateCartUI() {
-    const bar = document.getElementById('cart-bar');
-    const isMobile = document.getElementById('mobile-service-check').checked;
-    if (cart.length > 0) {
-        bar.classList.remove('cart-hidden');
-        let total = 0;
-        let movies = cart.filter(i => i.cat === "MOVIES").length;
-        let series = cart.filter(i => i.cat === "SERIES").length;
-        total += Math.ceil(movies / 10) + Math.ceil(series / 2);
-        cart.filter(i => !['MOVIES','SERIES'].includes(i.cat)).forEach(i => total += (parseFloat(i.price.replace('$','')) || 0));
-        document.getElementById('cart-total').innerText = isMobile ? `Est: $${total} + Travel` : `Total: $${total}`;
-    } else { bar.classList.add('cart-hidden'); }
+function switchTab(cat) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.innerText.includes(cat) || (cat === 'ALL' && b.innerText === 'ALL')));
+    document.getElementById('voucher-zone').style.display = (cat === 'VOUCHERS') ? 'block' : 'none';
+    const data = JSON.parse(localStorage.getItem('titan_catalog_cache')) || {};
+    renderGrid(data, cat);
+}
+
+function toggleCart(name, price) {
+    cart = [{name, price}];
+    document.getElementById('cart-bar').classList.remove('cart-hidden');
+    document.getElementById('cart-total').innerText = `Total: ${price}`;
 }
 
 function checkout() {
-    const isMobile = document.getElementById('mobile-service-check').checked;
-    const num = confirm("Send to Admin (OK) or Tech (Cancel)?") ? WHATSAPP_LINES[0] : WHATSAPP_LINES[1];
-    let msg = `TITAN ORDER ⚡\n\n${cart.map(i => `- ${i.name}`).join('\n')}${isMobile ? '\n\n🚀 *REQUEST MOBILE DELIVERY*' : ''}`;
-    window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`);
+    const msg = `TITAN ORDER: ${cart[0].name} (${cart[0].price})`;
+    window.open(`https://wa.me/263715913665?text=${encodeURIComponent(msg)}`);
 }
 
-function playTrailer(id) {
-    document.getElementById('video-container').innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1" allow="autoplay" allowfullscreen></iframe>`;
-    document.getElementById('trailer-modal').classList.remove('modal-hidden');
+function generateQR() {
+    document.getElementById('digital-qr').src = `https://quickchart.io/qr?text=${encodeURIComponent(window.location.href)}&size=100&markerColor=%23A020F0`;
 }
-
-function closeTrailer() {
-    document.getElementById('trailer-modal').classList.add('modal-hidden');
-    document.getElementById('video-container').innerHTML = "";
-}
-
-function loadLatestAlert() {
-    db.ref('latest_alert').on('value', snap => {
-        if (snap.val()) document.getElementById('ticker-msg').innerText = `📢 ${snap.val().title}: ${snap.val().body} | DEALS: 10 MOVIES FOR $1...`;
-    });
-}
-
-function updateShopStatus() { const h = new Date().getHours(); document.getElementById('status-light').className = (h>=8 && h<19) ? 'online' : 'offline'; }
-function switchTab(cat) { document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.innerText === cat)); filterGrid('', cat); }
-function filterGrid(q, cat) { document.querySelectorAll('.item-card').forEach(c => { const m = c.innerText.toLowerCase().includes(q) && (cat==='ALL' || c.innerHTML.includes(cat)); c.style.display = m ? 'block' : 'none'; }); }
