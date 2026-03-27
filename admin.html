@@ -6,81 +6,80 @@
     <title>Titan Admin | Lod of Tech</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
     <style>
-        body { padding: 15px; font-family: 'Orbitron', sans-serif; background: #050505; color: white; }
-        .admin-box { background: #0a0a0a; border: 2px solid #A020F0; padding: 20px; border-radius: 15px; max-width: 600px; margin: auto; display: none; box-shadow: 0 0 20px #A020F0; }
+        :root { --neon: #00f2ff; --purple: #A020F0; --red: #ff0000; }
+        body { padding: 15px; font-family: 'Orbitron', sans-serif; background: #050505; color: white; margin: 0; }
+        .admin-box { background: #0a0a0a; border: 2px solid var(--purple); padding: 20px; border-radius: 15px; max-width: 600px; margin: 20px auto; display: none; box-shadow: 0 0 20px var(--purple); }
         .section-card { background: #000; border: 1px solid #222; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
-        input, select { width: 100%; padding: 12px; margin: 8px 0; background: #111; color: #00f2ff; border: 1px solid #333; border-radius: 5px; box-sizing: border-box; font-family: 'Roboto Mono'; }
-        .btn-post { background: #A020F0; color: white; border: none; padding: 12px; font-weight: bold; border-radius: 5px; width: 100%; cursor: pointer; }
-        .btn-gen { background: #00f2ff; color: #000; border: none; padding: 12px; font-weight: bold; border-radius: 5px; width: 100%; cursor: pointer; }
-        .login-box { background: #111; border: 2px solid #ff0000; padding: 30px; border-radius: 15px; text-align: center; max-width: 400px; margin: 80px auto; }
-        .inventory-item, .log-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #222; font-size: 11px; font-family: 'Roboto Mono'; }
-        .del-btn { background: #ff0000; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
-        .revenue-badge { background: #00ff00; color: black; padding: 12px; border-radius: 5px; text-align: center; font-weight: bold; margin-bottom: 15px; font-size: 18px; }
-        .status-msg { text-align: center; font-size: 12px; color: #00ff00; margin-top: 5px; height: 15px; }
+        input, select { width: 100%; padding: 12px; margin: 8px 0; background: #111; color: var(--neon); border: 1px solid #333; border-radius: 5px; box-sizing: border-box; font-family: 'Roboto Mono'; }
+        .btn-post { background: var(--purple); color: white; border: none; padding: 15px; font-weight: bold; border-radius: 5px; width: 100%; cursor: pointer; text-transform: uppercase; }
+        .login-box { background: #111; border: 2px solid var(--red); padding: 30px; border-radius: 15px; text-align: center; max-width: 400px; margin: 100px auto; }
+        .inventory-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #222; font-size: 11px; font-family: 'Roboto Mono'; }
+        .del-btn { background: var(--red); color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
+        .revenue-badge { background: #00ff00; color: black; padding: 15px; border-radius: 5px; text-align: center; font-weight: bold; margin-bottom: 15px; font-size: 20px; }
+        .status-msg { text-align: center; font-size: 12px; color: #00ff00; margin-top: 10px; min-height: 18px; }
     </style>
 </head>
 <body>
 
     <div id="login-screen" class="login-box">
-        <h2 style="color: #ff0000; margin-top:0;">TITAN SECURITY</h2>
-        <input type="password" id="pinInput" placeholder="ENTER ADMIN PIN">
-        <button onclick="checkPin()" class="btn-post">INITIALIZE SYSTEM</button>
+        <h2 style="color: var(--red); margin-top:0;">TITAN SECURITY</h2>
+        <input type="password" id="pinInput" placeholder="ENTER SYSTEM PIN">
+        <button onclick="checkPin()" class="btn-post">AUTHORIZE ACCESS</button>
     </div>
 
     <div id="admin-interface" class="admin-box">
-        <h2 style="color: #A020F0; text-align: center; margin-top:0;">TITAN CONTROL CENTER</h2>
+        <h2 style="color: var(--purple); text-align: center; margin-top:0;">TITAN CONTROL CENTER</h2>
 
         <div class="section-card">
-            <h4 style="color: #00ff00; margin-top:0;">💰 REVENUE TRACKER</h4>
+            <h4 style="color: #00ff00; margin-top:0;">💰 TOTAL REVENUE</h4>
             <div id="total-revenue" class="revenue-badge">$0.00</div>
-            <div id="sales-list" style="max-height: 120px; overflow-y: auto; background: #050505; border: 1px solid #222;">
+            <div id="sales-list" style="max-height: 100px; overflow-y: auto; background: #050505; font-size: 10px; border: 1px solid #222;">
                 </div>
-            <button onclick="clearLogs()" style="background:none; border:none; color:#555; font-size:9px; margin-top:8px; cursor:pointer;">PURGE DATA LOGS</button>
         </div>
 
         <div class="section-card">
-            <h4 style="color: #A020F0; margin-top:0;">📦 ADD STOCK</h4>
-            <input type="text" id="itemName" placeholder="Item Name (e.g. Spiderman 2)">
-            <input type="text" id="itemPrice" placeholder="Price (e.g. $1)">
+            <h4 style="color: var(--purple); margin-top:0;">📦 DEPLOY NEW STOCK</h4>
+            <input type="text" id="itemName" placeholder="Item Name (e.g. Samsung Flash)">
+            <input type="text" id="itemPrice" placeholder="Price (e.g. $10)">
             
-            <p style="font-size: 10px; color: #888; margin: 5px 0;">Image Filename (e.g. spider.jpg):</p>
-            <input type="text" id="itemImgName" placeholder="image_name.png">
+            <p style="font-size: 10px; color: #888; margin: 5px 0;">Filename on GitHub (e.g. flash.png):</p>
+            <input type="text" id="itemImgName" placeholder="filename.png">
             
             <select id="itemCat">
-                <option value="games">🎮 GAMES</option>
-                <option value="movies">🎬 MOVIES</option>
                 <option value="repairs">🔧 REPAIRS</option>
+                <option value="movies">🎬 MOVIES</option>
                 <option value="tv_shows">📺 TV SHOWS</option>
+                <option value="games">🎮 GAMES</option>
                 <option value="software">💻 SOFTWARE</option>
                 <option value="music">🎵 MUSIC</option>
+                <option value="hack">💀 HACK</option>
             </select>
-            <button onclick="uploadItem()" class="btn-post">DEPLOY TO CATALOG ⚡</button>
+            <button onclick="uploadItem()" class="btn-post">POST TO TITAN HUB ⚡</button>
             <div id="status" class="status-msg"></div>
         </div>
 
-        <div class="section-card" style="border-color: #00f2ff;">
-            <h4 style="color: #00f2ff; margin-top:0;">🎫 VOUCHER GEN</h4>
-            <input type="text" id="voucherPin" placeholder="REAL PIN OR LINK TO HIDE">
-            <button onclick="generateVoucher()" class="btn-gen">GENERATE KEY 🔓</button>
-            <div id="gen-result" style="display:none; text-align:center; margin-top:10px; border:1px dashed #00f2ff; padding:10px;">
-                <small style="color:#888">GIVE THIS TO CUSTOMER:</small><br>
-                <strong id="final-secret-code" style="color:#00f2ff; font-size:20px; letter-spacing:2px;"></strong>
+        <div class="section-card" style="border-color: var(--neon);">
+            <h4 style="color: var(--neon); margin-top:0;">🎫 VOUCHER GEN</h4>
+            <input type="text" id="voucherPin" placeholder="REAL PIN / SECRET LINK">
+            <button onclick="generateVoucher()" style="background: var(--neon); color: black;" class="btn-post">CREATE ACCESS KEY 🔓</button>
+            <div id="gen-result" style="display:none; text-align:center; margin-top:10px; border:1px dashed var(--neon); padding:10px;">
+                <small style="color:#888">COPY THIS FOR CUSTOMER:</small><br>
+                <strong id="final-secret-code" style="color:var(--neon); font-size:20px;"></strong>
             </div>
         </div>
 
         <div class="section-card">
-            <h4 style="color: #ff0000; margin-top:0;">🗑️ MANAGE INVENTORY</h4>
-            <div id="live-inventory-list" style="max-height: 200px; overflow-y: auto;">
+            <h4 style="color: var(--red); margin-top:0;">🗑️ MANAGE INVENTORY</h4>
+            <div id="live-inventory-list" style="max-height: 250px; overflow-y: auto;">
                 </div>
         </div>
 
-        <button onclick="location.reload()" style="background:none; border:none; color:#444; width:100%; font-size:10px; cursor:pointer; margin-top:10px;">TERMINATE SESSION</button>
+        <button onclick="location.reload()" style="background:none; border:none; color:#444; width:100%; font-size:10px; cursor:pointer;">TERMINATE ADMIN SESSION</button>
     </div>
 
     <script>
-        // CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyBRHHvX9TMDsJQ8PzD7FMsq00VMUVnx_UI",
             databaseURL: "https://titan-tech-hub-default-rtdb.firebaseio.com"
@@ -95,77 +94,60 @@
                 document.getElementById('admin-interface').style.display = 'block';
                 loadInventory();
                 loadSales();
-            } else { alert("ACCESS DENIED: INVALID PIN"); }
+            } else { alert("SYSTEM ALERT: UNAUTHORIZED PIN"); }
         }
 
-        // ADD ITEM LOGIC
         function uploadItem() {
             const name = document.getElementById('itemName').value;
-            const price = document.getElementById('itemPrice').value;
+            const price = document.getElementById('itemPrice').value || "PRICE ON CHAT";
             const fileName = document.getElementById('itemImgName').value;
             const cat = document.getElementById('itemCat').value;
 
-            if(!name || !price || !fileName) {
-                alert("Missing data!");
+            if(!name || !fileName) {
+                alert("Please provide a Name and Filename!");
                 return;
             }
 
-            // This builds the path based on your GitHub Assets folders
-            const autoPath = "assets/" + cat + "/" + fileName;
+            // This matches the exact path structure: assets/category/filename.png
+            const fullPath = "assets/" + cat + "/" + fileName;
 
             db.ref('catalog').push({
                 name: name,
                 price: price,
-                img: autoPath,
-                cat: cat.toUpperCase() // Matches the filters in index.html
+                img: fullPath,
+                cat: cat.toUpperCase()
             })
             .then(() => {
-                document.getElementById('status').innerText = "✅ SYSTEM UPDATED";
+                document.getElementById('status').innerText = "✅ DEPLOYED SUCCESSFULLY";
                 document.getElementById('itemName').value = "";
                 document.getElementById('itemImgName').value = "";
-                setTimeout(() => { document.getElementById('status').innerText = ""; }, 2000);
+                setTimeout(() => { document.getElementById('status').innerText = ""; }, 2500);
             });
         }
 
-        // VOUCHER LOGIC
-        function generateVoucher() {
-            const realValue = document.getElementById('voucherPin').value;
-            if(!realValue) return;
-            const secretKey = "TITAN-" + Math.random().toString(36).substr(2, 4).toUpperCase();
-
-            db.ref('vouchers/' + secretKey).set(realValue)
-            .then(() => {
-                document.getElementById('gen-result').style.display = 'block';
-                document.getElementById('final-secret-code').innerText = secretKey;
-                document.getElementById('voucherPin').value = "";
-            });
-        }
-
-        // STOCK MANAGER
         function loadInventory() {
             db.ref('catalog').on('value', snap => {
                 const listDiv = document.getElementById('live-inventory-list');
                 listDiv.innerHTML = "";
                 const data = snap.val();
-                if(!data) return listDiv.innerHTML = "<p style='color:#444; font-size:10px;'>Catalog Empty</p>";
+                if(!data) return;
                 
                 Object.keys(data).forEach(id => {
                     listDiv.innerHTML += `
                         <div class="inventory-item">
-                            <span>${data[id].name} (${data[id].price})</span>
-                            <button class="del-btn" onclick="deleteItem('${id}')">DELETE</button>
+                            <span>${data[id].name} (${data[id].cat})</span>
+                            <button class="del-btn" onclick="deleteItem('${id}')">DEL</button>
                         </div>`;
                 });
             });
         }
 
         function deleteItem(id) {
-            if(confirm("Permanently delete this item?")) {
+            if(confirm("Permanently wipe this item?")) {
                 db.ref('catalog/' + id).remove();
             }
         }
 
-        // SALES TRACKER
         function loadSales() {
             db.ref('sales').on('value', snap => {
                 const logDiv = document.getElementById('sales-list');
@@ -173,31 +155,30 @@
                 logDiv.innerHTML = "";
                 let total = 0;
                 const data = snap.val();
-                
-                if(!data) {
-                    revDiv.innerText = "$0.00";
-                    return;
-                }
+                if(!data) return;
 
                 Object.keys(data).reverse().forEach(id => {
                     const sale = data[id];
-                    // Strip the "$" to calculate total
                     const val = parseFloat(sale.price.replace('$', '')) || 0;
                     total += val;
                     logDiv.innerHTML += `
-                        <div class="log-item">
-                            <span>${sale.name}</span>
-                            <span style="color:#00ff00;">${sale.price}</span>
+                        <div style="padding:4px; border-bottom:1px solid #111;">
+                            ${sale.name} - <span style="color:#00ff00;">${sale.price}</span>
                         </div>`;
                 });
                 revDiv.innerText = "$" + total.toFixed(2);
             });
         }
 
-        function clearLogs() {
-            if(confirm("Wipe all sales history?")) {
-                db.ref('sales').remove();
-            }
+        function generateVoucher() {
+            const val = document.getElementById('voucherPin').value;
+            if(!val) return;
+            const secret = "TITAN-" + Math.random().toString(36).substr(2, 5).toUpperCase();
+            db.ref('vouchers/' + secret).set(val).then(() => {
+                document.getElementById('gen-result').style.display = 'block';
+                document.getElementById('final-secret-code').innerText = secret;
+                document.getElementById('voucherPin').value = "";
+            });
         }
     </script>
 </body>
