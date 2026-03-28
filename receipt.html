@@ -1,199 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TITAN | Digital Receipt</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --titan-red: #B01E23;
-            --matrix-green: #00ff41;
-            --bg-dark: #050505;
-        }
-
-        body {
-            background: #111; /* Dark background for contrast */
-            color: #ccc;
-            font-family: 'Roboto Mono', monospace;
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-            margin: 0;
-        }
-
-        /* THE RECEIPT PAPER */
-        .receipt-paper {
-            background: var(--bg-dark);
-            width: 100%;
-            max-width: 350px;
-            padding: 30px 20px;
-            border: 1px solid #222;
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
-            position: relative;
-        }
-
-        /* TOP DECORATIVE EDGE */
-        .receipt-paper::before {
-            content: "";
-            position: absolute;
-            top: -5px; left: 0; width: 100%; height: 10px;
-            background: linear-gradient(-45deg, #111 5px, transparent 0), 
-                        linear-gradient(45deg, #111 5px, transparent 0);
-            background-size: 10px 10px;
-        }
-
-        /* DIGITAL OMEGA LOGO */
-        .titan-logo-css {
-            width: 50px; height: 50px;
-            background: var(--titan-red);
-            border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 15px auto;
-            box-shadow: 0 0 15px rgba(176, 30, 35, 0.4);
-        }
-        .titan-logo-css::after {
-            content: "Ω";
-            color: white;
-            font-size: 32px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: bold;
-        }
-
-        .header {
-            text-align: center;
-            border-bottom: 1px dashed #333;
-            padding-bottom: 20px;
-            margin-bottom: 20px;
-        }
-
-        .header h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 16px;
-            color: white;
-            margin: 0;
-            letter-spacing: 2px;
-        }
-
-        .header p {
-            font-size: 10px;
-            margin: 5px 0;
-            color: #666;
-        }
-
-        /* DATA ROWS */
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            margin-bottom: 10px;
-        }
-
-        .label { color: #555; text-transform: uppercase; }
-        .value { color: var(--matrix-green); text-align: right; }
-
-        .total-section {
-            border-top: 1px dashed #333;
-            margin-top: 20px;
-            padding-top: 15px;
-            font-size: 18px;
-            display: flex;
-            justify-content: space-between;
-            color: white;
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 40px;
-            font-size: 9px;
-            color: #444;
-        }
-
-        .btn-print {
-            display: block;
-            width: 100%;
-            background: #1a1a1a;
-            color: #888;
-            border: 1px solid #333;
-            padding: 10px;
-            margin-top: 20px;
-            cursor: pointer;
-            font-family: 'Roboto Mono';
-            text-transform: uppercase;
-        }
-
-        .btn-print:hover { background: #222; color: white; }
-
-        @media print {
-            .btn-print { display: none; }
-            body { background: white; }
-            .receipt-paper { box-shadow: none; border: none; color: black; }
-            .value { color: black; }
-            .total-section { color: black; }
-        }
+        body { font-family: 'Courier New', monospace; width: 300px; padding: 20px; border: 1px solid #ddd; }
+        .logo { background: #B01E23; color: white; padding: 10px; text-align: center; font-size: 24px; }
+        .details { margin: 20px 0; border-top: 1px dashed #000; padding-top: 10px; }
     </style>
 </head>
 <body>
-
-    <div class="receipt-paper">
-        <div class="header">
-            <div class="titan-logo-css"></div>
-            <h1>TITAN TECH HUB</h1>
-            <p>Zimbabwe Tech & Software Solutions</p>
-            <p id="receipt-id">ID: #000000</p>
-        </div>
-
-        <div class="info-row">
-            <span class="label">Date:</span>
-            <span class="value" id="date">--/--/----</span>
-        </div>
-        <div class="info-row">
-            <span class="label">Time:</span>
-            <span class="value" id="time">00:00</span>
-        </div>
-        <div class="info-row">
-            <span class="label">Customer:</span>
-            <span class="value">Verified Titan User</span>
-        </div>
-
-        <div style="margin: 20px 0; border-bottom: 1px solid #222;"></div>
-
-        <div class="info-row">
-            <span class="label">Item:</span>
-            <span class="value" id="item-name">N/A</span>
-        </div>
-        
-        <div class="total-section">
-            <span>TOTAL:</span>
-            <span id="item-price" style="color: var(--titan-red);">$0.00</span>
-        </div>
-
-        <div class="footer">
-            <p>--- LOD OF TECH VERIFIED ---</p>
-            <p>Digital License/Repair record saved in Titan DB.</p>
-            <p>Thank you for your investment.</p>
-        </div>
-
-        <button class="btn-print" onclick="window.print()">Print / Save PDF</button>
+    <div class="logo">TITAN Ω</div>
+    <div class="details">
+        JOB_ID: <span id="rid"></span><br>
+        DATE: <span id="date"></span><br>
+        SERVICE: <span id="svc"></span><br>
+        PRICE: <span id="prc"></span>
     </div>
-
+    <p style="font-size: 10px; text-align: center;">WWW.TITAN-TECH.ZW</p>
     <script>
-        // Fetch data from URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        
-        const itemName = urlParams.get('item') || 'Firmware Solution';
-        const itemPrice = urlParams.get('price') || '$0.00';
-        const now = new Date();
-
-        document.getElementById('item-name').innerText = itemName;
-        document.getElementById('item-price').innerText = itemPrice;
-        document.getElementById('date').innerText = now.toLocaleDateString();
-        document.getElementById('time').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-        
-        // Generate a random Receipt ID
-        const randomID = "TITAN-" + Math.floor(100000 + Math.random() * 900000);
-        document.getElementById('receipt-id').innerText = "ID: " + randomID;
+        const params = new URLSearchParams(window.location.search);
+        document.getElementById('rid').innerText = params.get('id');
+        document.getElementById('date').innerText = new Date().toLocaleDateString();
+        document.getElementById('svc').innerText = params.get('svc');
+        document.getElementById('prc').innerText = params.get('prc');
     </script>
 </body>
 </html>
