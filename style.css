@@ -1,144 +1,62 @@
-/* TITAN TECH HUB: MASTER DIGITAL OVERHAUL */
 :root {
+    --titan-red: #B01E23;
     --neon-blue: #00f2ff;
-    --titan-purple: #A020F0;
-    --titan-red: #FF0000;
-    --matrix-color: #00ff41; /* Default Hacking Green */
+    --matrix-green: #00ff41;
     --bg-dark: #050505;
+    --matrix-color: #00ff41;
 }
 
 body {
-    background-color: var(--bg-dark);
-    /* Subtle Grid Background */
-    background-image: 
-        linear-gradient(90deg, rgba(160, 32, 240, 0.05) 1px, transparent 1px),
-        linear-gradient(rgba(160, 32, 240, 0.05) 1px, transparent 1px);
+    background: var(--bg-dark);
+    color: white; font-family: 'Orbitron', sans-serif; margin: 0;
+    background-image: radial-gradient(circle, #1a1a1a 1px, transparent 1px);
     background-size: 30px 30px;
-    color: white; 
-    font-family: 'Orbitron', sans-serif; 
-    margin: 0;
-    overflow-x: hidden;
 }
 
-/* THE DIGITAL T LOGO - REPLACING THE OCTAGON */
-.titan-logo-css { 
-    width: 50px; 
-    height: 60px; 
-    background: var(--titan-red); 
-    /* Draws a sharp 'T' shape */
-    clip-path: polygon(0% 0%, 100% 0%, 100% 25%, 62% 25%, 62% 100%, 38% 100%, 38% 25%, 0% 25%); 
-    box-shadow: 0 0 15px var(--titan-red); 
-    margin: 0 auto;
+/* DIGITAL OMEGA LOGO */
+.titan-logo-css {
+    width: 60px; height: 60px;
+    background: var(--titan-red);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 20px rgba(176, 30, 35, 0.5);
     position: relative;
-    z-index: 10;
-    animation: digital-flicker 3s infinite;
 }
-
-@keyframes digital-flicker {
-    0%, 100% { opacity: 1; filter: drop-shadow(0 0 5px var(--titan-red)); }
-    50% { opacity: 0.8; filter: drop-shadow(0 0 20px var(--titan-red)); }
+.titan-logo-css::after {
+    content: "Ω"; color: white; font-size: 40px; font-weight: bold;
+    filter: drop-shadow(0 0 8px white);
 }
+.logo-small { transform: scale(0.5); }
+.logo-large { transform: scale(1.5); margin-bottom: 40px; }
 
-/* MATRIX HOVER EFFECT */
+/* MATRIX HOVER */
 .matrix-container {
-    position: absolute;
-    top: 0; left: 0; 
-    width: 100%; height: 120px;
-    overflow: hidden;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    pointer-events: none;
-    z-index: 1;
+    position: absolute; top: 0; left: 0; width: 100%; height: 120px;
+    overflow: hidden; opacity: 0; transition: 0.5s; z-index: 1;
 }
-
-.item-card:hover .matrix-container {
-    opacity: 0.8;
+.item-card:hover .matrix-container { opacity: 0.7; }
+.matrix-col {
+    position: absolute; top: -100px; color: var(--matrix-color);
+    font-family: 'Roboto Mono'; font-size: 8px; writing-mode: vertical-rl;
+    animation: fall 2s linear infinite;
 }
+@keyframes fall { to { transform: translateY(250px); } }
 
-.matrix-column {
-    position: absolute;
-    top: -100px;
-    color: var(--matrix-color);
-    font-family: 'Roboto Mono', monospace;
-    font-size: 9px;
-    writing-mode: vertical-rl;
-    text-orientation: upright;
-    animation: matrix-fall 2s linear infinite;
-}
+/* UI ELEMENTS */
+header { background: #000; border-bottom: 2px solid var(--titan-red); position: sticky; top:0; z-index:100; }
+.tabs-container { display: flex; overflow-x: auto; padding: 10px; gap: 8px; }
+.tab-btn { background: #111; border: 1px solid #333; color: #666; padding: 8px 15px; border-radius: 5px; cursor: pointer; white-space: nowrap; }
+.tab-btn.active { background: var(--titan-red); color: white; border-color: white; }
 
-@keyframes matrix-fall {
-    to { transform: translateY(250px); }
-}
+.grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; margin-bottom: 100px; }
+.item-card { background: #0a0a0a; border: 1px solid #222; border-radius: 12px; overflow: hidden; position: relative; text-align: center; }
 
-/* UI LAYOUT */
-header { 
-    background: #000; 
-    padding: 15px; 
-    border-bottom: 3px solid var(--titan-purple); 
-    position: sticky; 
-    top: 0; 
-    z-index: 500; 
-}
+/* BOOT SPLASH */
+#splash { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center; text-align: center; }
+.terminal-text { font-family: 'Roboto Mono'; color: var(--matrix-green); font-size: 12px; margin: 20px 0; min-height: 20px; }
+.loader-bar { width: 200px; height: 2px; background: #222; margin: auto; }
+.progress { width: 0%; height: 100%; background: var(--matrix-green); animation: load 2s forwards; }
+@keyframes load { to { width: 100%; } }
 
-.grid-layout { 
-    display: grid; 
-    grid-template-columns: repeat(2, 1fr); 
-    gap: 15px; 
-    padding: 15px; 
-    padding-bottom: 120px; 
-}
-
-.item-card { 
-    background: #0a0a0a; 
-    border: 1px solid #222; 
-    border-radius: 12px; 
-    text-align: center; 
-    overflow: hidden; 
-    position: relative; 
-    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.item-card:active { transform: scale(0.95); }
-
-/* TAB SYSTEM */
-.tabs-container { 
-    display: flex; 
-    overflow-x: auto; 
-    gap: 8px; 
-    padding: 12px; 
-    background: rgba(0,0,0,0.9); 
-}
-
-.tab-btn { 
-    background: #111; 
-    color: #555; 
-    border: 1px solid #333; 
-    padding: 8px 14px; 
-    border-radius: 4px; 
-    font-size: 10px; 
-    white-space: nowrap;
-}
-
-.tab-btn.active { 
-    background: var(--titan-purple); 
-    color: #fff; 
-    border-color: var(--titan-purple);
-    box-shadow: 0 0 10px var(--titan-purple);
-}
-
-/* CART BAR */
-#cart-bar { 
-    position: fixed; 
-    bottom: 0; 
-    width: 100%; 
-    background: #000; 
-    border-top: 2px solid var(--titan-purple); 
-    padding: 15px; 
-    z-index: 1000; 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-    box-sizing: border-box;
-}
-
-.cart-hidden { transform: translateY(100%); }
+#cart-bar { position: fixed; bottom: 0; width: 100%; background: #000; border-top: 2px solid var(--titan-red); padding: 15px; display: flex; justify-content: space-between; align-items: center; box-sizing: border-box; }
+.cart-hidden { display: none; }
