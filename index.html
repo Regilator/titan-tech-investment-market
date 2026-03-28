@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#B01E23">
-    <title>TITAN TECH HUB | Ω Edition</title>
+    <title>TITAN TECH INVESTMENT MARKET | Ω</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -15,14 +15,20 @@
     <div id="splash">
         <div class="titan-logo-css logo-large"></div>
         <div id="boot-text" class="terminal-text">> SECURE_BOOT_ACTIVE</div>
-        <div id="countdown" style="color: #B01E23; font-family: 'Roboto Mono'; font-size: 14px; margin-top: 10px;">LAUNCHING: 00d 00h 00m</div>
+        <div id="countdown" class="countdown-timer">LAUNCHING: 00d 00h 00m</div>
         <div class="loader-bar"><div class="progress"></div></div>
+        <div class="splash-footer">TITAN_TECH_INVESTMENT_MARKET_PROPRIETARY_SYSTEM</div>
     </div>
 
     <header>
         <div class="header-top">
-            <div class="titan-logo-css logo-small"></div>
-            <h1>TITAN TECH HUB</h1>
+            <div class="header-left">
+                <div class="titan-logo-css logo-small" onclick="adminGesture()"></div>
+                <div class="brand-info">
+                    <h1>TITAN TECH INVESTMENT MARKET</h1>
+                    <div class="version-tag">Ω v1.0.1</div>
+                </div>
+            </div>
             <div id="live-clock">00:00:00</div>
         </div>
         <div class="tabs-container">
@@ -36,18 +42,21 @@
 
     <main>
         <div class="tracker-card card">
-            <h3 style="font-size: 10px; color: #888; margin-bottom: 10px;">> TRACK_DEVICE_REPAIR</h3>
-            <div style="display:flex; gap:10px;">
+            <h3 class="module-title">> TRACK_DEVICE_REPAIR</h3>
+            <div class="tracker-input-row">
                 <input type="text" id="job-id-input" placeholder="Enter Job ID (TITAN-XXX)">
-                <button onclick="checkRepair()" class="tab-btn active" style="width: auto;">TRACK</button>
+                <button onclick="checkRepair()" class="btn-track">TRACK</button>
             </div>
-            <p id="repair-status-result" style="display:none; font-family:'Roboto Mono'; font-size:12px; margin-top:10px;">
+            <p id="repair-status-result" class="status-box" style="display:none;">
                 STATUS: <span id="status-text">--</span>
             </p>
         </div>
 
         <div class="search-wrap">
-            <input type="text" id="main-search" placeholder="Search system nodes..." oninput="searchCatalog()">
+            <div class="search-inner">
+                <input type="text" id="main-search" placeholder="Search firmware, tools, games..." oninput="searchCatalog()">
+                <div class="search-glow"></div>
+            </div>
         </div>
         
         <div id="catalog-grid" class="grid-layout"></div>
@@ -56,16 +65,15 @@
     <div id="cart-bar" class="cart-hidden">
         <div id="qr-code-area"></div>
         <div class="order-actions">
-            <button onclick="order('ADMIN')" class="wa-btn">SALES (+3665)</button>
-            <button onclick="order('TECH')" class="wa-btn tech-btn">TECH (+7711)</button>
+            <div id="selected-label">SELECTED: NONE</div>
+            <div style="display: flex; gap: 8px;">
+                <button onclick="order('ADMIN')" class="wa-btn">SALES (+3665)</button>
+                <button onclick="order('TECH')" class="wa-btn tech-btn">TECH (+7711)</button>
+            </div>
         </div>
     </div>
 
     <script src="app.js"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js');
-        }
-    </script>
+    <script>if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js'); }</script>
 </body>
 </html>
