@@ -1,51 +1,199 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>TITAN TECH | RECEIPT</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TITAN | Digital Receipt</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
     <style>
-        body { background: #000; color: #fff; font-family: 'Courier New', monospace; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .receipt-card { border: 2px solid #A020F0; padding: 25px; width: 100%; max-width: 350px; background: #0a0a0a; box-shadow: 0 0 15px rgba(160, 32, 240, 0.4); }
-        .logo { color: #A020F0; font-size: 24px; font-weight: bold; text-align: center; margin-bottom: 5px; }
-        .info { font-size: 11px; color: #666; text-align: center; margin-bottom: 20px; border-bottom: 1px dashed #333; padding-bottom: 10px; }
-        .item-row { display: flex; justify-content: space-between; margin: 10px 0; font-size: 13px; }
-        .total-box { border-top: 2px solid #A020F0; margin-top: 20px; padding-top: 15px; display: flex; justify-content: space-between; font-weight: bold; font-size: 18px; color: #00ff00; }
-        .footer { font-size: 9px; color: #444; text-align: center; margin-top: 30px; line-height: 1.4; }
-        .btn-print { background: #A020F0; color: white; border: none; padding: 12px; margin-top: 20px; width: 100%; max-width: 350px; cursor: pointer; font-weight: bold; }
-        @media print { .btn-print { display: none; } body { background: white; color: black; } .receipt-card { border: 1px solid black; box-shadow: none; } }
+        :root {
+            --titan-red: #B01E23;
+            --matrix-green: #00ff41;
+            --bg-dark: #050505;
+        }
+
+        body {
+            background: #111; /* Dark background for contrast */
+            color: #ccc;
+            font-family: 'Roboto Mono', monospace;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        /* THE RECEIPT PAPER */
+        .receipt-paper {
+            background: var(--bg-dark);
+            width: 100%;
+            max-width: 350px;
+            padding: 30px 20px;
+            border: 1px solid #222;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        /* TOP DECORATIVE EDGE */
+        .receipt-paper::before {
+            content: "";
+            position: absolute;
+            top: -5px; left: 0; width: 100%; height: 10px;
+            background: linear-gradient(-45deg, #111 5px, transparent 0), 
+                        linear-gradient(45deg, #111 5px, transparent 0);
+            background-size: 10px 10px;
+        }
+
+        /* DIGITAL OMEGA LOGO */
+        .titan-logo-css {
+            width: 50px; height: 50px;
+            background: var(--titan-red);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 15px auto;
+            box-shadow: 0 0 15px rgba(176, 30, 35, 0.4);
+        }
+        .titan-logo-css::after {
+            content: "Ω";
+            color: white;
+            font-size: 32px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 1px dashed #333;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            color: white;
+            margin: 0;
+            letter-spacing: 2px;
+        }
+
+        .header p {
+            font-size: 10px;
+            margin: 5px 0;
+            color: #666;
+        }
+
+        /* DATA ROWS */
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .label { color: #555; text-transform: uppercase; }
+        .value { color: var(--matrix-green); text-align: right; }
+
+        .total-section {
+            border-top: 1px dashed #333;
+            margin-top: 20px;
+            padding-top: 15px;
+            font-size: 18px;
+            display: flex;
+            justify-content: space-between;
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 9px;
+            color: #444;
+        }
+
+        .btn-print {
+            display: block;
+            width: 100%;
+            background: #1a1a1a;
+            color: #888;
+            border: 1px solid #333;
+            padding: 10px;
+            margin-top: 20px;
+            cursor: pointer;
+            font-family: 'Roboto Mono';
+            text-transform: uppercase;
+        }
+
+        .btn-print:hover { background: #222; color: white; }
+
+        @media print {
+            .btn-print { display: none; }
+            body { background: white; }
+            .receipt-paper { box-shadow: none; border: none; color: black; }
+            .value { color: black; }
+            .total-section { color: black; }
+        }
     </style>
 </head>
 <body>
-    <div class="receipt-card">
-        <div class="logo">TITAN TECH</div>
-        <div class="info">
-            14 28 CRESCENT, WARREN PARK 1<br>
-            DATE: <span id="date"></span><br>
-            ID: <span id="trans-id"></span>
+
+    <div class="receipt-paper">
+        <div class="header">
+            <div class="titan-logo-css"></div>
+            <h1>TITAN TECH HUB</h1>
+            <p>Zimbabwe Tech & Software Solutions</p>
+            <p id="receipt-id">ID: #000000</p>
         </div>
-        <div id="items-container"></div>
-        <div class="total-box">
+
+        <div class="info-row">
+            <span class="label">Date:</span>
+            <span class="value" id="date">--/--/----</span>
+        </div>
+        <div class="info-row">
+            <span class="label">Time:</span>
+            <span class="value" id="time">00:00</span>
+        </div>
+        <div class="info-row">
+            <span class="label">Customer:</span>
+            <span class="value">Verified Titan User</span>
+        </div>
+
+        <div style="margin: 20px 0; border-bottom: 1px solid #222;"></div>
+
+        <div class="info-row">
+            <span class="label">Item:</span>
+            <span class="value" id="item-name">N/A</span>
+        </div>
+        
+        <div class="total-section">
             <span>TOTAL:</span>
-            <span id="total-price">$0.00</span>
+            <span id="item-price" style="color: var(--titan-red);">$0.00</span>
         </div>
+
         <div class="footer">
-            THANKS FOR CHOOSING TITAN OMEGA<br>
-            NO REFUNDS ONCE ACTIVATED<br>
-            VERIFIED SECURE TRANSACTION
+            <p>--- LOD OF TECH VERIFIED ---</p>
+            <p>Digital License/Repair record saved in Titan DB.</p>
+            <p>Thank you for your investment.</p>
         </div>
+
+        <button class="btn-print" onclick="window.print()">Print / Save PDF</button>
     </div>
-    <button class="btn-print" onclick="window.print()">PRINT / SAVE AS PDF</button>
 
     <script>
-        const params = new URLSearchParams(window.location.search);
-        document.getElementById('date').innerText = new Date().toLocaleDateString();
-        document.getElementById('trans-id').innerText = Math.random().toString(36).substr(2, 7).toUpperCase();
-        document.getElementById('total-price').innerText = `$${params.get('total') || '0.00'}`;
+        // Fetch data from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
         
-        const items = JSON.parse(decodeURIComponent(params.get('items') || '[]'));
-        const container = document.getElementById('items-container');
-        items.forEach(i => {
-            if(i.name) container.innerHTML += `<div class="item-row"><span>${i.name}</span><span>ITEM</span></div>`;
-        });
+        const itemName = urlParams.get('item') || 'Firmware Solution';
+        const itemPrice = urlParams.get('price') || '$0.00';
+        const now = new Date();
+
+        document.getElementById('item-name').innerText = itemName;
+        document.getElementById('item-price').innerText = itemPrice;
+        document.getElementById('date').innerText = now.toLocaleDateString();
+        document.getElementById('time').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        
+        // Generate a random Receipt ID
+        const randomID = "TITAN-" + Math.floor(100000 + Math.random() * 900000);
+        document.getElementById('receipt-id').innerText = "ID: " + randomID;
     </script>
 </body>
 </html>
