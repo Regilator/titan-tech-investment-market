@@ -3,27 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Titan Tech Hub | Ω</title>
+    <meta name="theme-color" content="#B01E23">
+    <title>Titan Tech Hub | Ω Edition</title>
+    
     <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+    
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
 <body>
+
     <div id="splash">
         <div class="boot-container">
             <div class="titan-logo-css logo-large"></div>
             <div id="boot-text" class="terminal-text">> INITIALIZING OMEGA_OS...</div>
-            <div class="loader-bar"><div class="progress"></div></div>
+            <div class="loader-bar">
+                <div class="progress"></div>
+            </div>
+            <p style="font-family: 'Roboto Mono'; font-size: 8px; color: #333; margin-top: 20px;">
+                TITAN_TECH_INVESTMENT_PROPRIETARY_SYSTEM
+            </p>
         </div>
     </div>
 
     <header>
         <div class="header-top">
-            <div class="titan-logo-css logo-small"></div>
-            <h1>TITAN TECH HUB</h1>
+            <div class="header-left">
+                <div class="titan-logo-css logo-small"></div>
+                <div class="brand-text">
+                    <h1>TITAN TECH HUB</h1>
+                    <span class="version-tag">Ω v1.0.1</span>
+                </div>
+            </div>
             <div id="live-clock">00:00:00</div>
         </div>
+
         <div class="tabs-container">
             <button class="tab-btn active" onclick="switchTab('ALL')">ALL</button>
             <button class="tab-btn" onclick="switchTab('REPAIRS')">🔧 REPAIRS</button>
@@ -35,16 +53,43 @@
 
     <main>
         <div class="search-wrap">
-            <input type="text" id="main-search" placeholder="Search firmware, tools, games..." oninput="searchCatalog()">
+            <div class="search-inner">
+                <input type="text" id="main-search" placeholder="Search firmware, tools, games..." oninput="searchCatalog()">
+                <div class="search-glow"></div>
+            </div>
         </div>
-        <div id="catalog-grid" class="grid-layout"></div>
+
+        <div id="catalog-grid" class="grid-layout">
+            </div>
+
+        <div id="no-results" style="display:none; text-align:center; padding:50px; color:#444;">
+            <p>> NO_DATA_FOUND_IN_NODE</p>
+        </div>
     </main>
 
     <div id="cart-bar" class="cart-hidden">
-        <span id="cart-item-name"></span>
-        <button onclick="checkout()" class="wa-btn">ORDER VIA WHATSAPP</button>
+        <div class="cart-info">
+            <span class="label">SELECTED:</span>
+            <span id="cart-item-name" class="value">---</span>
+        </div>
+        <button onclick="checkout()" class="wa-btn">
+            ORDER VIA WHATSAPP
+        </button>
     </div>
+
+    <div id="toast-container"></div>
+
     <script src="app.js"></script>
-    <script>if('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js'); }</script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('> TITAN_OS: OFFLINE_ENGINE_ACTIVE'))
+                    .catch(err => console.log('> TITAN_OS: ENGINE_FAILURE', err));
+            });
+        }
+    </script>
+
 </body>
 </html>
