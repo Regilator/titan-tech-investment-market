@@ -1,11 +1,9 @@
 {
-  "name": "Titan Tech Omega",
+  "name": "Titan Tech Hub",
   "short_name": "TitanTech",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#050505",
-  "theme_color": "#ff0000",
-  "icons": [
-    { "src": "assets/icon.png", "type": "image/png", "sizes": "512x512" }
-  ]
+  "theme_color": "#B01E23",
+  "icons": [{ "src": "favicon.ico", "sizes": "192x192", "type": "image/png" }]
 }
