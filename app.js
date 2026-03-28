@@ -1,3 +1,4 @@
+// TITAN TECH HUB - DYNAMIC ENGINE
 const firebaseConfig = {
   apiKey: "AIzaSyBRHHvX9TMDsJQ8PzD7FMsq00VMUVnx_UI",
   databaseURL: "https://titan-tech-hub-default-rtdb.firebaseio.com"
@@ -7,17 +8,32 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 let activeOrder = null;
 
+// MATRIX COLOR MAP BY CATEGORY
+const themeColors = {
+    'HACK': '#00ff41',      // Hacker Green
+    'REPAIRS': '#ff0000',   // Emergency Red
+    'SOFTWARE': '#00f2ff',  // Tech Blue
+    'GAMES': '#A020F0',     // Titan Purple
+    'MOVIES': '#ffd700',    // Cinema Gold
+    'ALL': '#00ff41'
+};
+
 document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 2000);
+    // Hide splash after load
+    setTimeout(() => { 
+        const splash = document.getElementById('splash');
+        if(splash) splash.style.display = 'none'; 
+    }, 2000);
+    
     loadCatalog();
-    loadReviews();
-    startSystemUpdates();
-    generateStylishQR();
+    startClock();
+    generateQR();
 });
 
-function startSystemUpdates() {
+function startClock() {
     setInterval(() => {
-        document.getElementById('live-clock').innerText = new Date().toLocaleTimeString('en-GB');
+        const clock = document.getElementById('live-clock');
+        if(clock) clock.innerText = new Date().toLocaleTimeString('en-GB');
     }, 1000);
 }
 
@@ -31,82 +47,81 @@ function loadCatalog() {
 
 function renderGrid(data, filter = 'ALL') {
     const grid = document.getElementById('catalog-grid');
+    if(!grid) return;
     grid.innerHTML = "";
     
+    // Update Global Matrix Color based on Tab
+    const activeColor = themeColors[filter] || '#00ff41';
+    document.documentElement.style.setProperty('--matrix-color', activeColor);
+
     Object.keys(data).forEach(id => {
         const item = data[id];
         if (filter !== 'ALL' && item.cat !== filter) return;
         
-        // Dynamic Matrix Visual + Digital T Placeholder
+        // Matrix Rain HTML
         const matrixHTML = `
             <div class="matrix-container">
-                <div class="matrix-column" style="left:20%; animation-duration:1.2s;">10110</div>
-                <div class="matrix-column" style="left:50%; animation-duration:2s;">00101</div>
-                <div class="matrix-column" style="left:80%; animation-duration:1.5s;">11010</div>
+                <div class="matrix-column" style="left:15%; animation-duration:1.2s;">10101</div>
+                <div class="matrix-column" style="left:50%; animation-duration:2.1s;">01101</div>
+                <div class="matrix-column" style="left:85%; animation-duration:1.6s;">11001</div>
             </div>`;
-
-        let visual = (item.img && item.img !== "") ? 
-            `<img src="${item.img}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'; this.previousElementSibling.style.display='block';">` : 
-            `<div style="display:block;">${matrixHTML}</div>`;
 
         grid.innerHTML += `
             <div class="item-card" onclick="selectItem('${item.name}', '${item.price}')">
                 ${matrixHTML}
-                <div class="visual-wrapper" style="height:120px; display:flex; align-items:center; justify-content:center;">
-                    ${item.img ? `<img src="${item.img}" onerror="this.style.display='none';">` : ''}
-                    <div class="titan-logo-css" style="transform:scale(0.6);"></div>
+                <div style="height:120px; display:flex; align-items:center; justify-content:center; background:#000; position:relative;">
+                    ${item.img ? `<img src="${item.img}" style="width:100%; height:100%; object-fit:cover; position:absolute; z-index:5;" onerror="this.style.display='none';">` : ''}
+                    <div class="titan-logo-css" style="transform:scale(0.5);"></div>
                 </div>
-                <div style="padding:10px; background:#000; position:relative; z-index:10;">
-                    <div style="font-size:10px; height:30px; overflow:hidden; color:#ccc;">${item.name}</div>
+                <div style="padding:10px; background:#050505; border-top:1px solid #222; position:relative; z-index:20;">
+                    <div style="font-size:10px; height:25px; overflow:hidden; color:#bbb;">${item.name}</div>
                     <div style="color:var(--titan-red); font-weight:bold; margin-top:5px;">${item.price}</div>
                 </div>
             </div>`;
     });
 }
 
-function selectItem(name, price) {
-    activeOrder = { name, price };
-    document.getElementById('cart-bar').classList.remove('cart-hidden');
-    document.getElementById('cart-total').innerText = `REQ: ${name}`;
-}
-
-function checkout() {
-    db.ref('sales').push({ name: activeOrder.name, price: activeOrder.price, time: new Date().toLocaleString() });
-    const msg = `TITAN ORDER:\nItem: ${activeOrder.name}\nPrice: ${activeOrder.price}`;
-    window.open(`https://wa.me/263715913665?text=${encodeURIComponent(msg)}`);
-}
-
 function switchTab(cat) {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
-    const isV = (cat === 'VOUCHERS');
-    document.getElementById('catalog-grid').style.display = isV ? 'none' : 'grid';
-    document.getElementById('voucher-zone').style.display = isV ? 'block' : 'none';
-    if(!isV) renderGrid(JSON.parse(localStorage.getItem('titan_data')) || {}, cat);
-}
-
-function generateStylishQR() {
-    const qrImg = document.getElementById('titan-digital-qr');
-    if (qrImg) {
-        qrImg.src = `https://quickchart.io/qr?text=${encodeURIComponent(window.location.href)}&size=200&centerImageUrl=https://img.icons8.com/color/96/shield.png`;
+    if(event) event.target.classList.add('active');
+    
+    const isVoucher = (cat === 'VOUCHERS');
+    const grid = document.getElementById('catalog-grid');
+    const vZone = document.getElementById('voucher-zone');
+    
+    if(grid) grid.style.display = isVoucher ? 'none' : 'grid';
+    if(vZone) vZone.style.display = isVoucher ? 'block' : 'none';
+    
+    if(!isVoucher) {
+        const cachedData = JSON.parse(localStorage.getItem('titan_data')) || {};
+        renderGrid(cachedData, cat);
     }
 }
 
-// REVIEWS SYSTEM
-function loadReviews() {
-    db.ref('reviews').on('value', snap => {
-        const display = document.getElementById('reviews-display');
-        display.innerHTML = "";
-        const data = snap.val();
-        if(!data) return;
-        Object.keys(data).forEach(id => {
-            const r = data[id];
-            display.innerHTML += `
-                <div style="background:#111; padding:10px; border-radius:8px; margin-bottom:10px; border-left:3px solid var(--titan-purple);">
-                    <div style="color:gold; font-size:10px;">${"⭐".repeat(r.stars)}</div>
-                    <p style="font-size:12px; margin:5px 0;">${r.text}</p>
-                    <small style="color:#555;">- ${r.name}</small>
-                </div>`;
-        });
+function selectItem(name, price) {
+    activeOrder = { name, price };
+    const bar = document.getElementById('cart-bar');
+    const totalDisplay = document.getElementById('cart-total');
+    if(bar) bar.classList.remove('cart-hidden');
+    if(totalDisplay) totalDisplay.innerText = `SELECTED: ${name}`;
+}
+
+function checkout() {
+    if(!activeOrder) return;
+    db.ref('sales').push({ 
+        name: activeOrder.name, 
+        price: activeOrder.price, 
+        time: new Date().toLocaleString() 
     });
+    
+    const whatsappMsg = `TITAN ORDER:\n---\nItem: ${activeOrder.name}\nPrice: ${activeOrder.price}\n---\nConfirm Order?`;
+    window.open(`https://wa.me/263715913665?text=${encodeURIComponent(whatsappMsg)}`);
+}
+
+function generateQR() {
+    const qrImg = document.getElementById('titan-digital-qr');
+    if (qrImg) {
+        const siteUrl = window.location.href;
+        qrImg.src = `https://quickchart.io/qr?text=${encodeURIComponent(siteUrl)}&size=200&centerImageUrl=https://img.icons8.com/color/96/shield.png`;
+    }
 }
