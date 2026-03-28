@@ -1,98 +1,51 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-    <title>TITAN | COMMAND</title>
+    <title>TITAN_OS | COMMAND</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <style>
         :root { --titan-red: #B01E23; --matrix-green: #00ff41; }
-        body { background: #050505; color: var(--matrix-green); font-family: 'Roboto Mono', monospace; padding: 20px; }
-        .gate { text-align: center; margin-top: 15%; }
-        .hidden { display: none; }
-        .card { background: #111; padding: 20px; border: 1px solid #333; margin-bottom: 20px; border-radius: 8px; }
-        input, select { background: #000; color: var(--matrix-green); border: 1px solid #444; padding: 12px; width: 100%; margin: 10px 0; box-sizing: border-box; }
-        button { background: var(--titan-red); color: white; border: none; padding: 15px; width: 100%; cursor: pointer; font-weight: bold; }
-        .item-row { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #222; }
+        body { background: #050505; color: var(--matrix-green); font-family: 'Roboto Mono'; padding: 20px; }
+        .card { background: #111; padding: 20px; border: 1px solid #333; margin-bottom: 20px; }
+        input, select, button { width: 100%; padding: 12px; margin: 10px 0; background: #000; color: inherit; border: 1px solid #444; }
+        button { background: var(--titan-red); color: white; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div id="gate" class="gate">
+    <div id="gate">
         <h2>> AUTH_REQUIRED</h2>
-        <input type="password" id="pin" placeholder="ENTER SYSTEM PIN">
+        <input type="password" id="pin" placeholder="SYSTEM PIN">
         <button onclick="auth()">ACCESS SYSTEM</button>
     </div>
 
-    <div id="panel" class="hidden">
-        <h1>🔱 TITAN_OS COMMAND</h1>
-        
+    <div id="panel" style="display:none;">
+        <h1>🔱 TITAN TECH INVESTMENT MARKET</h1>
         <div class="card">
-            <h3>DEPLOY NEW STOCK</h3>
+            <h3>DEPLOY STOCK</h3>
             <input type="text" id="name" placeholder="Item Name">
-            <input type="text" id="price" placeholder="Price (e.g. $15)">
-            <input type="text" id="img" placeholder="Image Filename (optional)">
+            <input type="text" id="price" placeholder="Price">
             <select id="cat">
-                <option value="REPAIRS">🔧 REPAIRS</option>
-                <option value="SOFTWARE">💻 SOFTWARE</option>
-                <option value="HACK">💀 HACK TOOLS</option>
-                <option value="GAMES">🎮 GAMES</option>
+                <option value="REPAIRS">REPAIRS</option>
+                <option value="SOFTWARE">SOFTWARE</option>
+                <option value="HACK">HACK</option>
+                <option value="GAMES">GAMES</option>
             </select>
             <button onclick="upload()">PUSH LIVE</button>
         </div>
-
         <div class="card">
-            <h3>🛠 REPAIR STATUS UPDATER</h3>
-            <input type="text" id="jobID" placeholder="Job ID (e.g. TITAN-101)">
-            <select id="jobStatus">
-                <option value="DIAGNOSING...">DIAGNOSING...</option>
-                <option value="REPAIRING...">REPAIRING...</option>
-                <option value="TESTING_OS...">TESTING_OS...</option>
-                <option value="READY FOR COLLECTION ✅">READY FOR COLLECTION ✅</option>
-            </select>
-            <button onclick="updateRepair()" style="background:var(--matrix-green); color:black;">UPDATE STATUS</button>
-        </div>
-
-        <div class="card">
-            <h3>LIVE INVENTORY</h3>
-            <div id="list"></div>
+            <h3>REPAIR TRACKER</h3>
+            <input type="text" id="jobID" placeholder="TITAN-XXX">
+            <input type="text" id="jobStatus" placeholder="Current Status">
+            <button onclick="updateRepair()">UPDATE JOB</button>
         </div>
     </div>
-
     <script>
         const config = { apiKey: "AIzaSyBRHHvX9TMDsJQ8PzD7FMsq00VMUVnx_UI", databaseURL: "https://titan-tech-hub-default-rtdb.firebaseio.com" };
         firebase.initializeApp(config); const db = firebase.database();
-
-        function auth() {
-            if(document.getElementById('pin').value === "Reggiex123x123") {
-                document.getElementById('gate').className = 'hidden';
-                document.getElementById('panel').className = '';
-                loadStock();
-            } else { alert("ACCESS_DENIED"); }
-        }
-
-        function upload() {
-            db.ref('catalog').push({
-                name: document.getElementById('name').value,
-                price: document.getElementById('price').value,
-                cat: document.getElementById('cat').value,
-                img: document.getElementById('img').value
-            }).then(() => { alert("DEPLOYED"); });
-        }
-
-        function updateRepair() {
-            const id = document.getElementById('jobID').value.toUpperCase();
-            db.ref('repairs/' + id).set({ status: document.getElementById('jobStatus').value });
-            alert("Updated Status for " + id);
-        }
-
-        function loadStock() {
-            db.ref('catalog').on('value', snap => {
-                const list = document.getElementById('list'); list.innerHTML = "";
-                snap.forEach(i => {
-                    list.innerHTML += `<div class="item-row"><span>${i.val().name}</span> <button style="width:auto; padding:5px;" onclick="db.ref('catalog').child('${i.key}').remove()">DEL</button></div>`;
-                });
-            });
-        }
+        function auth() { if(document.getElementById('pin').value === "Reggiex123x123") { document.getElementById('gate').style.display='none'; document.getElementById('panel').style.display='block'; }}
+        function upload() { db.ref('catalog').push({ name: document.getElementById('name').value, price: document.getElementById('price').value, cat: document.getElementById('cat').value }); alert("Pushed!"); }
+        function updateRepair() { db.ref('repairs/'+document.getElementById('jobID').value.toUpperCase()).set({ status: document.getElementById('jobStatus').value }); alert("Updated!"); }
     </script>
 </body>
 </html>
