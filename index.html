@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Titan Tech Hub | Lod of Tech</title>
+    <title>Titan Tech Hub | Ω Edition</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <link rel="stylesheet" href="style.css">
@@ -12,95 +12,63 @@
 <body>
 
     <div id="splash">
-        <div class="titan-logo-css"></div>
-        <h1 class="glitch" data-text="TITAN TECH">TITAN TECH</h1>
-        <div class="loader"></div>
+        <div class="boot-container">
+            <div class="titan-logo-css logo-large"></div>
+            <div id="boot-text" class="terminal-text"></div>
+            <div class="loader-bar"><div class="progress"></div></div>
+        </div>
     </div>
 
     <header>
-        <div class="header-content">
+        <div class="header-top">
             <div class="titan-logo-css logo-small"></div>
-            <div class="header-text">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <h2 style="margin:0;">TITAN TECH HUB</h2>
-                    <div class="status-indicator">
-                        <span class="blink-dot"></span> 
-                        <small>SYSTEM ONLINE</small>
-                    </div>
-                </div>
-                <div class="admin-contacts">
-                    <a href="https://wa.me/263715913665" class="contact-pill whatsapp">💬 WHATSAPP</a>
-                    <div id="live-clock" class="system-time">00:00:00</div>
-                </div>
-            </div>
+            <h1>TITAN TECH HUB</h1>
+            <div id="live-clock">00:00:00</div>
         </div>
-        <div class="ticker-wrap">
-            <div class="ticker">
-                LAUNCH COUNTDOWN: <span id="countdown-clock" style="color:var(--neon-blue); font-weight:bold;">00d 00h 00m 00s</span> | SERVER STATUS: STABLE | 10 MOVIES $1 | REPAIRS ACTIVE...
-            </div>
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="switchTab('ALL')">ALL</button>
+            <button class="tab-btn" onclick="switchTab('REPAIRS')">🔧 REPAIRS</button>
+            <button class="tab-btn" onclick="switchTab('HACK')">💀 HACK</button>
+            <button class="tab-btn" onclick="switchTab('SOFTWARE')">💻 SOFT</button>
+            <button class="tab-btn" onclick="switchTab('GAMES')">🎮 GAMES</button>
+            <button class="tab-btn admin-trigger" onclick="switchTab('ADMIN')">🔐 ADMIN</button>
         </div>
     </header>
 
     <main>
-        <div class="search-container">
-            <input type="text" id="catalog-search" placeholder="Search (e.g. Mortal Kombat, iCloud)...">
-        </div>
-
-        <div class="tabs-container">
-            <button class="tab-btn active" onclick="switchTab('ALL')">ALL</button>
-            <button class="tab-btn" onclick="switchTab('REPAIRS')">🔧 REPAIRS</button>
-            <button class="tab-btn" onclick="switchTab('MOVIES')">🎬 MOVIES</button>
-            <button class="tab-btn" onclick="switchTab('TV_SHOWS')">📺 TV SHOWS</button>
-            <button class="tab-btn" onclick="switchTab('GAMES')">🎮 GAMES</button>
-            <button class="tab-btn" onclick="switchTab('SOFTWARE')">💻 SOFT</button>
-            <button class="tab-btn" onclick="switchTab('MUSIC')">🎵 MUSIC</button>
-            <button class="tab-btn" onclick="switchTab('HACK')">💀 HACK</button>
-            <button class="tab-btn vouchers" onclick="switchTab('VOUCHERS')">🎫 VOUCHERS</button>
+        <div class="search-wrap">
+            <input type="text" id="main-search" placeholder="Search firmware, tools, games...">
         </div>
 
         <div id="catalog-grid" class="grid-layout"></div>
 
-        <div id="voucher-zone" style="display:none; padding: 20px;">
-            <div class="voucher-portal-box">
-                <h3 class="voucher-title">TITAN REVEAL PORTAL</h3>
-                <input type="text" id="secret-code-input" placeholder="ENTER CODE..." style="text-align:center;">
-                <button onclick="revealVoucher()" class="btn-reveal">REVEAL PIN 🔓</button>
-                <div id="reveal-display" style="margin-top: 25px; display: none;">
-                    <div class="reveal-card">
-                        <p style="font-size: 10px; color: #888;">YOUR PIN:</p>
-                        <h2 id="voucher-pin-out">--------</h2>
-                    </div>
-                </div>
-                <div class="qr-container-stylish">
-                    <img id="titan-digital-qr" src="" alt="Titan QR">
-                    <p style="color: #000; font-size: 9px; font-weight: bold; margin-top: 8px;">TITAN SECURE CONNECT</p>
-                </div>
+        <div id="admin-portal" style="display:none;" class="portal-box">
+            <div id="admin-login">
+                <h3>ENCRYPTED ACCESS</h3>
+                <input type="password" id="admin-pin" placeholder="ENTER PIN">
+                <button onclick="unlockAdmin()" class="action-btn">AUTHORIZE</button>
             </div>
-        </div>
-
-        <div id="reviews-section" style="padding: 20px; margin-top: 20px;">
-            <h3 style="color: var(--titan-purple); border-bottom: 1px solid #222; padding-bottom: 10px;">CLIENT FEEDBACK</h3>
-            <div id="reviews-display"></div>
-            <div class="review-form-card">
-                <p style="font-size: 12px; margin-bottom: 5px; color: var(--neon-blue);">LEAVE A REVIEW:</p>
-                <input type="text" id="revName" placeholder="Name">
-                <select id="revStars">
-                    <option value="5">⭐⭐⭐⭐⭐</option>
-                    <option value="4">⭐⭐⭐⭐</option>
-                    <option value="3">⭐⭐⭐</option>
-                </select>
-                <input type="text" id="revText" placeholder="Message...">
-                <button onclick="submitReview()" class="btn-post" style="padding:10px;">SEND REVIEW</button>
-                <p id="revStatus" style="font-size: 10px; color: #00ff00;"></p>
+            <div id="admin-controls" style="display:none;">
+                <div class="stats-card">REVENUE: <span id="total-revenue">$0.00</span></div>
+                <div class="upload-form">
+                    <input type="text" id="itemName" placeholder="Item Name">
+                    <input type="text" id="itemPrice" placeholder="Price (e.g. $10)">
+                    <input type="text" id="itemImg" placeholder="Image Filename (optional)">
+                    <select id="itemCat">
+                        <option value="REPAIRS">REPAIRS</option>
+                        <option value="HACK">HACK</option>
+                        <option value="SOFTWARE">SOFTWARE</option>
+                        <option value="GAMES">GAMES</option>
+                    </select>
+                    <button onclick="uploadItem()" class="action-btn">DEPLOY TO HUB</button>
+                </div>
             </div>
         </div>
     </main>
 
     <div id="cart-bar" class="cart-hidden">
-        <div class="cart-content">
-            <span id="cart-total">$0.00</span>
-            <button id="checkout-btn" onclick="checkout()">ORDER VIA WHATSAPP ⚡</button>
-        </div>
+        <span id="cart-item-name"></span>
+        <button onclick="checkout()" class="wa-btn">ORDER VIA WHATSAPP</button>
     </div>
 
     <script src="app.js"></script>
