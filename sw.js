@@ -1,22 +1,39 @@
-import firebase_admin
-from firebase_admin import db, credentials
-import os
+const CACHE_NAME = 'titan-omega-v1.0.1';
+const ASSETS = [
+    '/',
+    '/index.html',
+    '/admin.html',
+    '/style.css',
+    '/app.js',
+    '/manifest.json'
+];
 
-# CONFIGURATION
-CERT_PATH = "serviceAccountKey.json"
-DATABASE_URL = "https://titan-tech-hub-default-rtdb.firebaseio.com"
+// INSTALL: Lock files into the device memory
+self.addEventListener('install', (event) => {
+    event.waitUntil(
+        caches.open(CACHE_NAME).then((cache) => {
+            console.log('🔱 TITAN_OS: CACHING_SYSTEM_NODES');
+            return cache.addAll(ASSETS);
+        })
+    );
+});
 
-if os.path.exists(CERT_PATH):
-    cred = credentials.Certificate(CERT_PATH)
-    firebase_admin.initialize_app(cred, {'databaseURL': DATABASE_URL})
-    print("🔱 TITAN_OS: DESKTOP_SYNC_READY")
-else:
-    print("[-] ERROR: serviceAccountKey.json MISSING")
+// ACTIVATE: Clean up old versions
+self.addEventListener('activate', (event) => {
+    event.waitUntil(
+        caches.keys().then((keys) => {
+            return Promise.all(keys.map((key) => {
+                if (key !== CACHE_NAME) return caches.delete(key);
+            }));
+        })
+    );
+});
 
-def sync_stock(items):
-    ref = db.reference('catalog')
-    for item in items:
-        ref.push(item)
-    print("[+] SYNC_COMPLETE")
-
-# Example usage: sync_stock([{'name': 'PS5 Jailbreak', 'price': '$20', 'cat': 'HACK'}])
+// FETCH: Serve files from cache if offline
+self.addEventListener('fetch', (event) => {
+    event.respondWith(
+        caches.match(event.request).then((response) => {
+            return response || fetch(event.request);
+        })
+    );
+});
