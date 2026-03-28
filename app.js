@@ -1,127 +1,114 @@
-// TITAN TECH HUB - DYNAMIC ENGINE
 const firebaseConfig = {
-  apiKey: "AIzaSyBRHHvX9TMDsJQ8PzD7FMsq00VMUVnx_UI",
-  databaseURL: "https://titan-tech-hub-default-rtdb.firebaseio.com"
+    apiKey: "AIzaSyBRHHvX9TMDsJQ8PzD7FMsq00VMUVnx_UI",
+    databaseURL: "https://titan-tech-hub-default-rtdb.firebaseio.com"
 };
-
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
-let activeOrder = null;
 
-// MATRIX COLOR MAP BY CATEGORY
-const themeColors = {
-    'HACK': '#00ff41',      // Hacker Green
-    'REPAIRS': '#ff0000',   // Emergency Red
-    'SOFTWARE': '#00f2ff',  // Tech Blue
-    'GAMES': '#A020F0',     // Titan Purple
-    'MOVIES': '#ffd700',    // Cinema Gold
-    'ALL': '#00ff41'
+const categoryThemes = {
+    'HACK': '#00ff41', 'REPAIRS': '#ff0000', 'SOFTWARE': '#00f2ff',
+    'GAMES': '#A020F0', 'ALL': '#00ff41'
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Hide splash after load
-    setTimeout(() => { 
-        const splash = document.getElementById('splash');
-        if(splash) splash.style.display = 'none'; 
-    }, 2000);
-    
+    runBootSequence();
     loadCatalog();
-    startClock();
-    generateQR();
+    setInterval(() => {
+        document.getElementById('live-clock').innerText = new Date().toLocaleTimeString('en-GB');
+    }, 1000);
 });
 
-function startClock() {
-    setInterval(() => {
-        const clock = document.getElementById('live-clock');
-        if(clock) clock.innerText = new Date().toLocaleTimeString('en-GB');
-    }, 1000);
-}
-
-function loadCatalog() {
-    db.ref('catalog').on('value', snap => {
-        const data = snap.val() || {};
-        localStorage.setItem('titan_data', JSON.stringify(data));
-        renderGrid(data);
-    });
+function runBootSequence() {
+    const lines = [
+        "> INITIALIZING OMEGA_OS...",
+        "> CONNECTING TO FIREBASE...",
+        "> LOADING TITAN_DATABASE...",
+        "> STATUS: SECURE",
+        "> WELCOME, LOD OF TECH"
+    ];
+    let i = 0;
+    const interval = setInterval(() => {
+        document.getElementById('boot-text').innerText = lines[i];
+        i++;
+        if(i >= lines.length) {
+            clearInterval(interval);
+            setTimeout(() => document.getElementById('splash').style.display = 'none', 500);
+        }
+    }, 400);
 }
 
 function renderGrid(data, filter = 'ALL') {
     const grid = document.getElementById('catalog-grid');
-    if(!grid) return;
     grid.innerHTML = "";
-    
-    // Update Global Matrix Color based on Tab
-    const activeColor = themeColors[filter] || '#00ff41';
-    document.documentElement.style.setProperty('--matrix-color', activeColor);
+    document.documentElement.style.setProperty('--matrix-color', categoryThemes[filter] || '#00ff41');
 
     Object.keys(data).forEach(id => {
         const item = data[id];
         if (filter !== 'ALL' && item.cat !== filter) return;
         
-        // Matrix Rain HTML
-        const matrixHTML = `
-            <div class="matrix-container">
-                <div class="matrix-column" style="left:15%; animation-duration:1.2s;">10101</div>
-                <div class="matrix-column" style="left:50%; animation-duration:2.1s;">01101</div>
-                <div class="matrix-column" style="left:85%; animation-duration:1.6s;">11001</div>
-            </div>`;
-
         grid.innerHTML += `
             <div class="item-card" onclick="selectItem('${item.name}', '${item.price}')">
-                ${matrixHTML}
-                <div style="height:120px; display:flex; align-items:center; justify-content:center; background:#000; position:relative;">
-                    ${item.img ? `<img src="${item.img}" style="width:100%; height:100%; object-fit:cover; position:absolute; z-index:5;" onerror="this.style.display='none';">` : ''}
-                    <div class="titan-logo-css" style="transform:scale(0.5);"></div>
+                <div class="matrix-container">
+                    <div class="matrix-col" style="left:20%">101</div>
+                    <div class="matrix-col" style="left:50%">011</div>
+                    <div class="matrix-col" style="left:80%">110</div>
                 </div>
-                <div style="padding:10px; background:#050505; border-top:1px solid #222; position:relative; z-index:20;">
-                    <div style="font-size:10px; height:25px; overflow:hidden; color:#bbb;">${item.name}</div>
+                <div style="height:110px; display:flex; align-items:center; justify-content:center; background:#000; position:relative;">
+                    ${item.img ? `<img src="${item.img}" style="width:100%;height:100%;object-fit:cover;position:absolute;z-index:5;" onerror="this.style.display='none'">` : ''}
+                    <div class="titan-logo-css logo-small"></div>
+                </div>
+                <div style="padding:10px; background:#080808; position:relative; z-index:10;">
+                    <div style="font-size:10px; color:#888;">${item.name}</div>
                     <div style="color:var(--titan-red); font-weight:bold; margin-top:5px;">${item.price}</div>
                 </div>
             </div>`;
     });
 }
 
+// ADMIN & UI LOGIC
 function switchTab(cat) {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    if(event) event.target.classList.add('active');
-    
-    const isVoucher = (cat === 'VOUCHERS');
-    const grid = document.getElementById('catalog-grid');
-    const vZone = document.getElementById('voucher-zone');
-    
-    if(grid) grid.style.display = isVoucher ? 'none' : 'grid';
-    if(vZone) vZone.style.display = isVoucher ? 'block' : 'none';
-    
-    if(!isVoucher) {
-        const cachedData = JSON.parse(localStorage.getItem('titan_data')) || {};
-        renderGrid(cachedData, cat);
+    event.target.classList.add('active');
+    const isAdmin = (cat === 'ADMIN');
+    document.getElementById('catalog-grid').style.display = isAdmin ? 'none' : 'grid';
+    document.getElementById('admin-portal').style.display = isAdmin ? 'block' : 'none';
+    if(!isAdmin) renderGrid(JSON.parse(localStorage.getItem('titan_data')) || {}, cat);
+}
+
+function unlockAdmin() {
+    if(document.getElementById('admin-pin').value === "Reggiex123x123") {
+        document.getElementById('admin-login').style.display = 'none';
+        document.getElementById('admin-controls').style.display = 'block';
+        db.ref('sales').on('value', snap => {
+            let total = 0;
+            snap.forEach(s => total += parseFloat(s.val().price.replace('$','')) || 0);
+            document.getElementById('total-revenue').innerText = "$" + total.toFixed(2);
+        });
     }
 }
 
-function selectItem(name, price) {
-    activeOrder = { name, price };
-    const bar = document.getElementById('cart-bar');
-    const totalDisplay = document.getElementById('cart-total');
-    if(bar) bar.classList.remove('cart-hidden');
-    if(totalDisplay) totalDisplay.innerText = `SELECTED: ${name}`;
+function uploadItem() {
+    const name = document.getElementById('itemName').value;
+    const price = document.getElementById('itemPrice').value;
+    const cat = document.getElementById('itemCat').value;
+    db.ref('catalog').push({ name, price, cat: cat.toUpperCase(), img: "" });
+    alert("DEPLOYED");
+}
+
+function selectItem(n, p) {
+    document.getElementById('cart-bar').classList.remove('cart-hidden');
+    document.getElementById('cart-item-name').innerText = n;
+    window.activeOrder = { n, p };
 }
 
 function checkout() {
-    if(!activeOrder) return;
-    db.ref('sales').push({ 
-        name: activeOrder.name, 
-        price: activeOrder.price, 
-        time: new Date().toLocaleString() 
-    });
-    
-    const whatsappMsg = `TITAN ORDER:\n---\nItem: ${activeOrder.name}\nPrice: ${activeOrder.price}\n---\nConfirm Order?`;
-    window.open(`https://wa.me/263715913665?text=${encodeURIComponent(whatsappMsg)}`);
+    const msg = `TITAN ORDER: ${window.activeOrder.n} (${window.activeOrder.p})`;
+    window.open(`https://wa.me/263715913665?text=${encodeURIComponent(msg)}`);
 }
 
-function generateQR() {
-    const qrImg = document.getElementById('titan-digital-qr');
-    if (qrImg) {
-        const siteUrl = window.location.href;
-        qrImg.src = `https://quickchart.io/qr?text=${encodeURIComponent(siteUrl)}&size=200&centerImageUrl=https://img.icons8.com/color/96/shield.png`;
-    }
+function loadCatalog() {
+    db.ref('catalog').on('value', snap => {
+        localStorage.setItem('titan_data', JSON.stringify(snap.val()));
+        renderGrid(snap.val() || {});
+    });
 }
