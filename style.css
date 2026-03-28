@@ -1,289 +1,34 @@
-/* TITAN TECH HUB: OMEGA MASTER STYLESHEET
-   Ref: Digital Fortress / Matrix Edition
-   Author: Lod of Tech
-*/
+:root { --titan-red: #B01E23; --bg-dark: #050505; --matrix-green: #00ff41; }
+body { background: var(--bg-dark); color: white; font-family: 'Orbitron', sans-serif; margin: 0; padding: 0; }
 
-:root {
-    --titan-red: #B01E23;
-    --neon-blue: #00f2ff;
-    --matrix-green: #00ff41;
-    --bg-dark: #050505;
-    --card-bg: #0a0a0a;
-    --matrix-color: #00ff41; /* Dynamic: Changes via app.js */
+/* LOGO Logic */
+.titan-logo-css { 
+    width: 60px; height: 60px; background: var(--titan-red); border-radius: 12px;
+    display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px var(--titan-red);
 }
-
-/* 1. GLOBAL RESET & BASE */
-body {
-    background-color: var(--bg-dark);
-    color: white;
-    font-family: 'Orbitron', sans-serif;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    /* Digital Grid Background */
-    background-image: 
-        linear-gradient(rgba(176, 30, 35, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(176, 30, 35, 0.05) 1px, transparent 1px);
-    background-size: 40px 40px;
-}
-
-/* 2. DIGITAL OMEGA LOGO (CSS ONLY) */
-.titan-logo-css {
-    width: 60px;
-    height: 60px;
-    background: var(--titan-red);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 0 20px rgba(176, 30, 35, 0.5);
-    position: relative;
-    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.titan-logo-css::after {
-    content: "Ω";
-    color: white;
-    font-size: 40px;
-    font-weight: bold;
-    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
-}
-
+.titan-logo-css::after { content: "Ω"; color: white; font-size: 40px; font-weight: bold; }
 .logo-small { transform: scale(0.6); }
 .logo-large { transform: scale(1.5); margin-bottom: 40px; }
 
-/* 3. SYSTEM BOOT SPLASH */
-#splash {
-    position: fixed;
-    inset: 0;
-    background: #000;
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-}
+/* Interface Components */
+header { background: rgba(0,0,0,0.9); border-bottom: 2px solid var(--titan-red); padding: 10px; position: sticky; top: 0; z-index: 100; }
+.header-top { display: flex; justify-content: space-between; align-items: center; }
+.tabs-container { display: flex; overflow-x: auto; gap: 10px; padding: 10px 0; }
+.tab-btn { background: #111; color: #666; border: 1px solid #222; padding: 8px 15px; border-radius: 5px; cursor: pointer; white-space: nowrap; }
+.tab-btn.active { background: var(--titan-red); color: white; border-color: white; }
 
-.terminal-text {
-    font-family: 'Roboto Mono', monospace;
-    color: var(--matrix-green);
-    font-size: 13px;
-    margin: 20px 0;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-}
+.grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
+.item-card { background: #111; border: 1px solid #222; padding: 15px; border-radius: 10px; cursor: pointer; }
+.card { background: #111; padding: 15px; border-radius: 10px; margin: 15px; }
 
-.loader-bar {
-    width: 250px;
-    height: 2px;
-    background: #111;
-    position: relative;
-    overflow: hidden;
-    border-radius: 2px;
-}
+input { width: 100%; background: #000; border: 1px solid #333; padding: 12px; color: white; border-radius: 8px; box-sizing: border-box; }
 
-.progress {
-    width: 0%;
-    height: 100%;
-    background: var(--matrix-green);
-    box-shadow: 0 0 15px var(--matrix-green);
-    animation: boot-progress 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
+#cart-bar { position: fixed; bottom: 0; width: 100%; background: #000; border-top: 2px solid var(--titan-red); padding: 15px; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box; }
+.cart-hidden { display: none !important; }
+.wa-btn { background: #25D366; color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+.tech-btn { background: var(--titan-red); }
 
-@keyframes boot-progress { to { width: 100%; } }
-
-/* 4. NAVIGATION & TABS */
-header {
-    background: rgba(0, 0, 0, 0.9);
-    border-bottom: 2px solid var(--titan-red);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    backdrop-filter: blur(8px);
-}
-
-.header-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 15px;
-}
-
-.brand-text h1 {
-    font-size: 14px;
-    letter-spacing: 3px;
-    margin: 0;
-    color: white;
-}
-
-.version-tag {
-    font-size: 8px;
-    color: var(--titan-red);
-    letter-spacing: 1px;
-}
-
-.tabs-container {
-    display: flex;
-    overflow-x: auto;
-    gap: 10px;
-    padding: 10px 15px;
-    scrollbar-width: none;
-}
-
-.tab-btn {
-    background: #111;
-    border: 1px solid #222;
-    color: #666;
-    padding: 10px 18px;
-    border-radius: 6px;
-    font-size: 10px;
-    font-weight: bold;
-    white-space: nowrap;
-    cursor: pointer;
-    transition: 0.3s;
-    text-transform: uppercase;
-}
-
-.tab-btn.active {
-    background: var(--titan-red);
-    color: white;
-    border-color: white;
-    box-shadow: 0 0 15px rgba(176, 30, 35, 0.5);
-}
-
-/* 5. SEARCH UI */
-.search-wrap { padding: 15px; }
-.search-inner { position: relative; }
-
-#main-search {
-    width: 100%;
-    background: #000;
-    border: 1px solid #222;
-    padding: 14px;
-    color: var(--neon-blue);
-    font-family: 'Roboto Mono';
-    border-radius: 10px;
-    box-sizing: border-box;
-    outline: none;
-    transition: 0.3s;
-}
-
-#main-search:focus {
-    border-color: var(--neon-blue);
-    box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
-}
-
-/* 6. CATALOG GRID & MATRIX CARDS */
-.grid-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    padding: 0 15px 120px 15px;
-}
-
-.item-card {
-    background: var(--card-bg);
-    border: 1px solid #1a1a1a;
-    border-radius: 14px;
-    overflow: hidden;
-    position: relative;
-    transition: transform 0.2s, border-color 0.2s;
-    cursor: pointer;
-}
-
-.item-card:active { transform: scale(0.95); }
-
-/* MATRIX HOVER ANIMATION */
-.matrix-container {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 110px;
-    overflow: hidden;
-    opacity: 0;
-    pointer-events: none;
-    z-index: 1;
-    transition: opacity 0.5s;
-}
-
-.item-card:hover .matrix-container { opacity: 0.7; }
-
-.matrix-col {
-    position: absolute;
-    top: -100px;
-    color: var(--matrix-color);
-    font-family: 'Roboto Mono';
-    font-size: 9px;
-    writing-mode: vertical-rl;
-    animation: matrix-fall 2.5s linear infinite;
-}
-
-@keyframes matrix-fall { to { transform: translateY(250px); } }
-
-/* CARD INFO */
-.card-image-area {
-    height: 110px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #000;
-    position: relative;
-}
-
-.card-info {
-    padding: 12px;
-    background: #080808;
-    border-top: 1px solid #111;
-    z-index: 10;
-    position: relative;
-}
-
-.product-title {
-    font-size: 11px;
-    color: #999;
-    text-transform: uppercase;
-    margin-bottom: 5px;
-}
-
-.product-price {
-    color: var(--titan-red);
-    font-size: 15px;
-    font-weight: bold;
-}
-
-/* 7. CART / CHECKOUT BAR */
-#cart-bar {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background: #000;
-    border-top: 2px solid var(--titan-red);
-    padding: 18px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-sizing: border-box;
-    z-index: 2000;
-    box-shadow: 0 -10px 30px rgba(0,0,0,0.8);
-}
-
-.cart-hidden { display: none; }
-
-.wa-btn {
-    background: #25D366;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-family: 'Orbitron';
-    font-size: 11px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 0 15px rgba(37, 211, 102, 0.3);
-}
-
-/* 8. MOBILE OPTIMIZATIONS */
-@media (max-width: 360px) {
-    .grid-layout { grid-template-columns: 1fr; }
-    .brand-text h1 { font-size: 12px; }
-}
+#splash { position: fixed; inset: 0; background: black; z-index: 999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.loader-bar { width: 200px; height: 2px; background: #222; margin-top: 20px; }
+.progress { height: 100%; background: var(--titan-red); width: 0%; animation: load 3s forwards; }
+@keyframes load { to { width: 100%; } }
