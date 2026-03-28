@@ -1,9 +1,24 @@
 {
   "name": "Titan Tech Investment Market",
-  "short_name": "TitanΩ",
-  "start_url": "index.html",
+  "short_name": "Titan Omega",
+  "description": "Premium Tech Services, Software, and Repairs by Lod of Tech",
+  "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#050505",
   "theme_color": "#B01E23",
-  "icons": [{ "src": "https://img.icons8.com/neon/512/omega.png", "sizes": "512x512", "type": "image/png" }]
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://img.icons8.com/neon/192/omega.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://img.icons8.com/neon/512/omega.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
 }
