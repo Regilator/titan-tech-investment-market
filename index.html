@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Titan Tech Hub | Ω Edition</title>
+    <title>Titan Tech Hub | Ω</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
-
     <div id="splash">
         <div class="boot-container">
             <div class="titan-logo-css logo-large"></div>
@@ -31,46 +30,20 @@
             <button class="tab-btn" onclick="switchTab('HACK')">💀 HACK</button>
             <button class="tab-btn" onclick="switchTab('SOFTWARE')">💻 SOFT</button>
             <button class="tab-btn" onclick="switchTab('GAMES')">🎮 GAMES</button>
-            <button class="tab-btn admin-trigger" onclick="switchTab('ADMIN')">🔐 ADMIN</button>
         </div>
     </header>
 
     <main>
         <div class="search-wrap">
-            <input type="text" id="main-search" placeholder="Search firmware, tools, games...">
+            <input type="text" id="main-search" placeholder="Search firmware, tools, games..." oninput="searchCatalog()">
         </div>
-
         <div id="catalog-grid" class="grid-layout"></div>
-
-        <div id="admin-portal" style="display:none;" class="portal-box">
-            <div id="admin-login">
-                <h3>ENCRYPTED ACCESS</h3>
-                <input type="password" id="admin-pin" placeholder="ENTER PIN">
-                <button onclick="unlockAdmin()" class="action-btn">AUTHORIZE</button>
-            </div>
-            <div id="admin-controls" style="display:none;">
-                <div class="stats-card">REVENUE: <span id="total-revenue">$0.00</span></div>
-                <div class="upload-form">
-                    <input type="text" id="itemName" placeholder="Item Name">
-                    <input type="text" id="itemPrice" placeholder="Price (e.g. $10)">
-                    <input type="text" id="itemImg" placeholder="Image Filename (optional)">
-                    <select id="itemCat">
-                        <option value="REPAIRS">REPAIRS</option>
-                        <option value="HACK">HACK</option>
-                        <option value="SOFTWARE">SOFTWARE</option>
-                        <option value="GAMES">GAMES</option>
-                    </select>
-                    <button onclick="uploadItem()" class="action-btn">DEPLOY TO HUB</button>
-                </div>
-            </div>
-        </div>
     </main>
 
     <div id="cart-bar" class="cart-hidden">
         <span id="cart-item-name"></span>
         <button onclick="checkout()" class="wa-btn">ORDER VIA WHATSAPP</button>
     </div>
-
     <script src="app.js"></script>
 </body>
 </html>
