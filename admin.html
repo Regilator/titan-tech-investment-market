@@ -1,130 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Titan Admin | Lod of Tech</title>
+    <title>OMEGA | COMMAND</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <link rel="stylesheet" href="style.css">
     <style>
-        body { padding: 15px; font-family: 'Orbitron'; background: #050505; color: white; }
-        .admin-box { background: #0a0a0a; border: 2px solid #A020F0; padding: 20px; border-radius: 15px; max-width: 600px; margin: auto; display: none; }
-        .section-card { background: #000; border: 1px solid #222; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
-        input, select { width: 100%; padding: 12px; margin: 8px 0; background: #111; color: #00f2ff; border: 1px solid #333; border-radius: 5px; box-sizing: border-box; }
-        .btn-post { background: #A020F0; color: white; border: none; padding: 15px; border-radius: 5px; width: 100%; cursor: pointer; font-weight: bold; }
-        .revenue-badge { background: #00ff00; color: black; padding: 15px; border-radius: 5px; text-align: center; font-weight: bold; font-size: 20px; }
+        body { background: #050505; color: white; font-family: sans-serif; padding: 20px; }
+        .card { background: #111; padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #333; }
+        input, select { width: 100%; padding: 10px; margin: 10px 0; background: #000; color: #00ff41; border: 1px solid #444; }
+        button { width: 100%; padding: 15px; background: #B01E23; color: white; border: none; font-weight: bold; cursor: pointer; }
+        .item-row { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #222; }
     </style>
 </head>
 <body>
-
-    <div id="login-screen" style="text-align:center; margin-top:100px;">
-        <h2 style="color:red;">TITAN SECURITY</h2>
-        <input type="password" id="pinInput" placeholder="ENTER PIN">
-        <button onclick="checkPin()" class="btn-post">LOGIN</button>
+    <div class="card">
+        <h3>DEPLOY NEW ITEM</h3>
+        <input type="text" id="itemName" placeholder="Name">
+        <input type="text" id="itemPrice" placeholder="Price">
+        <select id="itemCat"><option value="REPAIRS">REPAIRS</option><option value="HACK">HACK</option><option value="SOFTWARE">SOFTWARE</option></select>
+        <button onclick="deploy()">PUSH TO HUB</button>
     </div>
-
-    <div id="admin-interface" class="admin-box">
-        <h2 style="color: #A020F0; text-align: center;">TITAN CONTROL</h2>
-
-        <div class="section-card">
-            <h4 style="color: #00ff00;">💰 REVENUE</h4>
-            <div id="total-revenue" class="revenue-badge">$0.00</div>
-            <div id="sales-list" style="max-height: 100px; overflow-y: auto; font-size: 10px; margin-top:10px;"></div>
-        </div>
-
-        <div class="section-card">
-            <h4 style="color: #A020F0;">📦 ADD STOCK</h4>
-            <input type="text" id="itemName" placeholder="Item Name">
-            <input type="text" id="itemPrice" placeholder="Price">
-            <input type="text" id="itemImgName" placeholder="Filename (e.g. nfs.png)">
-            <select id="itemCat">
-                <option value="repairs">🔧 REPAIRS</option>
-                <option value="movies">🎬 MOVIES</option>
-                <option value="tv_shows">📺 TV SHOWS</option>
-                <option value="games">🎮 GAMES</option>
-                <option value="software">💻 SOFTWARE</option>
-                <option value="music">🎵 MUSIC</option>
-                <option value="hack">💀 HACK</option>
-            </select>
-            <button onclick="uploadItem()" class="btn-post">DEPLOY</button>
-        </div>
-
-        <div class="section-card" style="border-color: gold;">
-            <h4 style="color: gold;">⭐ PENDING REVIEWS</h4>
-            <div id="pending-reviews-list"></div>
-        </div>
-
-        <div class="section-card">
-            <h4 style="color: #00f2ff;">🛡️ QR TOOL</h4>
-            <button onclick="downloadQR()" style="background:#00f2ff; color:black;" class="btn-post">DOWNLOAD STYLISH QR</button>
-        </div>
+    <div class="card">
+        <h3>INVENTORY (TOTAL REV: <span id="rev">$0</span>)</h3>
+        <div id="inventory-list"></div>
     </div>
-
     <script>
-        const firebaseConfig = { apiKey: "AIzaSyBRHHvX9TMDsJQ8PzD7FMsq00VMUVnx_UI", databaseURL: "https://titan-tech-hub-default-rtdb.firebaseio.com" };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-
-        function checkPin() {
-            if (document.getElementById('pinInput').value === "Reggiex123x123") {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('admin-interface').style.display = 'block';
-                loadInventory(); loadSales(); loadPendingReviews();
-            } else { alert("ACCESS DENIED"); }
-        }
-
-        function uploadItem() {
+        const config = { apiKey: "AIzaSyBRHHvX9TMDsJQ8PzD7FMsq00VMUVnx_UI", databaseURL: "https://titan-tech-hub-default-rtdb.firebaseio.com" };
+        firebase.initializeApp(config); const db = firebase.database();
+        function deploy() {
             const name = document.getElementById('itemName').value;
             const price = document.getElementById('itemPrice').value;
-            const fileName = document.getElementById('itemImgName').value;
             const cat = document.getElementById('itemCat').value;
-            db.ref('catalog').push({ name, price, img: `assets/${cat}/${fileName}`, cat: cat.toUpperCase() });
+            db.ref('catalog').push({ name, price, cat });
         }
-
-        function loadPendingReviews() {
-            db.ref('pending_reviews').on('value', snap => {
-                const list = document.getElementById('pending-reviews-list');
-                list.innerHTML = "";
-                const data = snap.val();
-                if(!data) return;
-                Object.keys(data).forEach(id => {
-                    const r = data[id];
-                    list.innerHTML += `<div style="padding:10px; border-bottom:1px solid #111;">
-                        <p>${r.text}</p>
-                        <button onclick="approveReview('${id}')" style="background:green; color:white;">APPROVE</button>
-                        <button onclick="db.ref('pending_reviews/${id}').remove()" style="background:red; color:white;">DELETE</button>
-                    </div>`;
-                });
+        db.ref('catalog').on('value', snap => {
+            const list = document.getElementById('inventory-list'); list.innerHTML = "";
+            snap.forEach(item => {
+                list.innerHTML += `<div class="item-row">${item.val().name} - ${item.val().price} <button onclick="db.ref('catalog').child('${item.key}').remove()">DEL</button></div>`;
             });
-        }
-
-        function approveReview(id) {
-            db.ref('pending_reviews/'+id).once('value', snap => {
-                db.ref('reviews').push(snap.val()).then(() => db.ref('pending_reviews/'+id).remove());
-            });
-        }
-
-        function downloadQR() {
-            const siteUrl = "https://regilator.github.io/titan-tech-investment-market/";
-            const qrUrl = `https://quickchart.io/qr?text=${encodeURIComponent(siteUrl)}&size=300&ecLevel=H&centerImageUrl=https://img.icons8.com/color/96/shield.png`;
-            window.open(qrUrl, '_blank');
-        }
-
-        function loadSales() {
-            db.ref('sales').on('value', snap => {
-                const data = snap.val();
-                let total = 0;
-                const log = document.getElementById('sales-list');
-                log.innerHTML = "";
-                if(!data) return;
-                Object.keys(data).forEach(id => {
-                    total += parseFloat(data[id].price.replace('$','')) || 0;
-                    log.innerHTML += `<div>${data[id].name} - ${data[id].price}</div>`;
-                });
-                document.getElementById('total-revenue').innerText = "$" + total.toFixed(2);
-            });
-        }
+        });
     </script>
 </body>
 </html>
