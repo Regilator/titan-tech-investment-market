@@ -1,31 +1,32 @@
-:root { --titan-red: #B01E23; --bg-dark: #050505; --matrix-green: #00ff41; }
-body { background: var(--bg-dark); color: white; font-family: 'Orbitron', sans-serif; margin: 0; padding: 0; }
+:root { --titan-red: #B01E23; --bg: #050505; --green: #00ff41; }
+body { background: var(--bg); color: white; font-family: 'Roboto Mono', monospace; margin: 0; }
 
-/* LOGO Logic */
 .titan-logo-css { 
     width: 60px; height: 60px; background: var(--titan-red); border-radius: 12px;
     display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px var(--titan-red);
 }
-.titan-logo-css::after { content: "Ω"; color: white; font-size: 40px; font-weight: bold; }
-.logo-small { transform: scale(0.6); }
-.logo-large { transform: scale(1.5); margin-bottom: 40px; }
+.titan-logo-css::after { content: "Ω"; color: white; font-size: 35px; font-weight: bold; }
+.logo-small { transform: scale(0.6); cursor: pointer; }
+.logo-large { transform: scale(1.5); margin-bottom: 30px; }
 
-/* Interface Components */
-header { background: rgba(0,0,0,0.9); border-bottom: 2px solid var(--titan-red); padding: 10px; position: sticky; top: 0; z-index: 100; }
+header { background: #000; border-bottom: 2px solid var(--titan-red); padding: 15px; position: sticky; top: 0; z-index: 100; }
 .header-top { display: flex; justify-content: space-between; align-items: center; }
+.brand-info h1 { font-family: 'Orbitron'; font-size: 14px; margin: 0; }
+.version-tag { font-size: 10px; color: #666; }
+
 .tabs-container { display: flex; overflow-x: auto; gap: 10px; padding: 10px 0; }
-.tab-btn { background: #111; color: #666; border: 1px solid #222; padding: 8px 15px; border-radius: 5px; cursor: pointer; white-space: nowrap; }
-.tab-btn.active { background: var(--titan-red); color: white; border-color: white; }
+.tab-btn { background: #111; color: #555; border: 1px solid #222; padding: 8px 15px; border-radius: 5px; white-space: nowrap; }
+.tab-btn.active { background: var(--titan-red); color: white; }
 
-.grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
-.item-card { background: #111; border: 1px solid #222; padding: 15px; border-radius: 10px; cursor: pointer; }
-.card { background: #111; padding: 15px; border-radius: 10px; margin: 15px; }
+.grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; }
+.item-card { background: #111; border: 1px solid #222; padding: 15px; border-radius: 10px; font-size: 12px; }
 
-input { width: 100%; background: #000; border: 1px solid #333; padding: 12px; color: white; border-radius: 8px; box-sizing: border-box; }
+.tracker-card { background: #111; margin: 15px; padding: 15px; border-radius: 10px; border-left: 4px solid var(--titan-red); }
+input { background: #000; border: 1px solid #333; color: white; padding: 10px; width: 100%; box-sizing: border-box; }
 
-#cart-bar { position: fixed; bottom: 0; width: 100%; background: #000; border-top: 2px solid var(--titan-red); padding: 15px; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box; }
+#cart-bar { position: fixed; bottom: 0; width: 100%; background: #000; border-top: 2px solid var(--titan-red); padding: 15px; display: flex; justify-content: space-between; align-items: center; }
 .cart-hidden { display: none !important; }
-.wa-btn { background: #25D366; color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+.wa-btn { background: #25D366; color: white; border: none; padding: 10px; border-radius: 5px; font-weight: bold; font-size: 10px; }
 .tech-btn { background: var(--titan-red); }
 
 #splash { position: fixed; inset: 0; background: black; z-index: 999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
