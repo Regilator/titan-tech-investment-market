@@ -1,258 +1,97 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TITAN | OMEGA COMMAND</title>
-    
+    <title>TITAN | COMMAND</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
-    
     <style>
-        :root {
-            --titan-red: #B01E23;
-            --matrix-green: #00ff41;
-            --neon-blue: #00f2ff;
-            --bg-black: #050505;
-        }
-
-        body {
-            background: var(--bg-black);
-            color: white;
-            font-family: 'Orbitron', sans-serif;
-            margin: 0;
-            padding: 20px;
-        }
-
-        /* DIGITAL OMEGA LOGO */
-        .admin-logo {
-            width: 45px; height: 45px;
-            background: var(--titan-red);
-            border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
-            margin-bottom: 20px;
-            box-shadow: 0 0 15px var(--titan-red);
-        }
-        .admin-logo::after {
-            content: "Ω"; color: white; font-size: 28px; font-weight: bold;
-        }
-
-        header {
-            border-bottom: 2px solid var(--titan-red);
-            padding-bottom: 15px;
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background: #0a0a0a;
-            border: 1px solid #222;
-            padding: 20px;
-            border-radius: 15px;
-        }
-
-        .card h2 {
-            font-size: 12px;
-            color: var(--matrix-green);
-            text-transform: uppercase;
-            margin-top: 0;
-            letter-spacing: 2px;
-            border-bottom: 1px solid #111;
-            padding-bottom: 10px;
-        }
-
-        /* FORM ELEMENTS */
-        input, select {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            background: #000;
-            border: 1px solid #333;
-            color: var(--neon-blue);
-            font-family: 'Roboto Mono', monospace;
-            box-sizing: border-box;
-            border-radius: 5px;
-        }
-
-        button.deploy-btn {
-            width: 100%;
-            padding: 15px;
-            background: var(--titan-red);
-            color: white;
-            border: none;
-            font-family: 'Orbitron';
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-
-        /* INVENTORY LIST */
-        .inventory-scroll {
-            max-height: 300px;
-            overflow-y: auto;
-            font-family: 'Roboto Mono';
-            font-size: 11px;
-        }
-
-        .item-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #111;
-        }
-
-        .item-info span { color: var(--matrix-green); }
-
-        .del-btn {
-            background: transparent;
-            color: #ff4444;
-            border: 1px solid #444;
-            padding: 5px 10px;
-            cursor: pointer;
-            font-size: 10px;
-        }
-
-        .del-btn:hover { background: #ff4444; color: white; }
-
-        .stat-val {
-            font-size: 32px;
-            color: white;
-            text-shadow: 0 0 10px var(--neon-blue);
-        }
+        :root { --titan-red: #B01E23; --matrix-green: #00ff41; }
+        body { background: #050505; color: var(--matrix-green); font-family: 'Roboto Mono', monospace; padding: 20px; }
+        .gate { text-align: center; margin-top: 15%; }
+        .hidden { display: none; }
+        .card { background: #111; padding: 20px; border: 1px solid #333; margin-bottom: 20px; border-radius: 8px; }
+        input, select { background: #000; color: var(--matrix-green); border: 1px solid #444; padding: 12px; width: 100%; margin: 10px 0; box-sizing: border-box; }
+        button { background: var(--titan-red); color: white; border: none; padding: 15px; width: 100%; cursor: pointer; font-weight: bold; }
+        .item-row { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #222; }
     </style>
 </head>
 <body>
+    <div id="gate" class="gate">
+        <h2>> AUTH_REQUIRED</h2>
+        <input type="password" id="pin" placeholder="ENTER SYSTEM PIN">
+        <button onclick="auth()">ACCESS SYSTEM</button>
+    </div>
 
-    <header>
-        <div>
-            <div class="admin-logo"></div>
-            <h1 style="font-size: 16px; margin: 0;">TITAN_OS COMMAND</h1>
-        </div>
-        <div id="status" style="color: var(--matrix-green); font-size: 10px;">● SECURE_CONNECTION</div>
-    </header>
-
-    <div class="dashboard-grid">
+    <div id="panel" class="hidden">
+        <h1>🔱 TITAN_OS COMMAND</h1>
         
         <div class="card">
-            <h2>Revenue Tracker</h2>
-            <div class="stat-val" id="total-rev">$0.00</div>
-            <p style="font-size: 10px; color: #444; margin-bottom: 20px;">TOTAL SALES LOGGED</p>
-            
-            <h2>Recent Activity</h2>
-            <div id="sales-feed" class="inventory-scroll">
-                </div>
-        </div>
-
-        <div class="card">
-            <h2>New Product Deployment</h2>
-            <input type="text" id="itemName" placeholder="ITEM NAME (e.g. Photoshop 2026)">
-            <input type="text" id="itemPrice" placeholder="PRICE (e.g. $15)">
-            <select id="itemCat">
+            <h3>DEPLOY NEW STOCK</h3>
+            <input type="text" id="name" placeholder="Item Name">
+            <input type="text" id="price" placeholder="Price (e.g. $15)">
+            <input type="text" id="img" placeholder="Image Filename (optional)">
+            <select id="cat">
                 <option value="REPAIRS">🔧 REPAIRS</option>
                 <option value="SOFTWARE">💻 SOFTWARE</option>
                 <option value="HACK">💀 HACK TOOLS</option>
                 <option value="GAMES">🎮 GAMES</option>
             </select>
-            <button class="deploy-btn" onclick="deployItem()">Push to Hub</button>
+            <button onclick="upload()">PUSH LIVE</button>
         </div>
 
         <div class="card">
-            <h2>Live Inventory Editor</h2>
-            <div id="inventory-list" class="inventory-scroll">
-                </div>
+            <h3>🛠 REPAIR STATUS UPDATER</h3>
+            <input type="text" id="jobID" placeholder="Job ID (e.g. TITAN-101)">
+            <select id="jobStatus">
+                <option value="DIAGNOSING...">DIAGNOSING...</option>
+                <option value="REPAIRING...">REPAIRING...</option>
+                <option value="TESTING_OS...">TESTING_OS...</option>
+                <option value="READY FOR COLLECTION ✅">READY FOR COLLECTION ✅</option>
+            </select>
+            <button onclick="updateRepair()" style="background:var(--matrix-green); color:black;">UPDATE STATUS</button>
         </div>
 
+        <div class="card">
+            <h3>LIVE INVENTORY</h3>
+            <div id="list"></div>
+        </div>
     </div>
 
     <script>
-        // FIREBASE CONFIG
-        const firebaseConfig = {
-            apiKey: "AIzaSyBRHHvX9TMDsJQ8PzD7FMsq00VMUVnx_UI",
-            databaseURL: "https://titan-tech-hub-default-rtdb.firebaseio.com"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+        const config = { apiKey: "AIzaSyBRHHvX9TMDsJQ8PzD7FMsq00VMUVnx_UI", databaseURL: "https://titan-tech-hub-default-rtdb.firebaseio.com" };
+        firebase.initializeApp(config); const db = firebase.database();
 
-        // 1. INITIALIZE DATA
-        window.onload = function() {
-            loadFinancials();
-            loadInventory();
-        };
+        function auth() {
+            if(document.getElementById('pin').value === "Reggiex123x123") {
+                document.getElementById('gate').className = 'hidden';
+                document.getElementById('panel').className = '';
+                loadStock();
+            } else { alert("ACCESS_DENIED"); }
+        }
 
-        // 2. DEPLOY ITEM
-        function deployItem() {
-            const name = document.getElementById('itemName').value;
-            const price = document.getElementById('itemPrice').value;
-            const cat = document.getElementById('itemCat').value;
-
-            if(!name || !price) { alert("ERROR: INCOMPLETE_DATA"); return; }
-
+        function upload() {
             db.ref('catalog').push({
-                name: name,
-                price: price.startsWith('$') ? price : '$' + price,
-                cat: cat
-            }).then(() => {
-                alert("DEPLOYMENT_SUCCESSFUL");
-                document.getElementById('itemName').value = "";
-                document.getElementById('itemPrice').value = "";
-            });
+                name: document.getElementById('name').value,
+                price: document.getElementById('price').value,
+                cat: document.getElementById('cat').value,
+                img: document.getElementById('img').value
+            }).then(() => { alert("DEPLOYED"); });
         }
 
-        // 3. LOAD REVENUE & SALES FEED
-        function loadFinancials() {
-            db.ref('sales').on('value', snap => {
-                let total = 0;
-                const feed = document.getElementById('sales-feed');
-                feed.innerHTML = "";
-                
-                snap.forEach(child => {
-                    const data = child.val();
-                    total += parseFloat(data.price.replace('$','')) || 0;
-                    feed.innerHTML += `
-                        <div class="item-row">
-                            <span>[${data.time || 'NOW'}]</span> ${data.name}
-                        </div>`;
-                });
-                document.getElementById('total-rev').innerText = `$${total.toFixed(2)}`;
-            });
+        function updateRepair() {
+            const id = document.getElementById('jobID').value.toUpperCase();
+            db.ref('repairs/' + id).set({ status: document.getElementById('jobStatus').value });
+            alert("Updated Status for " + id);
         }
 
-        // 4. LOAD INVENTORY EDITOR
-        function loadInventory() {
+        function loadStock() {
             db.ref('catalog').on('value', snap => {
-                const list = document.getElementById('inventory-list');
-                list.innerHTML = "";
-                
-                snap.forEach(item => {
-                    const data = item.val();
-                    list.innerHTML += `
-                        <div class="item-row">
-                            <div class="item-info">
-                                <b>${data.name}</b><br>
-                                <span>${data.price}</span> | ${data.cat}
-                            </div>
-                            <button class="del-btn" onclick="deleteItem('${item.key}')">DEL</button>
-                        </div>`;
+                const list = document.getElementById('list'); list.innerHTML = "";
+                snap.forEach(i => {
+                    list.innerHTML += `<div class="item-row"><span>${i.val().name}</span> <button style="width:auto; padding:5px;" onclick="db.ref('catalog').child('${i.key}').remove()">DEL</button></div>`;
                 });
             });
-        }
-
-        // 5. DELETE ITEM
-        function deleteItem(key) {
-            if(confirm("PERMANENTLY_REMOVE_ITEM?")) {
-                db.ref('catalog').child(key).remove();
-            }
         }
     </script>
 </body>
